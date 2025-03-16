@@ -1,0 +1,10 @@
+build-gen:
+  board: ""
+  compiler: AC6
+  device: STM32L476RGTx
+  generated-by: uVision version 5.41.0.0
+  processor:
+    core: Cortex-M4
+    dsp: on
+    endian: little
+    fpu: sp

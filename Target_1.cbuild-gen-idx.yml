@@ -1,0 +1,13 @@
+build-gen-idx:
+  generated-by: uVision version 5.41.0.0
+  generators:
+    - board: ""
+      device: STM32L476RGTx
+      id: CubeMX
+      output: C:/Users/mrpat/OneDrive/Documents/ECE3130/Hardware/ece3130_project/STM32CubeMX/Target_1/
+      project-type: single-core
+      cbuild-gens:
+        - cbuild-gen: C:/Users/mrpat/OneDrive/Documents/ECE3130/Hardware/ece3130_project/ece3130_project.Target_1.cbuild-gen.yml
+          configuration: .Target_1
+          name: C:/Users/mrpat/OneDrive/Documents/ECE3130/Hardware/ece3130_project/STM32CubeMX/Target_1/ece3130_project.cgen.yml
+          project: ece3130_project

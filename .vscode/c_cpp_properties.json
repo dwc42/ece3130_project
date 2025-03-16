@@ -1,0 +1,23 @@
+{
+	"configurations": [
+		{
+			"name": "Win32",
+			"includePath": [
+				"${workspaceFolder}/**",
+				"${workspaceFolder}/STM32CubeMX/Target_1/STM32CubeMX/Drivers/CMSIS/Device/ST/STM32L4xx/Include",
+				"${workspaceFolder}/STM32CubeMX/Target_1/STM32CubeMX/Drivers/CMSIS/Include",
+				"${workspaceFolder}/STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Inc",
+				"${workspaceFolder}/STM32CubeMX/Target_1/STM32CubeMX/Inc"
+			],
+			"forcedInclude": [
+				"${workspaceFolder}/STM32CubeMX/Target_1/STM32CubeMX/Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l476xx.h",
+				"${workspaceFolder}/STM32CubeMX/Target_1/STM32CubeMX/Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l4xx.h",
+				"${workspaceFolder}/STM32CubeMX/Target_1/STM32CubeMX/Drivers/CMSIS/Device/ST/STM32L4xx/Include/system_stm32l4xx.h"
+			],
+			"defines": [
+				"STM32L476xx"
+			]
+		}
+	],
+	"version": 4
+}

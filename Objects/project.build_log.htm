@@ -1,0 +1,129 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: µVision V5.41.0.0
+Copyright (C) 2024 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: Dow Cox, Tennessee Tech University, LIC=----
+ 
+Tool Versions:
+Toolchain:       MDK-Lite  Version: 5.41.0.0
+Toolchain Path:  C:\Users\mrpat\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin
+C Compiler:      ArmClang.exe V6.22
+Assembler:       Armasm.exe V6.22
+Linker/Locator:  ArmLink.exe V6.22
+Library Manager: ArmAr.exe V6.22
+Hex Converter:   FromElf.exe V6.22
+CPU DLL:         SARMCM3.DLL V5.41.0.0
+Dialog DLL:      DCM.DLL V1.17.5.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.3.0.0
+Dialog DLL:      TCM.DLL V1.56.4.0
+ 
+<h2>Project:</h2>
+C:\Users\mrpat\OneDrive\Documents\ECE3130\Hardware\ece3130_project\ece3130_project.uvprojx
+Project File Date:  03/16/2025
+
+<h2>Output:</h2>
+*** Using Compiler 'V6.22', folder: 'C:\Users\mrpat\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin'
+Build target 'Target_1'
+compiling run.c...
+compiling stm32l4xx_hal_rcc.c...
+compiling lcd.c...
+compiling keypad.c...
+compiling stm32l4xx_hal_i2c.c...
+compiling stm32l4xx_hal_msp.c...
+events.c(63): warning: incompatible pointer types passing 'void (**)(enum KEYPAD)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+   63 |         int size = length(Events.onKeyPadPressCallbacks);
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\events.h(52): note: passing argument to parameter 'array' here
+   52 | int length(void **array);
+      |                   ^
+events.c(77): warning: incompatible pointer types passing 'void (**)(enum KEYPAD)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+   77 |         int size = length(Events.onKeyPadReleaseCallbacks);
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\events.h(52): note: passing argument to parameter 'array' here
+   52 | int length(void **array);
+      |                   ^
+events.c(91): warning: incompatible pointer types passing 'void (**)(enum SWITCHS)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+   91 |         int size = length(Events.onSwitchReleaseCallbacks);
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\events.h(52): note: passing argument to parameter 'array' here
+   52 | int length(void **array);
+      |                   ^
+events.c(105): warning: incompatible pointer types passing 'void (**)(enum SWITCHS)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+  105 |         int size = length(Events.onSwitchPressCallbacks);
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\events.h(52): note: passing argument to parameter 'array' here
+   52 | int length(void **array);
+      |                   ^
+events.c(199): warning: incompatible pointer types passing 'void (**)(enum KEYPAD)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+  199 |                         int callbacksLength = length(Events.onKeyPadPressCallbacks);
+      |                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+events.c(144): note: passing argument to parameter 'array' here
+  144 | int length(void **array)
+      |                   ^
+5 warnings generated.
+compiling events.c...
+compiling stm32l4xx_hal_flash.c...
+compiling stm32l4xx_hal_i2c_ex.c...
+compiling main.c...
+compiling stm32l4xx_hal_dma_ex.c...
+compiling stm32l4xx_hal_gpio.c...
+compiling stm32l4xx_hal.c...
+compiling stm32l4xx_hal_flash_ramfunc.c...
+compiling stm32l4xx_hal_dma.c...
+compiling stm32l4xx_it.c...
+compiling stm32l4xx_hal_pwr.c...
+compiling system_stm32l4xx.c...
+compiling stm32l4xx_hal_flash_ex.c...
+compiling retarget_io.c...
+compiling stm32l4xx_hal_pwr_ex.c...
+compiling stm32l4xx_hal_exti.c...
+compiling stm32l4xx_hal_cortex.c...
+compiling stm32l4xx_hal_rcc_ex.c...
+linking...
+Program Size: Code=8042 RO-data=522 RW-data=28 ZI-data=1808  
+".\Objects\project.axf" - 0 Error(s), 5 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                https://www.keil.com/pack/ARM.CMSIS.6.1.0.pack
+                ARM::CMSIS@6.1.0
+                CMSIS (Common Microcontroller Software Interface Standard)
+   * Component: CORE Version: 6.1.0
+
+Package Vendor: ARM
+                https://www.keil.com/pack/ARM.CMSIS-Compiler.2.1.0.pack
+                ARM::CMSIS-Compiler@2.1.0
+                CMSIS Compiler extensions for Arm Compiler, GCC, Clang, and IAR Compiler
+   * Component: CORE Version: 1.1.0
+
+Package Vendor: Keil
+                https://www.keil.com/pack/Keil.STM32L4xx_DFP.3.0.0.pack
+                Keil::STM32L4xx_DFP@3.0.0
+                STMicroelectronics STM32L4 Series Device Support
+   * Component: CubeMX Version: 1.0.0
+
+<h2>Collection of Component include folders:</h2>
+  ./RTE/_Target_1
+  ./STM32CubeMX/Target_1/MX_Device
+  ./STM32CubeMX/Target_1/STM32CubeMX/Drivers/CMSIS/Device/ST/STM32L4xx/Include
+  ./STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Inc
+  ./STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy
+  ./STM32CubeMX/Target_1/STM32CubeMX/Inc
+  C:/Users/mrpat/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS-Compiler:CORE@1.1.0
+      Source file:   source/armcc/retarget_io.c
+
+   * Component: ARM::CMSIS:CORE@6.1.0
+
+   * Component: Keil::Device:CubeMX@1.0.0
+Build Time Elapsed:  00:00:01
+</pre>
+</body>
+</html>
