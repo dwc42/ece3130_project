@@ -37,6 +37,8 @@ struct EventsType
 	int switchsubcribed;
 	int keyPadPressTicks[4][4];
 	int keyPadPressed[4][4];
+	int switchPressTicks[4];
+	int switchPressed[4];
 	void (*onKeyPadPress)(void (*eventHandler)(enum KEYPAD key));
 	void (*onKeyPadRelease)(void (*eventHandler)(enum KEYPAD key));
 	void (*onSwitchRelease)(void (*eventHandler)(enum SWITCHS sw));
@@ -46,6 +48,7 @@ struct EventsType
 	void (**onSwitchReleaseCallbacks)(enum SWITCHS sw);
 	void (**onSwitchPressCallbacks)(enum SWITCHS sw);
 };
+extern char KEYPAD_CHARS[16];
 void Delay(unsigned int n);
 extern struct EventsType Events;
 void InitEvents();

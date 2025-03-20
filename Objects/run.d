@@ -20,4 +20,4 @@
   STM32CubeMX\Target_1\STM32CubeMX\Drivers\STM32L4xx_HAL_Driver\Inc\stm32l4xx_hal_flash_ramfunc.h \
   STM32CubeMX\Target_1\STM32CubeMX\Drivers\STM32L4xx_HAL_Driver\Inc\stm32l4xx_hal_pwr.h \
   STM32CubeMX\Target_1\STM32CubeMX\Drivers\STM32L4xx_HAL_Driver\Inc\stm32l4xx_hal_pwr_ex.h \
-  keypad.h
+  keypad.h lcd.h
