@@ -5,6 +5,7 @@
 #include "stm32l4xx_hal.h"
 #include "keypad.h"
 #include "lcd.h"
+#include "buzzer.h"
 void SystemClock_Config(void);
 
 void EnableClock()
@@ -23,11 +24,19 @@ void Init_LED(int i)
 	GPIOA->PUPDR &= ~(0x03 << (2 * i));
 }
 
+void keyPress5Callback(enum KEYPAD key)
+{
+	if (key!= KEY_5)
+		return;
+	GPIOA->ODR ^=(1<<0);
+	
+	//Write_Char_LCD(KEYPAD_CHARS[key]);
+}
 void keyPressCallback(enum KEYPAD key)
 {
-	if (!key)
+	if (key == KEY_5)
 		return;
-	Write_Char_LCD(KEYPAD_CHARS[key]);
+	GPIOA->ODR ^=(1<<1);
 }
 void switchPressCallback(enum SWITCHS key)
 {
@@ -63,36 +72,53 @@ void switchPressCallback(enum SWITCHS key)
  */
 int run(void)
 {
-	int LED = 1;
+	
 	EnableClock();
 	Delay(500);
-	Init_LED(LED);
+	Init_LED(1);
+	Init_LED(0);
 	LCD_Init();
-	//InitEvents();
-	//Clear_Display();
-	//Set_Cursor(1);
-	//Set_Display(1);
-	//Set_Cursor_Blinking();
-	//Set_Cursor_Write_Shift(1);
-	//Set_Text_Write_Shift(1);
-	Delay(2000);
-	char *line1 = "Welcome";
-	//char *line2 = "Spring 2023";
+	InitEvents();
+	
+	char *line1 = "Big Daddy";
+	char *line2 = "Spring 2023";
 	/*Write_Char_LCD('o');*/
-	Write_Char_LCD(0x42);
 	Write_String_LCD(line1); 
-	//Write_Instr_LCD(0xc0); /* move to line 2*/ 
-	//Write_String_LCD(line2);
+	Write_Instr_LCD(0xc0); /* move to line 2*/ 
+	Write_String_LCD(line2);
 
-	//Events.onKeyPadPress(keyPressCallback);
+	Events.onKeyPadPress(keyPressCallback);
+	Events.onKeyPadPress(keyPress5Callback);  
 	//Events.onSwitchPress(switchPressCallback);
+
+	Init_buzzer();
+
+
+
+	double prev_date = date();
+	double p = (1/500);
+	
+
 	while (1)
 	{
 		//Write_Char_LCD('1');
 		//Delay(1000);
-		//check();
-		GPIOA->ODR ^=(1<<1);
-		Delay(1000);
+		check();
+
+		GPIOC->ODR|=(1<<9);
+		GPIOC->ODR&=~(1<<9);
+		double current = date();
+		if ((current - prev_date) > p)
+			{
+				GPIOC->ODR ^=(1<<9);
+				prev_date =  current;
+			}
+		
+		
+
+
+		
+		
 	}
 
 	

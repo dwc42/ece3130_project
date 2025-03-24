@@ -218,10 +218,10 @@ void check()
 		GPIOB->ODR &= ~(1 << 3);
 		GPIOB->ODR &= ~(1 << 4);
 
-		Delay(2);
+	
 		uint32_t temp = GPIOB->ODR;
 		GPIOB->ODR |= (1 << (1 + col));
-		Delay(2);
+		
 		temp = GPIOB->ODR;
 		GPIOB->ODR = temp;
 		for (int row = 0; row < 4; row++)
