@@ -27,14 +27,45 @@ Project File Date:  03/24/2025
 <h2>Output:</h2>
 *** Using Compiler 'V6.22', folder: 'C:\Users\austi\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'Target_1'
-compiling run.c...
-linking...
-.\Objects\project.axf: Error: L6218E: Undefined symbol Init_buzzer (referred from run.o).
-.\Objects\project.axf: Error: L6218E: Undefined symbol date (referred from run.o).
-Not enough information to list image symbols.
-Not enough information to list load addresses in the image map.
-Finished: 2 information, 0 warning and 2 error messages.
-".\Objects\project.axf" - 2 Error(s), 0 Warning(s).
+buzzer.c(8): error: variable has incomplete type 'struct timespec'
+    8 |     struct timespec ts;
+      |                     ^
+buzzer.c(8): note: forward declaration of 'struct timespec'
+    8 |     struct timespec ts;
+      |            ^
+buzzer.c(9): error: call to undeclared function 'clock_gettime'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    9 |     clock_gettime(CLOCK_REALTIME, &ts); // Get the current time
+      |     ^
+buzzer.c(9): error: use of undeclared identifier 'CLOCK_REALTIME'
+    9 |     clock_gettime(CLOCK_REALTIME, &ts); // Get the current time
+      |                   ^
+buzzer.c(16): error: use of undeclared identifier 'RCC'
+   16 |     RCC->AHB2ENR |= RCC_AHB2ENR_GPIOCEN; /* enable GPIOC clock*/
+      |     ^
+buzzer.c(16): error: use of undeclared identifier 'RCC_AHB2ENR_GPIOCEN'
+   16 |     RCC->AHB2ENR |= RCC_AHB2ENR_GPIOCEN; /* enable GPIOC clock*/
+      |                     ^
+buzzer.c(17): error: use of undeclared identifier 'GPIOC'
+   17 |     temp = GPIOC->MODER;
+      |            ^
+buzzer.c(20): error: use of undeclared identifier 'GPIOC'
+   20 |     GPIOC->MODER = temp;
+      |     ^
+buzzer.c(21): error: use of undeclared identifier 'GPIOC'
+   21 |     temp=GPIOC->OTYPER;
+      |          ^
+buzzer.c(23): error: use of undeclared identifier 'GPIOC'
+   23 |     GPIOC->OTYPER=temp;
+      |     ^
+buzzer.c(24): error: use of undeclared identifier 'GPIOC'
+   24 |     temp=GPIOC->PUPDR;
+      |          ^
+buzzer.c(26): error: use of undeclared identifier 'GPIOC'
+   26 |     GPIOC->PUPDR=temp;
+      |     ^
+11 errors generated.
+compiling buzzer.c...
+".\Objects\project.axf" - 11 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
