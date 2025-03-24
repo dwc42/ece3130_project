@@ -27,7 +27,62 @@ Project File Date:  03/16/2025
 <h2>Output:</h2>
 *** Using Compiler 'V6.22', folder: 'C:\Users\mrpat\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'Target_1'
-".\Objects\project.axf" - 0 Error(s), 0 Warning(s).
+events.c(64): warning: unused variable 'keyb2' [-Wunused-variable]
+   64 |                 int keyb2 = keyPadIB2[i];
+      |                     ^~~~~
+events.c(75): warning: incompatible pointer types passing 'void (**)(enum KEYPAD)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+   75 |         int size = length(Events.onKeyPadPressCallbacks);
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\events.h(55): note: passing argument to parameter 'array' here
+   55 | int length(void **array);
+      |                   ^
+events.c(89): warning: incompatible pointer types passing 'void (**)(enum KEYPAD)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+   89 |         int size = length(Events.onKeyPadReleaseCallbacks);
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\events.h(55): note: passing argument to parameter 'array' here
+   55 | int length(void **array);
+      |                   ^
+events.c(103): warning: incompatible pointer types passing 'void (**)(enum SWITCHS)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+  103 |         int size = length(Events.onSwitchReleaseCallbacks);
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\events.h(55): note: passing argument to parameter 'array' here
+   55 | int length(void **array);
+      |                   ^
+events.c(117): warning: incompatible pointer types passing 'void (**)(enum SWITCHS)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+  117 |         int size = length(Events.onSwitchPressCallbacks);
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\events.h(55): note: passing argument to parameter 'array' here
+   55 | int length(void **array);
+      |                   ^
+events.c(187): warning: incompatible pointer types passing 'void (**)(enum SWITCHS)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+  187 |                                 int callbacksLength = length(Events.onSwitchReleaseCallbacks);
+      |                                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+events.c(158): note: passing argument to parameter 'array' here
+  158 | int length(void **array)
+      |                   ^
+events.c(205): warning: incompatible pointer types passing 'void (**)(enum SWITCHS)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+  205 |                         int callbacksLength = length(Events.onSwitchPressCallbacks);
+      |                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+events.c(158): note: passing argument to parameter 'array' here
+  158 | int length(void **array)
+      |                   ^
+events.c(238): warning: incompatible pointer types passing 'void (**)(enum KEYPAD)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+  238 |                                 int callbacksLength = length(Events.onKeyPadReleaseCallbacks);
+      |                                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+events.c(158): note: passing argument to parameter 'array' here
+  158 | int length(void **array)
+      |                   ^
+events.c(256): warning: incompatible pointer types passing 'void (**)(enum KEYPAD)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+  256 |                         int callbacksLength = length(Events.onKeyPadPressCallbacks);
+      |                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+events.c(158): note: passing argument to parameter 'array' here
+  158 | int length(void **array)
+      |                   ^
+9 warnings generated.
+compiling events.c...
+linking...
+Program Size: Code=9290 RO-data=522 RW-data=48 ZI-data=1840  
+".\Objects\project.axf" - 0 Error(s), 9 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -66,7 +121,7 @@ Package Vendor: Keil
    * Component: ARM::CMSIS:CORE@6.1.0
 
    * Component: Keil::Device:CubeMX@1.0.0
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>

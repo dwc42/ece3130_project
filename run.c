@@ -27,6 +27,7 @@ void keyPressCallback(enum KEYPAD key)
 {
 	if (!key)
 		return;
+	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_1);
 	Write_Char_LCD(KEYPAD_CHARS[key]);
 }
 void switchPressCallback(enum SWITCHS key)
@@ -68,32 +69,17 @@ int run(void)
 	Delay(500);
 	Init_LED(LED);
 	LCD_Init();
-	//InitEvents();
-	//Clear_Display();
-	//Set_Cursor(1);
-	//Set_Display(1);
-	//Set_Cursor_Blinking();
-	//Set_Cursor_Write_Shift(1);
-	//Set_Text_Write_Shift(1);
+	InitEvents();
 	Delay(2000);
-	char *line1 = "Welcome";
-	//char *line2 = "Spring 2023";
-	/*Write_Char_LCD('o');*/
-	Write_Char_LCD(0x42);
-	Write_String_LCD(line1); 
-	//Write_Instr_LCD(0xc0); /* move to line 2*/ 
-	//Write_String_LCD(line2);
+	// Write_Instr_LCD(0xc0); /* move to line 2*/
+	// Write_String_LCD(line2);
 
-	//Events.onKeyPadPress(keyPressCallback);
-	//Events.onSwitchPress(switchPressCallback);
+	Events.onKeyPadPress(keyPressCallback);
+	// Events.onSwitchPress(switchPressCallback);
 	while (1)
 	{
-		//Write_Char_LCD('1');
-		//Delay(1000);
-		//check();
-		GPIOA->ODR ^=(1<<1);
-		Delay(1000);
+		// Write_Char_LCD('1');
+		// Delay(1000);
+		check();
 	}
-
-	
 }
