@@ -4,6 +4,8 @@
 		"events.h": "c",
 		"lcd.h": "c",
 		"stm32l4xx_hal.h": "c",
-		"time.h": "c"
+		"time.h": "c",
+		"stdlib.h": "c",
+		"number.h": "c"
 	}
 }

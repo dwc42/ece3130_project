@@ -22,15 +22,27 @@ Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
 C:\Users\mrpat\OneDrive\Documents\ECE3130\Hardware\ece3130_project\ece3130_project.uvprojx
-Project File Date:  03/24/2025
+Project File Date:  03/25/2025
 
 <h2>Output:</h2>
 *** Using Compiler 'V6.22', folder: 'C:\Users\mrpat\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'Target_1'
+run.c(89): warning: '/*' within block comment [-Wcomment]
+   89 |         Write_Instr_LCD(0xc0); /* move to line 2*/
+      |                                ^
+run.c(85): warning: unused variable 'line1' [-Wunused-variable]
+   85 |         char *line1 = "Big Daddy";
+      |               ^~~~~
+run.c(86): warning: unused variable 'line2' [-Wunused-variable]
+   86 |         char *line2 = "Spring 2023";
+      |               ^~~~~
+3 warnings generated.
 compiling run.c...
 linking...
-Program Size: Code=12426 RO-data=570 RW-data=36 ZI-data=1848  
-".\Objects\project.axf" - 0 Error(s), 0 Warning(s).
+.\Objects\project.axf: Warning: L6989W: Could not apply patch sdcomp-29491-629360 to instruction VPOP     {d8-d15} at offset 0xf4, instruction is within an IT block and is not the last instruction for log.o(i.__hardfp_log).
+Program Size: Code=21188 RO-data=1192 RW-data=36 ZI-data=1848  
+Finished: 0 information, 1 warning and 0 error messages.
+".\Objects\project.axf" - 0 Error(s), 4 Warning(s).
 
 <h2>Software Packages used:</h2>
 

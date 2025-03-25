@@ -7,6 +7,7 @@
 #include "lcd.h"
 #include "buzzer.h"
 #include "date.h"
+#include "number.h"
 void SystemClock_Config(void);
 
 void EnableClock()
@@ -27,17 +28,17 @@ void Init_LED(int i)
 
 void keyPress5Callback(enum KEYPAD key)
 {
-	if (key!= KEY_5)
+	if (key != KEY_5)
 		return;
-	GPIOA->ODR ^=(1<<0);
-	
-	//Write_Char_LCD(KEYPAD_CHARS[key]);
+	GPIOA->ODR ^= (1 << 0);
+
+	// Write_Char_LCD(KEYPAD_CHARS[key]);
 }
 void keyPressCallback(enum KEYPAD key)
 {
 	if (key == KEY_5)
 		return;
-	GPIOA->ODR ^=(1<<1);
+	GPIOA->ODR ^= (1 << 1);
 }
 void switchPressCallback(enum SWITCHS key)
 {
@@ -73,7 +74,7 @@ void switchPressCallback(enum SWITCHS key)
  */
 int run(void)
 {
-	
+
 	EnableClock();
 	Delay(500);
 	Init_LED(1);
@@ -84,43 +85,33 @@ int run(void)
 	char *line1 = "Big Daddy";
 	char *line2 = "Spring 2023";
 	/*Write_Char_LCD('o');*/
-	Write_String_LCD(line1); 
-	Write_Instr_LCD(0xc0); /* move to line 2*/ 
-	Write_String_LCD(line2);
-
+	/*Write_String_LCD(line1);
+	Write_Instr_LCD(0xc0); /* move to line 2*/
+	// Write_String_LCD(line2);
 	Events.onKeyPadPress(keyPressCallback);
-	Events.onKeyPadPress(keyPress5Callback);  
-	//Events.onSwitchPress(switchPressCallback);
+	Events.onKeyPadPress(keyPress5Callback);
+	// Events.onSwitchPress(switchPressCallback);
 
 	Init_buzzer();
-
-
+	Delay(1000);
+	double current = date();
+	char *str = doubleToString(current, 3);
+	Write_String_LCD(str);
 
 	double prev_date = date();
-	double p = (1/500);
-	
+	double p = (1 / 500) * 1000;
 
 	while (1)
 	{
-		//Write_Char_LCD('1');
-		//Delay(1000);
+		// Write_Char_LCD('1');
+		// Delay(1000);
 		check();
 		dwt_check();
-		GPIOC->ODR|=(1<<9);
-		GPIOC->ODR&=~(1<<9);
 		double current = date();
 		if ((current - prev_date) > p)
-			{
-				GPIOC->ODR ^=(1<<9);
-				prev_date =  current;
-			}
-		
-		
-
-
-		
-		
+		{
+			//GPIOC->ODR ^= (1 << 9);
+			prev_date = current;
+		}
 	}
-
-	
 }
