@@ -409,6 +409,11 @@
               <FileType>1</FileType>
               <FilePath>.\buzzer.c</FilePath>
             </File>
+            <File>
+              <FileName>date.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\date.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

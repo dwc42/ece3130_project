@@ -2,6 +2,8 @@
 	"files.associations": {
 		"stm32l4xx_it.h": "c",
 		"events.h": "c",
-		"lcd.h": "c"
+		"lcd.h": "c",
+		"stm32l4xx_hal.h": "c",
+		"time.h": "c"
 	}
 }

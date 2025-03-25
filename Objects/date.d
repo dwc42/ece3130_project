@@ -1,5 +1,4 @@
-./objects/stm32l4xx_hal_rcc_ex.o: \
-  STM32CubeMX\Target_1\STM32CubeMX\Drivers\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_rcc_ex.c \
+./objects/date.o: date.c \
   STM32CubeMX\Target_1\STM32CubeMX\Drivers\STM32L4xx_HAL_Driver\Inc\stm32l4xx_hal.h \
   STM32CubeMX\Target_1\STM32CubeMX\Inc\stm32l4xx_hal_conf.h \
   STM32CubeMX\Target_1\STM32CubeMX\Drivers\STM32L4xx_HAL_Driver\Inc\stm32l4xx_hal_rcc.h \
