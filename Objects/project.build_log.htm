@@ -5,11 +5,11 @@
 <h2>Tool Versions:</h2>
 IDE-Version: µVision V5.41.0.0
 Copyright (C) 2024 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: Austin DuCrest, Student, LIC=----
+License Information: Dow Cox, Tennessee Tech University, LIC=----
  
 Tool Versions:
 Toolchain:       MDK-Lite  Version: 5.41.0.0
-Toolchain Path:  C:\Users\austi\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin
+Toolchain Path:  C:\Users\mrpat\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin
 C Compiler:      ArmClang.exe V6.22
 Assembler:       Armasm.exe V6.22
 Linker/Locator:  ArmLink.exe V6.22
@@ -21,105 +21,16 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.3.0.0
 Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
-C:\Users\austi\OneDrive\Documents\School Stuff\Class Stuff\Engineering Folder\ECE 3130\Project\ece3130_project\ece3130_project.uvprojx
+C:\Users\mrpat\OneDrive\Documents\ECE3130\Hardware\ece3130_project\ece3130_project.uvprojx
 Project File Date:  03/24/2025
 
 <h2>Output:</h2>
-*** Using Compiler 'V6.22', folder: 'C:\Users\austi\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin'
+*** Using Compiler 'V6.22', folder: 'C:\Users\mrpat\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'Target_1'
-buzzer.c(8): error: variable has incomplete type 'struct timespec'
-    8 |     struct timespec ts;
-      |                     ^
-buzzer.c(8): note: forward declaration of 'struct timespec'
-    8 |     struct timespec ts;
-      |            ^
-buzzer.c(9): error: call to undeclared function 'clock_gettime'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    9 |     clock_gettime(CLOCK_REALTIME, &ts); // Get the current time
-      |     ^
-buzzer.c(9): error: use of undeclared identifier 'CLOCK_REALTIME'
-    9 |     clock_gettime(CLOCK_REALTIME, &ts); // Get the current time
-      |                   ^
-buzzer.c(16): error: use of undeclared identifier 'RCC'
-   16 |     RCC->AHB2ENR |= RCC_AHB2ENR_GPIOCEN; /* enable GPIOC clock*/
-      |     ^
-buzzer.c(16): error: use of undeclared identifier 'RCC_AHB2ENR_GPIOCEN'
-   16 |     RCC->AHB2ENR |= RCC_AHB2ENR_GPIOCEN; /* enable GPIOC clock*/
-      |                     ^
-buzzer.c(17): error: use of undeclared identifier 'GPIOC'
-   17 |     temp = GPIOC->MODER;
-      |            ^
-buzzer.c(20): error: use of undeclared identifier 'GPIOC'
-   20 |     GPIOC->MODER = temp;
-      |     ^
-buzzer.c(21): error: use of undeclared identifier 'GPIOC'
-   21 |     temp=GPIOC->OTYPER;
-      |          ^
-buzzer.c(23): error: use of undeclared identifier 'GPIOC'
-   23 |     GPIOC->OTYPER=temp;
-      |     ^
-buzzer.c(24): error: use of undeclared identifier 'GPIOC'
-   24 |     temp=GPIOC->PUPDR;
-      |          ^
-buzzer.c(26): error: use of undeclared identifier 'GPIOC'
-   26 |     GPIOC->PUPDR=temp;
-      |     ^
-11 errors generated.
-compiling buzzer.c...
 compiling run.c...
-events.c(64): warning: unused variable 'keyb2' [-Wunused-variable]
-   64 |                 int keyb2 = keyPadIB2[i];
-      |                     ^~~~~
-events.c(75): warning: incompatible pointer types passing 'void (**)(enum KEYPAD)' to parameter of type 'void **' [-Wincompatible-pointer-types]
-   75 |         int size = length(Events.onKeyPadPressCallbacks);
-      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.\events.h(55): note: passing argument to parameter 'array' here
-   55 | int length(void **array);
-      |                   ^
-events.c(89): warning: incompatible pointer types passing 'void (**)(enum KEYPAD)' to parameter of type 'void **' [-Wincompatible-pointer-types]
-   89 |         int size = length(Events.onKeyPadReleaseCallbacks);
-      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.\events.h(55): note: passing argument to parameter 'array' here
-   55 | int length(void **array);
-      |                   ^
-events.c(103): warning: incompatible pointer types passing 'void (**)(enum SWITCHS)' to parameter of type 'void **' [-Wincompatible-pointer-types]
-  103 |         int size = length(Events.onSwitchReleaseCallbacks);
-      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.\events.h(55): note: passing argument to parameter 'array' here
-   55 | int length(void **array);
-      |                   ^
-events.c(117): warning: incompatible pointer types passing 'void (**)(enum SWITCHS)' to parameter of type 'void **' [-Wincompatible-pointer-types]
-  117 |         int size = length(Events.onSwitchPressCallbacks);
-      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.\events.h(55): note: passing argument to parameter 'array' here
-   55 | int length(void **array);
-      |                   ^
-events.c(187): warning: incompatible pointer types passing 'void (**)(enum SWITCHS)' to parameter of type 'void **' [-Wincompatible-pointer-types]
-  187 |                                 int callbacksLength = length(Events.onSwitchReleaseCallbacks);
-      |                                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-events.c(158): note: passing argument to parameter 'array' here
-  158 | int length(void **array)
-      |                   ^
-events.c(205): warning: incompatible pointer types passing 'void (**)(enum SWITCHS)' to parameter of type 'void **' [-Wincompatible-pointer-types]
-  205 |                         int callbacksLength = length(Events.onSwitchPressCallbacks);
-      |                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-events.c(158): note: passing argument to parameter 'array' here
-  158 | int length(void **array)
-      |                   ^
-events.c(238): warning: incompatible pointer types passing 'void (**)(enum KEYPAD)' to parameter of type 'void **' [-Wincompatible-pointer-types]
-  238 |                                 int callbacksLength = length(Events.onKeyPadReleaseCallbacks);
-      |                                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-events.c(158): note: passing argument to parameter 'array' here
-  158 | int length(void **array)
-      |                   ^
-events.c(256): warning: incompatible pointer types passing 'void (**)(enum KEYPAD)' to parameter of type 'void **' [-Wincompatible-pointer-types]
-  256 |                         int callbacksLength = length(Events.onKeyPadPressCallbacks);
-      |                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-events.c(158): note: passing argument to parameter 'array' here
-  158 | int length(void **array)
-      |                   ^
-9 warnings generated.
-compiling events.c...
-".\Objects\project.axf" - 11 Error(s), 9 Warning(s).
+linking...
+Program Size: Code=12426 RO-data=570 RW-data=36 ZI-data=1848  
+".\Objects\project.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -148,7 +59,7 @@ Package Vendor: Keil
   ./STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Inc
   ./STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy
   ./STM32CubeMX/Target_1/STM32CubeMX/Inc
-  C:/Users/austi/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include
+  C:/Users/mrpat/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include
 
 <h2>Collection of Component Files used:</h2>
 
@@ -158,8 +69,7 @@ Package Vendor: Keil
    * Component: ARM::CMSIS:CORE@6.1.0
 
    * Component: Keil::Device:CubeMX@1.0.0
-Target not created.
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>

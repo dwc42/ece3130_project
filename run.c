@@ -6,6 +6,7 @@
 #include "keypad.h"
 #include "lcd.h"
 #include "buzzer.h"
+#include "date.h"
 void SystemClock_Config(void);
 
 void EnableClock()
@@ -79,7 +80,7 @@ int run(void)
 	Init_LED(0);
 	LCD_Init();
 	InitEvents();
-	
+	DWT_Init();
 	char *line1 = "Big Daddy";
 	char *line2 = "Spring 2023";
 	/*Write_Char_LCD('o');*/
@@ -104,7 +105,7 @@ int run(void)
 		//Write_Char_LCD('1');
 		//Delay(1000);
 		check();
-
+		dwt_check();
 		GPIOC->ODR|=(1<<9);
 		GPIOC->ODR&=~(1<<9);
 		double current = date();

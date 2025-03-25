@@ -3,6 +3,8 @@
 ".\objects\run.o"
 ".\objects\keypad.o"
 ".\objects\lcd.o"
+".\objects\buzzer.o"
+".\objects\date.o"
 ".\objects\main.o"
 ".\objects\stm32l4xx_it.o"
 ".\objects\stm32l4xx_hal_msp.o"

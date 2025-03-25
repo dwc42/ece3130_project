@@ -3,6 +3,4 @@
 
 void Init_buzzer();
 
-double date();
-
-#endif 
+#endif
