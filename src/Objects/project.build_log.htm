@@ -21,18 +21,25 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.3.0.0
 Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
-C:\Users\mrpat\OneDrive\Documents\ECE3130\Hardware\ece3130_project\ece3130_project.uvprojx
-Project File Date:  03/27/2025
+C:\Users\mrpat\OneDrive\Documents\ECE3130\Hardware\ece3130_project\src\ece3130_project.uvprojx
+Project File Date:  03/28/2025
 
 <h2>Output:</h2>
 *** Using Compiler 'V6.22', folder: 'C:\Users\mrpat\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'Target_1'
-compiling lcd.c...
+run.c(64): warning: unused variable 'current' [-Wunused-variable]
+   64 |         double current = date();
+      |                ^~~~~~~
+run.c(108): warning: '/*' within block comment [-Wcomment]
+  108 |         Write_Instr_LCD(0xc0); /* move to line 2*/
+      |                                ^
+2 warnings generated.
+compiling run.c...
 linking...
 .\Objects\project.axf: Warning: L6989W: Could not apply patch sdcomp-29491-629360 to instruction VPOP     {d8-d15} at offset 0xf4, instruction is within an IT block and is not the last instruction for log.o(i.__hardfp_log).
-Program Size: Code=21500 RO-data=1160 RW-data=176 ZI-data=1864  
+Program Size: Code=21420 RO-data=1160 RW-data=176 ZI-data=1864  
 Finished: 0 information, 1 warning and 0 error messages.
-".\Objects\project.axf" - 0 Error(s), 1 Warning(s).
+".\Objects\project.axf" - 0 Error(s), 3 Warning(s).
 
 <h2>Software Packages used:</h2>
 

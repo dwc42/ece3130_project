@@ -115,13 +115,15 @@ int run(void)
 	double prev_date = date();
 	while (1)
 	{
-		double old = date();
+		/*double old = date();
 		HAL_Delay(2);
 		double test = date();
 		
 		HAL_Delay(2000);
 		char *str = doubleToString(test- old, 2);
+		
 		Set_LCD(str);
+		*/
 		check();
 		double current = date();
 		if (!peroid)

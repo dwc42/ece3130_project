@@ -3,11 +3,11 @@
 <title>Static Call Graph - [.\Objects\project.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\project.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6220000: Last Updated: Fri Mar 28 10:29:24 2025
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6220000: Last Updated: Fri Mar 28 12:46:13 2025
 <BR><P>
-<H3>Maximum Stack Usage =        384 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        344 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
-__rt_entry_main &rArr; main &rArr; run &rArr; doubleToString &rArr; countSigFigs &rArr; __hardfp_log10 &rArr; log &rArr; __hardfp_log &rArr; __kernel_poly &rArr; __aeabi_dmul
+switchPressCallback &rArr; doubleToString &rArr; countSigFigs &rArr; __hardfp_log10 &rArr; log &rArr; __hardfp_log &rArr; __kernel_poly &rArr; __aeabi_dmul
 <P>
 <H3>
 Functions with no stack information
@@ -421,8 +421,8 @@ Global Symbols
 <P><STRONG><a name="[151]"></a>__rt_entry_postsh_1</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$00000009))
 
 <P><STRONG><a name="[9b]"></a>__rt_entry_main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$0000000D))
-<BR><BR>[Stack]<UL><LI>Max Depth = 384 + Unknown Stack Size
-<LI>Call Chain = __rt_entry_main &rArr; main &rArr; run &rArr; doubleToString &rArr; countSigFigs &rArr; __hardfp_log10 &rArr; log &rArr; __hardfp_log &rArr; __kernel_poly &rArr; __aeabi_dmul
+<BR><BR>[Stack]<UL><LI>Max Depth = 240 + Unknown Stack Size
+<LI>Call Chain = __rt_entry_main &rArr; main &rArr; SystemClock_Config &rArr; HAL_RCC_OscConfig &rArr; HAL_InitTick &rArr; HAL_NVIC_SetPriority &rArr; NVIC_EncodePriority
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;exit
@@ -1241,8 +1241,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 </UL>
-<BR>[Called By]<UL><LI><a href="#[103]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;run
-<LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_LCD
+<BR>[Called By]<UL><LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_LCD
 </UL>
 
 <P><STRONG><a name="[d3]"></a>HAL_GetTick</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, stm32l4xx_hal.o(.text.HAL_GetTick))
@@ -1405,12 +1404,11 @@ Global Symbols
 <P><STRONG><a name="[e9]"></a>Set_LCD</STRONG> (Thumb, 26 bytes, Stack size 16 bytes, lcd.o(.text.Set_LCD))
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = Set_LCD &rArr; Write_String_LCD &rArr; Write_Char_LCD &rArr; LCD_nibble_write &rArr; Write_SR_LCD &rArr; Delay
 </UL>
-<BR>[Calls]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Clear_Display
-<LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<BR>[Calls]<UL><LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Clear_Display
 <LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Write_String_LCD
 </UL>
-<BR>[Called By]<UL><LI><a href="#[103]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;run
-<LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;switchPressCallback
+<BR>[Called By]<UL><LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;switchPressCallback
 </UL>
 
 <P><STRONG><a name="[9]"></a>SysTick_Handler</STRONG> (Thumb, 8 bytes, Stack size 8 bytes, stm32l4xx_it.o(.text.SysTick_Handler))
@@ -1518,8 +1516,7 @@ Global Symbols
 <LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
 <LI><a href="#[f3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;countSigFigs
 </UL>
-<BR>[Called By]<UL><LI><a href="#[103]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;run
-<LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;switchPressCallback
+<BR>[Called By]<UL><LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;switchPressCallback
 </UL>
 
 <P><STRONG><a name="[fe]"></a>getCurrentMicros</STRONG> (Thumb, 100 bytes, Stack size 24 bytes, date.o(.text.getCurrentMicros))
@@ -1557,8 +1554,8 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[9c]"></a>main</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, main.o(.text.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 384 + Unknown Stack Size
-<LI>Call Chain = main &rArr; run &rArr; doubleToString &rArr; countSigFigs &rArr; __hardfp_log10 &rArr; log &rArr; __hardfp_log &rArr; __kernel_poly &rArr; __aeabi_dmul
+<BR><BR>[Stack]<UL><LI>Max Depth = 240 + Unknown Stack Size
+<LI>Call Chain = main &rArr; SystemClock_Config &rArr; HAL_RCC_OscConfig &rArr; HAL_InitTick &rArr; HAL_NVIC_SetPriority &rArr; NVIC_EncodePriority
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ec]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 <LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Init
@@ -1607,15 +1604,11 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> events.o(.text.InitEvents)
 </UL>
-<P><STRONG><a name="[103]"></a>run</STRONG> (Thumb, 304 bytes, Stack size 64 bytes, run.o(.text.run))
-<BR><BR>[Stack]<UL><LI>Max Depth = 376 + Unknown Stack Size
-<LI>Call Chain = run &rArr; doubleToString &rArr; countSigFigs &rArr; __hardfp_log10 &rArr; log &rArr; __hardfp_log &rArr; __kernel_poly &rArr; __aeabi_dmul
+<P><STRONG><a name="[103]"></a>run</STRONG> (Thumb, 224 bytes, Stack size 32 bytes, run.o(.text.run))
+<BR><BR>[Stack]<UL><LI>Max Depth = 152<LI>Call Chain = run &rArr; check &rArr; length
 </UL>
-<BR>[Calls]<UL><LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
-<LI><a href="#[108]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Init_buzzer
+<BR>[Calls]<UL><LI><a href="#[108]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Init_buzzer
 <LI><a href="#[e4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_Init
-<LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Set_LCD
-<LI><a href="#[101]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;doubleToString
 <LI><a href="#[fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;date
 <LI><a href="#[107]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Init_LED
 <LI><a href="#[106]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EnableClock
