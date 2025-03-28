@@ -167,49 +167,51 @@ int length(void **array)
 
 void check()
 {
+	int switchPressed = 0;
 
-	if (Events.switchsubcribed)
+	GPIOB->ODR &= ~(1 << 1);
+	GPIOB->ODR &= ~(1 << 2);
+	GPIOB->ODR &= ~(1 << 3);
+	GPIOB->ODR &= ~(1 << 4);
+	for (int row = 0; row < 4; row++)
 	{
-		GPIOB->ODR &= ~(1 << 1);
-		GPIOB->ODR &= ~(1 << 2);
-		GPIOB->ODR &= ~(1 << 3);
-		GPIOB->ODR &= ~(1 << 4);
-		for (int row = 0; row < 4; row++)
+		int pressedCurrent = GPIOB->IDR & (0x1 << (11 - row));
+		switchPressed += pressedCurrent;
+		if (!Events.switchsubcribed)
+			continue;
+		if (!pressedCurrent)
 		{
-			int pressedCurrent = GPIOB->IDR & (0x1 << (8 + row));
-			if (!pressedCurrent)
-			{
-				if (!Events.keyPadPressed[row])
-					continue;
-
-				Events.switchPressTicks[row] = 0;
-				enum SWITCHS key = SWITCH_ARRAY[row];
-				int callbacksLength = length(Events.onSwitchReleaseCallbacks);
-				for (int i = 0; i < callbacksLength; i++)
-				{
-					Events.onSwitchReleaseCallbacks[i](key);
-				}
-				Events.switchPressed[row] = 0;
+			if (!Events.keyPadPressed[row])
 				continue;
-			}
+
+			Events.switchPressTicks[row] = 0;
 			enum SWITCHS key = SWITCH_ARRAY[row];
-			int pressed = Events.switchPressed[row];
-
-			if (pressed)
-				continue;
-			int ticks = Events.switchPressTicks[row]++;
-			if (ticks < Events.countToUnbounce)
-				continue;
-
-			Events.switchPressed[row] = 1;
-			int callbacksLength = length(Events.onSwitchPressCallbacks);
+			int callbacksLength = length(Events.onSwitchReleaseCallbacks);
 			for (int i = 0; i < callbacksLength; i++)
 			{
-				Events.onSwitchPressCallbacks[i](key);
+				Events.onSwitchReleaseCallbacks[i](key);
 			}
+			Events.switchPressed[row] = 0;
+			continue;
+		}
+		enum SWITCHS key = SWITCH_ARRAY[row];
+		int pressed = Events.switchPressed[row];
+
+		if (pressed)
+			continue;
+		int ticks = Events.switchPressTicks[row]++;
+		if (ticks < Events.countToUnbounce)
+			continue;
+
+		Events.switchPressed[row] = 1;
+		int callbacksLength = length(Events.onSwitchPressCallbacks);
+		for (int i = 0; i < callbacksLength; i++)
+		{
+			Events.onSwitchPressCallbacks[i](key);
 		}
 	}
-	if (!Events.keypadsubcribed)
+
+	if (switchPressed || !Events.keypadsubcribed)
 		return;
 	for (int col = 0; col < 4; col++)
 	{
@@ -229,29 +231,30 @@ void check()
 			int pressedCurrent = (GPIOB->IDR & (0x1 << (8 + row)));
 			if (!pressedCurrent)
 			{
-				if (!Events.keyPadPressed[col][row])
-					continue;
 
-				Events.keyPadPressTicks[col][row] = 0;
-				enum KEYPAD key = KEYPAD_MATRIX[col][row];
+				Events.keyPadPressTicks[row][col] = 0;
+				Events.keyPadPressed[row][col] = 0;
+				if (!Events.keyPadPressed[row][col])
+					continue;
+				enum KEYPAD key = KEYPAD_MATRIX[row][col];
 				int callbacksLength = length(Events.onKeyPadReleaseCallbacks);
 				for (int i = 0; i < callbacksLength; i++)
 				{
 					Events.onKeyPadReleaseCallbacks[i](key);
 				}
-				Events.keyPadPressed[col][row] = 0;
+
 				continue;
 			}
-			enum KEYPAD key = KEYPAD_MATRIX[col][row];
-			int pressed = Events.keyPadPressed[col][row];
+			enum KEYPAD key = KEYPAD_MATRIX[row][col];
+			int pressed = Events.keyPadPressed[row][col];
 
 			if (pressed)
 				continue;
-			int ticks = Events.keyPadPressTicks[col][row]++;
+			int ticks = Events.keyPadPressTicks[row][col]++;
 			if (ticks < Events.countToUnbounce)
 				continue;
 
-			Events.keyPadPressed[col][row] = 1;
+			Events.keyPadPressed[row][col] = 1;
 			int callbacksLength = length(Events.onKeyPadPressCallbacks);
 			for (int i = 0; i < callbacksLength; i++)
 			{

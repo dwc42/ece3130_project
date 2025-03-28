@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include "events.h"
 #include "main.h"
@@ -25,45 +26,46 @@ void Init_LED(int i)
 	GPIOA->OTYPER &= ~(0x01 << i);
 	GPIOA->PUPDR &= ~(0x03 << (2 * i));
 }
-
-void keyPress5Callback(enum KEYPAD key)
+char *charToString(char c)
 {
-	if (key != KEY_5)
-		return;
-	GPIOA->ODR ^= (1 << 0);
-
-	// Write_Char_LCD(KEYPAD_CHARS[key]);
+	if (c == '\0')
+		return "";
+	char *str = (char *)malloc(2);
+	str[0] = c;
+	str[1] = '\0';
+	return str;
 }
 void keyPressCallback(enum KEYPAD key)
 {
-	if (key == KEY_5)
-		return;
-	GPIOA->ODR ^= (1 << 1);
+	GPIOA->ODR ^= (1 << 0);
+	Set_LCD(charToString(KEYPAD_CHARS[key]));
 }
+
 void switchPressCallback(enum SWITCHS key)
 {
-	if (!key)
-		return;
+	double current = date();
+	char *str = doubleToString(current, 10);
+	Set_LCD(str);
 	switch (key)
 	{
 	case BUTTON_SWITCH2:
 	{
-		Write_String_LCD(" SW2 ");
+		Write_String_LCD(" Q");
 		break;
 	}
 	case BUTTON_SWITCH3:
 	{
-		Write_String_LCD(" SW3 ");
+		Write_String_LCD(" R");
 		break;
 	}
 	case BUTTON_SWITCH4:
 	{
-		Write_String_LCD(" SW4 ");
+		Write_String_LCD(" S");
 		break;
 	}
 	case BUTTON_SWITCH5:
 	{
-		Write_String_LCD(" SW5 ");
+		Write_String_LCD(" T");
 		break;
 	}
 	}
@@ -82,21 +84,15 @@ int run(void)
 	LCD_Init();
 	InitEvents();
 	DWT_Init();
-	char *line1 = "Big Daddy";
-	char *line2 = "Spring 2023";
 	/*Write_Char_LCD('o');*/
 	/*Write_String_LCD(line1);
 	Write_Instr_LCD(0xc0); /* move to line 2*/
 	// Write_String_LCD(line2);
 	Events.onKeyPadPress(keyPressCallback);
-	Events.onKeyPadPress(keyPress5Callback);
-	// Events.onSwitchPress(switchPressCallback);
+	Events.onSwitchPress(switchPressCallback);
 
 	Init_buzzer();
 	Delay(1000);
-	double current = date();
-	char *str = doubleToString(current, 3);
-	Write_String_LCD(str);
 
 	double prev_date = date();
 	double p = (1 / 500) * 1000;
@@ -110,7 +106,7 @@ int run(void)
 		double current = date();
 		if ((current - prev_date) > p)
 		{
-			//GPIOC->ODR ^= (1 << 9);
+			// GPIOC->ODR ^= (1 << 9);
 			prev_date = current;
 		}
 	}

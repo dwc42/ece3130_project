@@ -7,9 +7,9 @@
 enum KEYPAD
 {
 	KEY_0 = 13,
-	KEY_1 = 1,
-	KEY_2 = 2,
-	KEY_3 = 3,
+	KEY_1 = 0,
+	KEY_2 = 1,
+	KEY_3 = 2,
 	KEY_4 = 4,
 	KEY_5 = 5,
 	KEY_6 = 6,
@@ -25,10 +25,10 @@ enum KEYPAD
 };
 enum SWITCHS
 {
-	BUTTON_SWITCH2 = 2,
-	BUTTON_SWITCH3 = 3,
-	BUTTON_SWITCH4 = 4,
-	BUTTON_SWITCH5 = 5,
+	BUTTON_SWITCH2 = 0,
+	BUTTON_SWITCH3 = 1,
+	BUTTON_SWITCH4 = 2,
+	BUTTON_SWITCH5 = 3,
 };
 struct EventsType
 {

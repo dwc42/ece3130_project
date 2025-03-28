@@ -8,7 +8,7 @@ void Write_Instr_LCD(uint8_t code);
 void Write_Char_LCD(uint8_t code);
 
 void Write_String_LCD(char *temp);
-
+void Set_LCD(char *string);
 void Clear_Display();
 void Set_Cursor(uint8_t value);
 void Set_Cursor_Blinking();
