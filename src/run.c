@@ -35,16 +35,34 @@ char *charToString(char c)
 	str[1] = '\0';
 	return str;
 }
+double time = 0;
+
+double Frequencies[16] = {10000, 1174, 1318, 1396,
+						  392, 440, 493.88, 523.25,
+						  1000, 1200, 1400,
+						  1600, 1800, 2000, 2500};
+
+/*double Frequencies[16] = {1, 2, 3, 4,
+						  5, 6, 7, 8,
+						  9, 10, 11,
+						  12, 13, 14, 15};*/
+double peroid = 0.0;
 void keyPressCallback(enum KEYPAD key)
 {
-	GPIOA->ODR ^= (1 << 0);
-	Set_LCD(charToString(KEYPAD_CHARS[key]));
+	peroid = 1000.0 / ((double)Frequencies[key]);
+	// GPIOA->ODR |= (1 << 1);
+	Write_Char_LCD(KEYPAD_CHARS[key]);
 }
-
+void keyReleaseCallback(enum KEYPAD key)
+{
+	peroid = 0;
+	// GPIOA->ODR &= ~(1 << 1);
+	Write_Char_LCD(KEYPAD_CHARS[key]);
+}
 void switchPressCallback(enum SWITCHS key)
 {
 	double current = date();
-	char *str = doubleToString(current, 10);
+	char *str = doubleToString(time, 10);
 	Set_LCD(str);
 	switch (key)
 	{
@@ -70,6 +88,7 @@ void switchPressCallback(enum SWITCHS key)
 	}
 	}
 }
+
 /**
  * @brief  The application entry point.
  * @retval int
@@ -83,30 +102,34 @@ int run(void)
 	Init_LED(0);
 	LCD_Init();
 	InitEvents();
-	DWT_Init();
+	/*DWT_Init();*/
 	/*Write_Char_LCD('o');*/
 	/*Write_String_LCD(line1);
 	Write_Instr_LCD(0xc0); /* move to line 2*/
 	// Write_String_LCD(line2);
 	Events.onKeyPadPress(keyPressCallback);
+	Events.onKeyPadRelease(keyReleaseCallback);
 	Events.onSwitchPress(switchPressCallback);
 
 	Init_buzzer();
-	Delay(1000);
-
 	double prev_date = date();
-	double p = (1 / 500) * 1000;
-
 	while (1)
 	{
-		// Write_Char_LCD('1');
-		// Delay(1000);
+		double old = date();
+		HAL_Delay(2);
+		double test = date();
+		
+		HAL_Delay(2000);
+		char *str = doubleToString(test- old, 2);
+		Set_LCD(str);
 		check();
-		dwt_check();
 		double current = date();
-		if ((current - prev_date) > p)
+		if (!peroid)
+			continue;
+		if (((current - prev_date) > peroid))
 		{
-			// GPIOC->ODR ^= (1 << 9);
+			GPIOC->ODR ^= (1 << 9);
+			//GPIOA->ODR ^= 1 << 1;
 			prev_date = current;
 		}
 	}

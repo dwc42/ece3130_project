@@ -80,7 +80,7 @@ void Clear_Display()
 void Set_LCD(char *string)
 {
 	Clear_Display();
-	HAL_Delay(2);
+	HAL_Delay(5);
 	Write_String_LCD(string);
 }
 void Set_Cursor(uint8_t value)

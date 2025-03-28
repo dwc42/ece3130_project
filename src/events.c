@@ -233,16 +233,18 @@ void check()
 			{
 
 				Events.keyPadPressTicks[row][col] = 0;
-				Events.keyPadPressed[row][col] = 0;
-				if (!Events.keyPadPressed[row][col])
-					continue;
-				enum KEYPAD key = KEYPAD_MATRIX[row][col];
-				int callbacksLength = length(Events.onKeyPadReleaseCallbacks);
-				for (int i = 0; i < callbacksLength; i++)
-				{
-					Events.onKeyPadReleaseCallbacks[i](key);
-				}
 
+				if (Events.keyPadPressed[row][col])
+				{
+
+					enum KEYPAD key = KEYPAD_MATRIX[row][col];
+					int callbacksLength = length(Events.onKeyPadReleaseCallbacks);
+					for (int i = 0; i < callbacksLength; i++)
+					{
+						Events.onKeyPadReleaseCallbacks[i](key);
+					}
+				}
+				Events.keyPadPressed[row][col] = 0;
 				continue;
 			}
 			enum KEYPAD key = KEYPAD_MATRIX[row][col];
