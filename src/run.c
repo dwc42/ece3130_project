@@ -9,6 +9,7 @@
 #include "buzzer.h"
 #include "date.h"
 #include "number.h"
+#include "async.h"
 void SystemClock_Config(void);
 
 void EnableClock()
@@ -49,26 +50,25 @@ double Frequencies[16] = {10000, 1174, 1318, 1396,
 double peroid = 0.0;
 void keyPressCallback(enum KEYPAD key)
 {
-	peroid = 1000.0 / ((double)Frequencies[key]);
-	// GPIOA->ODR |= (1 << 1);
+	SetFrequency(Frequencies[key]);
 	Write_Char_LCD(KEYPAD_CHARS[key]);
 }
 void keyReleaseCallback(enum KEYPAD key)
 {
-	peroid = 0;
+	SetFrequency(0);
 	// GPIOA->ODR &= ~(1 << 1);
 	Write_Char_LCD(KEYPAD_CHARS[key]);
 }
+double average = 0;
 void switchPressCallback(enum SWITCHS key)
 {
-	double current = date();
-	char *str = doubleToString(time, 10);
+	char *str = doubleToString(average, 3);
 	Set_LCD(str);
 	switch (key)
 	{
 	case BUTTON_SWITCH2:
 	{
-		Write_String_LCD(" Q");
+		Write_String_LCD("A  Q");
 		break;
 	}
 	case BUTTON_SWITCH3:
@@ -89,6 +89,8 @@ void switchPressCallback(enum SWITCHS key)
 	}
 }
 
+double ticksArray[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+
 /**
  * @brief  The application entry point.
  * @retval int
@@ -102,10 +104,12 @@ int run(void)
 	Init_LED(0);
 	LCD_Init();
 	InitEvents();
+	InitAsync();
 	/*DWT_Init();*/
 	/*Write_Char_LCD('o');*/
 	/*Write_String_LCD(line1);
-	Write_Instr_LCD(0xc0); /* move to line 2*/
+	Write_Instr_LCD(0xc0);
+		move to line */
 	// Write_String_LCD(line2);
 	Events.onKeyPadPress(keyPressCallback);
 	Events.onKeyPadRelease(keyReleaseCallback);
@@ -113,26 +117,51 @@ int run(void)
 
 	Init_buzzer();
 	double prev_date = date();
+	double lastTickDate = date();
+	double lastPrint = date();
+
 	while (1)
 	{
+
 		/*double old = date();
 		HAL_Delay(2);
 		double test = date();
-		
+
 		HAL_Delay(2000);
 		char *str = doubleToString(test- old, 2);
-		
+
 		Set_LCD(str);
 		*/
+		lastTickDate = date();
+		double time2 = date();
+		double tickTime = time2 - lastTickDate;
 		check();
+		checkLCDWrites();
 		double current = date();
-		if (!peroid)
-			continue;
-		if (((current - prev_date) > peroid))
+		if (peroid)
 		{
-			GPIOC->ODR ^= (1 << 9);
-			//GPIOA->ODR ^= 1 << 1;
-			prev_date = current;
+			if (((current - prev_date) > peroid))
+			{
+				GPIOC->ODR ^= (1 << 9);
+				prev_date = current;
+			}
+		}
+
+		double total = 0;
+		for (int i = 0; i < 10; i++)
+		{
+			total += ticksArray[i];
+			if (i >= 9)
+				continue;
+			ticksArray[i + 1] = ticksArray[i];
+		}
+		ticksArray[0] = tickTime;
+		average = total / 10;
+		if (date() - lastPrint > 1000)
+		{
+			char *str = doubleToString(average, 3);
+			Set_LCD(str);
+			lastPrint = date();
 		}
 	}
 }

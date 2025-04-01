@@ -20,17 +20,18 @@ int lengthDoubles(double *list)
  * @param list point to an array of doubles with a DBL_MAX at the end
  * @param item the double to add to the list
  */
-void pushDouble(double *list, double item)
+void pushDouble(double **list, double item)
 {
-	int len = lengthDoubles(list);
+	int len = lengthDoubles(*list);
 	double *new_list = malloc((sizeof(double) * (len) + 1) + sizeof('\0'));
 	for (int i = 0; i < len; i++)
 	{
-		new_list[i] = list[i];
+		new_list[i] = (*list)[i];
 	}
 	new_list[len] = item;
 	new_list[len + 1] = DBL_MAX;
-	list = new_list;
+	free(*list);
+	*list = new_list;
 }
 /**
  * @brief

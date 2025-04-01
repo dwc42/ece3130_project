@@ -1,0 +1,5 @@
+load STM32L476RGTx
+project name STM32CubeMX
+project toolchain "MDK-ARM V5"
+project path "C:\Users\mrpat\OneDrive\Documents\ECE3130\Hardware\buzzer_test\STM32CubeMX\Target_1"
+SetCopyLibrary "copy only"

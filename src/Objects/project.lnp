@@ -6,6 +6,8 @@
 ".\objects\buzzer.o"
 ".\objects\date.o"
 ".\objects\number.o"
+".\objects\list.o"
+".\objects\async.o"
 ".\objects\main.o"
 ".\objects\stm32l4xx_it.o"
 ".\objects\stm32l4xx_hal_msp.o"

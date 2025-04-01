@@ -6,6 +6,20 @@
 		"stm32l4xx_hal.h": "c",
 		"time.h": "c",
 		"stdlib.h": "c",
-		"number.h": "c"
+		"number.h": "c",
+		"xlocale": "cpp",
+		"xstring": "cpp",
+		"thread": "cpp",
+		"async.h": "c",
+		"algorithm": "c",
+		"chrono": "c",
+		"optional": "c",
+		"system_error": "c",
+		"type_traits": "c",
+		"xlocmon": "c",
+		"xtr1common": "c",
+		"xutility": "c",
+		"main.h": "c",
+		"buzzer.h": "c"
 	}
 }

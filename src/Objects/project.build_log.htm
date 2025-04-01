@@ -27,19 +27,18 @@ Project File Date:  03/28/2025
 <h2>Output:</h2>
 *** Using Compiler 'V6.22', folder: 'C:\Users\mrpat\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'Target_1'
-run.c(64): warning: unused variable 'current' [-Wunused-variable]
-   64 |         double current = date();
-      |                ^~~~~~~
-run.c(108): warning: '/*' within block comment [-Wcomment]
-  108 |         Write_Instr_LCD(0xc0); /* move to line 2*/
-      |                                ^
-2 warnings generated.
-compiling run.c...
 linking...
 .\Objects\project.axf: Warning: L6989W: Could not apply patch sdcomp-29491-629360 to instruction VPOP     {d8-d15} at offset 0xf4, instruction is within an IT block and is not the last instruction for log.o(i.__hardfp_log).
-Program Size: Code=21420 RO-data=1160 RW-data=176 ZI-data=1864  
-Finished: 0 information, 1 warning and 0 error messages.
-".\Objects\project.axf" - 0 Error(s), 3 Warning(s).
+.\Objects\project.axf: Error: L6218E: Undefined symbol HAL_TIM_PWM_Init (referred from buzzer.o).
+.\Objects\project.axf: Error: L6218E: Undefined symbol HAL_TIM_PWM_ConfigChannel (referred from buzzer.o).
+.\Objects\project.axf: Error: L6218E: Undefined symbol HAL_TIM_PWM_Start (referred from buzzer.o).
+.\Objects\project.axf: Error: L6218E: Undefined symbol HAL_TIM_Base_Init (referred from main.o).
+.\Objects\project.axf: Error: L6218E: Undefined symbol HAL_TIM_ConfigClockSource (referred from main.o).
+.\Objects\project.axf: Error: L6218E: Undefined symbol HAL_TIMEx_MasterConfigSynchronization (referred from main.o).
+Not enough information to list image symbols.
+Not enough information to list load addresses in the image map.
+Finished: 2 information, 1 warning and 6 error messages.
+".\Objects\project.axf" - 6 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -78,6 +77,7 @@ Package Vendor: Keil
    * Component: ARM::CMSIS:CORE@6.1.0
 
    * Component: Keil::Device:CubeMX@1.0.0
+Target not created.
 Build Time Elapsed:  00:00:01
 </pre>
 </body>

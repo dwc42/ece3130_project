@@ -165,10 +165,11 @@ int length(void **array)
 	return i;
 }
 
-void check()
+double check()
 {
+	double timetest = 0;
 	int switchPressed = 0;
-
+	
 	GPIOB->ODR &= ~(1 << 1);
 	GPIOB->ODR &= ~(1 << 2);
 	GPIOB->ODR &= ~(1 << 3);
@@ -212,13 +213,9 @@ void check()
 	}
 
 	if (switchPressed || !Events.keypadsubcribed)
-		return;
+		return timetest;
 	for (int col = 0; col < 4; col++)
 	{
-		GPIOB->ODR &= ~(1 << 1);
-		GPIOB->ODR &= ~(1 << 2);
-		GPIOB->ODR &= ~(1 << 3);
-		GPIOB->ODR &= ~(1 << 4);
 
 		uint32_t temp = GPIOB->ODR;
 		GPIOB->ODR |= (1 << (1 + col));
@@ -263,5 +260,7 @@ void check()
 				Events.onKeyPadPressCallbacks[i](key);
 			}
 		}
+		GPIOB->ODR &= ~(1 << (col + 1));
 	}
+	return timetest;
 }

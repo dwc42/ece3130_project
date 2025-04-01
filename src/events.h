@@ -54,5 +54,5 @@ extern struct EventsType Events;
 void InitEvents();
 int length(void **array);
 extern enum KEYPAD KEYPAD_MATRIX[4][4];
-void check();
+double check();
 #endif /* __EVENTS_H */
