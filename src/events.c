@@ -8,9 +8,7 @@ struct EventsType Events;
 void Delay(unsigned int n)
 {
 	int i;
-	for (; n > 0; n--)
-		for (i = 0; i < 136; i++)
-			;
+	HAL_Delay(n);
 	/*1ms*/
 }
 
@@ -169,7 +167,7 @@ double check()
 {
 	double timetest = 0;
 	int switchPressed = 0;
-	
+
 	GPIOB->ODR &= ~(1 << 1);
 	GPIOB->ODR &= ~(1 << 2);
 	GPIOB->ODR &= ~(1 << 3);

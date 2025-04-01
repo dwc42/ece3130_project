@@ -38,10 +38,7 @@ char *charToString(char c)
 }
 double time = 0;
 
-double Frequencies[16] = {10000, 1174, 1318, 1396,
-						  392, 440, 493.88, 523.25,
-						  1000, 1200, 1400,
-						  1600, 1800, 2000, 2500};
+double Frequencies[16] = {135, 149, 169, 175, 196, 220, 246.9, 261.6, 294, 330, 349, 392, 440, 494, 523};
 
 /*double Frequencies[16] = {1, 2, 3, 4,
 						  5, 6, 7, 8,
@@ -133,6 +130,7 @@ int run(void)
 		Set_LCD(str);
 		*/
 		lastTickDate = date();
+		HAL_Delay(5);
 		double time2 = date();
 		double tickTime = time2 - lastTickDate;
 		check();

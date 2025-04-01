@@ -9,6 +9,11 @@
 #include <list.h>
 #include "main.h"
 TIM_HandleTypeDef htim3;
+/**
+ *
+ * @brief Initialize the buzzer on PC9 using TIM3 in PWM mode
+ * @note This function configures the GPIO pin and the timer for PWM output. chat gpt suggested this code for buzzer( as not covered in the slides)
+ */
 void Init_buzzer(void)
 {
     // Enable TIM3 and GPIOC clocks
@@ -34,29 +39,16 @@ void Init_buzzer(void)
     htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
     htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
 
-    if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)
-    {
-        // Initialization error
-        while (1)
-            ;
-    }
-
     TIM_OC_InitTypeDef sConfigOC = {0};
     sConfigOC.OCMode = TIM_OCMODE_PWM1;
     sConfigOC.Pulse = 500; // 50% Duty Cycle
     sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
     sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-
-    if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_4) != HAL_OK)
-    {
-        // Configuration error
-        while (1)
-            ;
-    }
 }
 /**
  * @brief Set the frequency of the buzzer
  * @param freq The desired frequency in Hz
+ * @note gpt suggested this code for buzzer
  */
 void SetFrequency(double freq)
 {
@@ -67,9 +59,9 @@ void SetFrequency(double freq)
         return;
     }
 
-    uint32_t timerClock = 72000000; // Assuming system clock is 72 MHz
-    uint32_t prescaler = 72 - 1;    // Prescale to 1 MHz timer clock
-    uint32_t period = (timerClock / (prescaler + 1) / freq) - 1;
+    uint32_t timerClock = 72000000;                                // Assuming system clock is 72 MHz
+    uint32_t prescaler = 72 - 1;                                   // Prescale to 1 MHz timer clock
+    uint32_t period = timerClock / ((freq + 1) * (prescaler + 1)); // <-- owens/blog chat gpt's -> (timerClock / (prescaler + 1) / freq) - 1;
 
     // Update the timer configuration
     htim3.Init.Prescaler = prescaler;
