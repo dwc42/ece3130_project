@@ -4,12 +4,10 @@
 #include "events.h"
 #include "main.h"
 #include "stm32l4xx_hal.h"
-#include "keypad.h"
 #include "lcd.h"
 #include "buzzer.h"
 #include "date.h"
 #include "number.h"
-#include "async.h"
 void SystemClock_Config(void);
 
 void EnableClock()
@@ -38,7 +36,7 @@ char *charToString(char c)
 }
 double time = 0;
 
-double Frequencies[16] = {135, 149, 169, 175, 196, 220, 246.9, 261.6, 294, 330, 349, 392, 440, 494, 523};
+double Frequencies[16] = {33, 37, 169, 175, 196, 220, 246.9, 261.6, 294, 330, 349, 392, 440, 494, 523};
 
 /*double Frequencies[16] = {1, 2, 3, 4,
 						  5, 6, 7, 8,
@@ -47,14 +45,14 @@ double Frequencies[16] = {135, 149, 169, 175, 196, 220, 246.9, 261.6, 294, 330, 
 double peroid = 0.0;
 void keyPressCallback(enum KEYPAD key)
 {
-	SetFrequency(Frequencies[key]);
-	Write_Char_LCD(KEYPAD_CHARS[key]);
+	AddFrequency(Frequencies[key]);
+	//Write_Char_LCD(KEYPAD_CHARS[key]);
 }
 void keyReleaseCallback(enum KEYPAD key)
 {
-	SetFrequency(0);
+	RemoveFrequency(Frequencies[key]);
 	// GPIOA->ODR &= ~(1 << 1);
-	Write_Char_LCD(KEYPAD_CHARS[key]);
+	//Write_Char_LCD(KEYPAD_CHARS[key]);
 }
 double average = 0;
 void switchPressCallback(enum SWITCHS key)
@@ -65,7 +63,7 @@ void switchPressCallback(enum SWITCHS key)
 	{
 	case BUTTON_SWITCH2:
 	{
-		Write_String_LCD("A  Q");
+		Write_String_LCD(" Q");
 		break;
 	}
 	case BUTTON_SWITCH3:
@@ -96,12 +94,10 @@ int run(void)
 {
 
 	EnableClock();
-	Delay(500);
 	Init_LED(1);
 	Init_LED(0);
 	LCD_Init();
 	InitEvents();
-	InitAsync();
 	/*DWT_Init();*/
 	/*Write_Char_LCD('o');*/
 	/*Write_String_LCD(line1);
@@ -116,26 +112,14 @@ int run(void)
 	double prev_date = date();
 	double lastTickDate = date();
 	double lastPrint = date();
-
+	Write_String_LCD("THIS BOARD SUCKS BALLS! IT NEEDS TO BE THROWN IN THE TRASH!     ");
 	while (1)
 	{
-
-		/*double old = date();
-		HAL_Delay(2);
-		double test = date();
-
-		HAL_Delay(2000);
-		char *str = doubleToString(test- old, 2);
-
-		Set_LCD(str);
-		*/
-		lastTickDate = date();
-		HAL_Delay(5);
-		double time2 = date();
-		double tickTime = time2 - lastTickDate;
+		CheckFrequency();
 		check();
 		checkLCDWrites();
 		double current = date();
+		double tickTime = date() - lastTickDate;
 		if (peroid)
 		{
 			if (((current - prev_date) > peroid))
@@ -155,11 +139,12 @@ int run(void)
 		}
 		ticksArray[0] = tickTime;
 		average = total / 10;
-		if (date() - lastPrint > 1000)
+		/*if (date() - lastPrint > 1000)
 		{
 			char *str = doubleToString(average, 3);
 			Set_LCD(str);
 			lastPrint = date();
-		}
+		}*/
+		lastTickDate = date();
 	}
 }

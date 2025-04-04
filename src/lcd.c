@@ -1,6 +1,8 @@
 #include "stm32l4xx_hal.h"
 #include "events.h"
 #include "date.h"
+#include "lcd.h"
+#include "list.h"
 void Write_SR_LCD_Direct(uint8_t temp)
 {
 	uint8_t i;
@@ -106,15 +108,17 @@ void checkLCDWrites()
 	if (sr_writeslength == 0)
 		return;
 	double currentDate = date();
-	if (currentDate - lastDateLCD < 5) // 1ms delay between writes to LCD
-		return;						   // not enough time has passed since last write to LCD, return and wait for next check
-	lastDateLCD = currentDate;		   // update the last date LCD was written to
+	if (currentDate - lastDateLCD < 10) // 1ms delay between writes to LCD
+		return;							// not enough time has passed since last write to LCD, return and wait for next check
+	lastDateLCD = currentDate;			// update the last date LCD was written to
 	if (indexLCD <= 0)
 		currentWrite = popWrites();
 	Write_SR_LCD_Direct_GEN(currentWrite, indexLCD++);
 	if (indexLCD >= 8)
 		indexLCD = 0;
 }
+struct LCDCache cacheLCD;
+
 void LCD_nibble_write(uint8_t temp, uint8_t s)
 {
 
@@ -172,6 +176,7 @@ void Write_Instr_LCD_Direct(uint8_t code)
 	code = code << 4;
 	LCD_nibble_write_direct(code, 0);
 }
+
 void Write_Instr_LCD(uint8_t code)
 {
 	LCD_nibble_write(code & 0xF0, 0);
@@ -179,18 +184,24 @@ void Write_Instr_LCD(uint8_t code)
 	code = code << 4;
 	LCD_nibble_write(code, 0);
 }
+
 void Write_Char_LCD(uint8_t code)
 {
+	if (cacheLCD.position >= 16)
+	{
+		Set_CursorPosition(cacheLCD.line ? 0 : 1, 0);
+	}
+	cacheLCD.string[16 * cacheLCD.line + cacheLCD.position] = code; // cache the string for later use in Set_LCD
 	LCD_nibble_write(code & 0xF0, 1);
-
 	code = code << 4;
 	LCD_nibble_write(code, 1);
+	cacheLCD.position++;
 }
 
 void Write_String_LCD(char *temp)
 {
 	int i = 0;
-	while (temp[i] != 0)
+	while (temp[i] != '\0')
 	{
 		Write_Char_LCD(temp[i]);
 		i = i + 1;
@@ -206,41 +217,22 @@ void Set_LCD(char *string)
 	// HAL_Delay(5);
 	Write_String_LCD(string);
 }
-void Set_Cursor(uint8_t value)
+void Set_CursorPosition(uint8_t line, uint8_t position)
 {
-	if (value)
-		Write_Instr_LCD(0x0E);
-	else
-		Write_Instr_LCD(0x0c);
-}
-void Set_Cursor_Blinking()
-{
-	Write_Instr_LCD(0x0F);
+
+	uint8_t location = line ? 0xC0 : 0x80;
+	location |= position;
+	cacheLCD.line = line;
+	cacheLCD.position = position;
+	Write_Instr_LCD(location);
 }
 
-void Set_Display(uint8_t value)
-{
-	if (value)
-		Write_Instr_LCD(0x0C);
-	else
-		Write_Instr_LCD(0x08);
-}
-void Set_Cursor_Write_Shift(uint8_t value)
-{
-	if (value)
-		Write_Instr_LCD(0x14);
-	else
-		Write_Instr_LCD(0x10);
-}
-void Set_Text_Write_Shift(uint8_t value)
-{
-	if (value)
-		Write_Instr_LCD(0x1C);
-	else
-		Write_Instr_LCD(0x18);
-}
 void LCD_Init()
 {
+	for (int i = 0; i < 32; i++)
+		cacheLCD.string[i] = 0;
+	cacheLCD.line = 0;	   // default line 0
+	cacheLCD.position = 0; // default position 0
 	uint32_t temp;
 	/* enable GPIOA clock */
 	RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
@@ -286,13 +278,13 @@ void LCD_Init()
 	Write_Instr_LCD_Direct(0x28);
 	Delay(1);
 	/* set 4 bit data LCD - two line display - 5x8 font*/
-	Write_Instr_LCD(0x0E);
+	Write_Instr_LCD_Direct(0x0E);
 	Delay(1);
 	/* turn on display, turn on cursor , turn off blinking */
-	Write_Instr_LCD(0x01);
+	Write_Instr_LCD_Direct(0x01);
 	Delay(1);
 	/* clear display screen and return to home position*/
-	Write_Instr_LCD(0x06);
+	Write_Instr_LCD_Direct(0x06);
 	Delay(1);
 	/* move cursor to right (entry mode set instruction)*/
 }

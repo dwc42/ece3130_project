@@ -1,9 +1,7 @@
 --cpu=Cortex-M4.fp.sp --branchpatch=sdcomp-29491-629360
-".\objects\async.o"
 ".\objects\buzzer.o"
 ".\objects\date.o"
 ".\objects\events.o"
-".\objects\keypad.o"
 ".\objects\lcd.o"
 ".\objects\list.o"
 ".\objects\number.o"

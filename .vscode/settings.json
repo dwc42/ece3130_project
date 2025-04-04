@@ -20,6 +20,7 @@
 		"xtr1common": "c",
 		"xutility": "c",
 		"main.h": "c",
-		"buzzer.h": "c"
+		"buzzer.h": "c",
+		"list.h": "c"
 	}
 }

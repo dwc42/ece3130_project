@@ -8,6 +8,11 @@
 #include <float.h>
 #include <list.h>
 #include "main.h"
+#include <float.h>
+#include "date.h"
+
+int *frequency_list; // List of frequencies, initialized to NULL
+
 TIM_HandleTypeDef htim3;
 /**
  *
@@ -16,6 +21,10 @@ TIM_HandleTypeDef htim3;
  */
 void Init_buzzer(void)
 {
+    // Initialize the frequency list if it hasn't been done yet
+    frequency_list = malloc(sizeof(INT32_MAX)); // allocate space for one integer and INT32_MAX terminator
+    frequency_list[0] = INT32_MAX;              // set the terminator
+
     // Enable TIM3 and GPIOC clocks
     __HAL_RCC_TIM3_CLK_ENABLE();  // Enable TIM3 clock
     __HAL_RCC_GPIOC_CLK_ENABLE(); // Enable GPIOC clock
@@ -45,13 +54,50 @@ void Init_buzzer(void)
     sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
     sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
 }
+void AddFrequency(double freq)
+{
+    pushInteger(&frequency_list, (int)freq);
+}
+void RemoveFrequency(double freq)
+{
+    removeFromIntegers(&frequency_list, (int)freq, 2);
+}
+double lastDateFrequency = 0.0;
+int frequencyIndex = 0;
+int currentFrequency = 0;
+void CheckFrequency()
+{
+    if (date() - lastDateFrequency <= 2)
+        return;
+		lastDateFrequency = date();
+		if (frequency_list[0] == INT32_MAX)
+		{
+			SetFrequency(0);
+			return;
+		}
+     // Update the last date frequency to now, to avoid spamming the buzzer
+    if (frequencyIndex >= 4 || frequency_list[frequencyIndex] == INT32_MAX)
+    {
+        frequencyIndex = 0;
+    }
+    // Get the frequency from the list
+    int freq = frequency_list[frequencyIndex];
+
+    // Set the frequency on the buzzer
+    SetFrequency((double)freq);
+		frequencyIndex++;
+    // Only play the first frequency in the list for now, can be extended to play multiple in sequence if needed
+}
 /**
  * @brief Set the frequency of the buzzer
  * @param freq The desired frequency in Hz
  * @note gpt suggested this code for buzzer
  */
 void SetFrequency(double freq)
-{
+{	
+		int freqInt = (int) freq;
+		if (currentFrequency == freqInt) return;
+		currentFrequency = freqInt;
     if (freq <= 0)
     {
         // Stop the timer if frequency is 0

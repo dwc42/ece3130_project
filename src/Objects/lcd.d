@@ -21,4 +21,5 @@
   STM32CubeMX\Target_1\STM32CubeMX\Drivers\STM32L4xx_HAL_Driver\Inc\stm32l4xx_hal_pwr_ex.h \
   STM32CubeMX\Target_1\STM32CubeMX\Drivers\STM32L4xx_HAL_Driver\Inc\stm32l4xx_hal_tim.h \
   STM32CubeMX\Target_1\STM32CubeMX\Drivers\STM32L4xx_HAL_Driver\Inc\stm32l4xx_hal_tim_ex.h \
-  events.h STM32CubeMX\Target_1\STM32CubeMX\Inc\main.h date.h
+  events.h STM32CubeMX\Target_1\STM32CubeMX\Inc\main.h date.h lcd.h \
+  list.h

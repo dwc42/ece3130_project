@@ -2,7 +2,6 @@
 #include "float.h"
 #include "stdlib.h"
 #include "events.h"
-#include "async.h"
 
 struct AsyncTask nullptrTask = {NULL, 0, -1, 0};
 int lengthTasks(struct AsyncTask *array)

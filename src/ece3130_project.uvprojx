@@ -385,11 +385,6 @@
           <GroupName>Source Group 1</GroupName>
           <Files>
             <File>
-              <FileName>async.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\async.c</FilePath>
-            </File>
-            <File>
               <FileName>buzzer.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\buzzer.c</FilePath>
@@ -403,11 +398,6 @@
               <FileName>events.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\events.c</FilePath>
-            </File>
-            <File>
-              <FileName>keypad.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\keypad.c</FilePath>
             </File>
             <File>
               <FileName>lcd.c</FileName>
