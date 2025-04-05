@@ -200,6 +200,19 @@ void Write_Instr_LCD(uint8_t code)
 
 void Write_Char_LCD(uint8_t code)
 {
+	if (Events.beforeCharWriteSubscribed)
+	{
+		struct BeforeCharWriteEventType event;
+		event.c = code;						 // character to be written
+		event.cancel = 0;					 // default to not canceling the write
+		event.position = cacheLCD.position;	 // current position in the LCD cache
+		event.line = cacheLCD.line;			 // current line in the LCD cache
+		runBeforeCharWriteCallbacks(&event); // run the before character write callbacks
+		if (event.c != code)				 // if the character was modified by a callback, use the modified character instead
+			code = event.c;
+		if (event.cancel)
+			return;
+	}
 	if (cacheLCD.position >= 16)
 	{
 		Set_CursorPosition(cacheLCD.line ? 0 : 1, 0);
@@ -243,19 +256,20 @@ char *Get_String_LCD(int8_t from, int8_t to)
 	if (from > 31)
 		from = 31;
 	if (to > 31)
-		from = 31;
+		to = 31;
 	if (from < 0)
 		from = min(32 + from, 0);
 	if (to < 0)
 		to = min(32 + to, 0);
-	char *output = malloc(sizeof(int8_t) * ((abs(to - from) + 1)));
+	char *output = malloc(sizeof(char) * ((abs(to - from) + 1)));
 	int8_t j = 0;
 	if (from > to)
 		for (int8_t i = to; i >= from; i--)
 			output[j++] = cacheLCD.string[i];
 	else
-		for (int8_t i = from; i >= to; i++)
+		for (int8_t i = from; i <= to; i++)
 			output[j++] = cacheLCD.string[i];
+	output[j] = '\0';
 	return output;
 }
 void Set_LCD(char *string)
@@ -278,39 +292,22 @@ void LCD_Init()
 {
 	for (int i = 0; i < 32; i++)
 		cacheLCD.string[i] = 0;
-	cacheLCD.line = 0;	   // default line 0
-	cacheLCD.position = 0; // default position 0
-	uint32_t temp;
-	/* enable GPIOA clock */
-	RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
-	/* enable GPIOB clock */
-	RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN;
-	/*PB5 MOSI, PA10 /CS_7 latch , PA5 shift clock */
-	/*PA5 and PA10 are outputs*/ temp = GPIOA->MODER;
-	temp &= ~(0x03 << (2 * 5));
-	temp |= (0x01 << (2 * 5));
-	temp &= ~(0x03 << (2 * 10));
-	temp |= (0x01 << (2 * 10));
-	GPIOA->MODER = temp;
-	temp = GPIOA->OTYPER;
-	temp &= ~(0x01 << 5);
-	temp &= ~(0x01 << 10);
-	GPIOA->OTYPER = temp;
-	temp = GPIOA->PUPDR;
-	temp &= ~(0x03 << (2 * 5));
-	temp &= ~(0x03 << (2 * 10));
-	GPIOA->PUPDR = temp;
-	temp = GPIOB->MODER;
-	temp &= ~(0x03 << (2 * 5));
-	temp |= (0x01 << (2 * 5));
-	GPIOB->MODER = temp;
-
-	temp = GPIOB->OTYPER;
-	temp &= ~(0x01 << 5);
-	GPIOB->OTYPER = temp;
-	temp = GPIOB->PUPDR;
-	temp &= ~(0x03 << (2 * 5));
-	GPIOB->PUPDR = temp;
+	cacheLCD.string[32] = '\0'; // ensure null termination for safety, though it should not be used in the string directly
+	cacheLCD.line = 0;			// default line 0
+	cacheLCD.position = 0;		// default position 0
+	GPIOA->MODER &= ~(0x03 << (2 * 5));
+	GPIOA->MODER |= (0x01 << (2 * 5));
+	GPIOA->MODER &= ~(0x03 << (2 * 10));
+	GPIOA->MODER |= (0x01 << (2 * 10));
+	GPIOA->OTYPER &= ~(0x01 << 5);
+	GPIOA->OTYPER &= ~(0x01 << 10);
+	GPIOA->PUPDR &= ~(0x03 << (2 * 5));
+	GPIOA->PUPDR &= ~(0x03 << (2 * 10));
+	GPIOB->MODER &= ~(0x03 << (2 * 5));
+	GPIOB->MODER |= (0x01 << (2 * 5));
+	;
+	GPIOB->OTYPER &= ~(0x01 << 5);
+	GPIOB->PUPDR &= ~(0x03 << (2 * 5));
 	/* LCD controller reset sequence */
 	LCD_nibble_write(0x30, 0);
 	LCD_nibble_write(0x30, 0);

@@ -2,8 +2,10 @@
 #define __EVENTS_H
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "events.h"
 #include "main.h"
+
 enum KEYPAD
 {
 	KEY_0 = 13,
@@ -30,24 +32,37 @@ enum SWITCHS
 	BUTTON_SWITCH4 = 2,
 	BUTTON_SWITCH5 = 3,
 };
+struct BeforeCharWriteEventType
+{
+	char c;
+	bool cancel;	  // if set to 1, the event will be cancelled and not written to the output
+	uint8_t position; //(readonly)
+	uint8_t line;	  //(readonly)
+	char string[33];  // 32 characters + null terminator (readonly)
+};
 struct EventsType
 {
-	int countToUnbounce;
-	int keypadsubcribed;
-	int switchsubcribed;
-	int keyPadPressTicks[4][4];
-	int keyPadPressed[4][4];
-	int switchPressTicks[4];
-	int switchPressed[4];
+	uint8_t countToUnbounce;
+	uint8_t keypadsubcribed;
+	uint8_t switchsubcribed;
+	uint8_t beforeCharWriteSubscribed; // if before char write is subscribed or not, used to run callbacks for before char write events
+	uint8_t keyPadPressTicks[4][4];
+	uint8_t keyPadPressed[4][4];
+	uint8_t switchPressTicks[4];
+	uint8_t switchPressed[4];
 	void (*onKeyPadPress)(void (*eventHandler)(enum KEYPAD key));
 	void (*onKeyPadRelease)(void (*eventHandler)(enum KEYPAD key));
 	void (*onSwitchRelease)(void (*eventHandler)(enum SWITCHS sw));
 	void (*onSwitchPress)(void (*eventHandler)(enum SWITCHS sw));
+	void (*unsubscribeEvent)(void *eventHandler);
+	void (*beforeCharWrite)(void (*eventHandler)(struct BeforeCharWriteEventType *event));
+	void (**beforeCharWriteCallbacks)(struct BeforeCharWriteEventType *event); // Callbacks for before character write events, used in UART or other output streams
 	void (**onKeyPadPressCallbacks)(enum KEYPAD key);
 	void (**onKeyPadReleaseCallbacks)(enum KEYPAD key);
 	void (**onSwitchReleaseCallbacks)(enum SWITCHS sw);
 	void (**onSwitchPressCallbacks)(enum SWITCHS sw);
 };
+void runBeforeCharWriteCallbacks(struct BeforeCharWriteEventType *event);
 extern char KEYPAD_CHARS[16];
 void Delay(unsigned int n);
 extern struct EventsType Events;

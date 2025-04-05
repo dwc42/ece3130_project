@@ -21,6 +21,7 @@
 		"xutility": "c",
 		"main.h": "c",
 		"buzzer.h": "c",
-		"list.h": "c"
+		"list.h": "c",
+		"stdint.h": "c"
 	}
 }

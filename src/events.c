@@ -124,6 +124,89 @@ void onSwitchPress(void (*eventHandler)(enum SWITCHS sw))
 	Events.onSwitchPressCallbacks = arrayNew;
 }
 
+void beforeCharWrite(void (*eventHandler)(struct BeforeCharWriteEventType *event))
+{
+	int size = length(Events.beforeCharWriteCallbacks);
+	void (**arrayNew)(struct BeforeCharWriteEventType *event) = malloc((size + 2) * sizeof(void (*)(struct BeforeCharWriteEventType *event)));
+	for (int i = 0; i < size; i++)
+	{
+		arrayNew[i] = Events.beforeCharWriteCallbacks[i];
+	}
+	arrayNew[size] = eventHandler;
+	arrayNew[size + 1] = NULL;
+	free(Events.beforeCharWriteCallbacks);
+	Events.beforeCharWriteSubscribed = 1;
+	Events.beforeCharWriteCallbacks = arrayNew;
+}
+void runBeforeCharWriteCallbacks(struct BeforeCharWriteEventType *event)
+{
+
+	if (Events.beforeCharWriteCallbacks == NULL)
+		return;
+	int size = length(Events.beforeCharWriteCallbacks);
+	for (int i = 0; i < size; i++)
+	{
+		if (Events.beforeCharWriteCallbacks[i] != NULL)
+		{
+			Events.beforeCharWriteCallbacks[i](event);
+		}
+	}
+}
+int removeAddressFromEvent(void *address, void (**callbackArray)(void), int size)
+{
+	if (callbackArray == NULL || address == NULL)
+		return 0;
+	void (**arrayNew)(void) = malloc(size * sizeof(void (*)(void)));
+	int j = 0;
+	int found = 0; // flag to check if we found the address in the array
+	for (int i = 0; callbackArray[i] != '\0'; i++)
+	{
+		if ((void *)callbackArray[i] == (void *)address)
+		{
+			found = 1;
+			continue; // skip the address we want to remove
+		}
+		arrayNew[j++] = callbackArray[i];
+	}
+	arrayNew[j] = NULL; // null terminate the array
+	free(callbackArray);
+	callbackArray = arrayNew;
+	return found;
+}
+void unsubscribeEvent(void *address)
+{
+	if (!removeAddressFromEvent(
+			address,
+			(void (**)(void))Events.onKeyPadPressCallbacks,
+			length(Events.onKeyPadPressCallbacks)))
+	{
+	}
+	if (!removeAddressFromEvent(
+			address,
+			(void (**)(void))Events.onKeyPadReleaseCallbacks,
+			length(Events.onKeyPadReleaseCallbacks)))
+	{
+	}
+	if (!removeAddressFromEvent(
+			address,
+			(void (**)(void))Events.onSwitchReleaseCallbacks,
+			length(Events.onSwitchReleaseCallbacks)))
+	{
+	}
+	if (!removeAddressFromEvent(
+
+			address,
+			(void (**)(void))Events.onSwitchPressCallbacks,
+			length(Events.onSwitchPressCallbacks)))
+	{
+	}
+	if (!removeAddressFromEvent(
+			address,
+			(void (**)(void))Events.beforeCharWriteCallbacks,
+			length(Events.beforeCharWriteCallbacks)))
+	{
+	}
+}
 void InitEvents()
 {
 
@@ -131,16 +214,20 @@ void InitEvents()
 	Events.onKeyPadReleaseCallbacks = malloc(sizeof(void (*)(enum KEYPAD key)));
 	Events.onSwitchReleaseCallbacks = malloc(sizeof(void (*)(enum SWITCHS sw)));
 	Events.onSwitchPressCallbacks = malloc(sizeof(void (*)(enum SWITCHS sw)));
+	Events.beforeCharWriteCallbacks = malloc(sizeof(void (*)(struct BeforeCharWriteEventType *event)));
 	Events.onKeyPadPressCallbacks[0] = NULL;
 	Events.onKeyPadReleaseCallbacks[0] = NULL;
 	Events.onSwitchReleaseCallbacks[0] = NULL;
 	Events.onSwitchPressCallbacks[0] = NULL;
+	Events.beforeCharWriteCallbacks[0] = NULL;
 	Events.onKeyPadPress = onKeyPadPress;
 	Events.onKeyPadRelease = onKeyPadRelease;
 	Events.onSwitchRelease = onSwitchRelease;
 	Events.onSwitchPress = onSwitchPress;
+	Events.beforeCharWrite = beforeCharWrite;
 	Events.keypadsubcribed = 0;
 	Events.switchsubcribed = 0;
+	Events.beforeCharWriteSubscribed = 0; // if before char write is subscribed or not, used to run callbacks for before char write events
 	Events.countToUnbounce = 30;
 	for (int b = 0; b < 4; b++)
 	{

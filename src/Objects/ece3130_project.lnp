@@ -4,7 +4,6 @@
 ".\objects\events.o"
 ".\objects\lcd.o"
 ".\objects\list.o"
-".\objects\number.o"
 ".\objects\run.o"
 ".\objects\main.o"
 ".\objects\stm32l4xx_it.o"

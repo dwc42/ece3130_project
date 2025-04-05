@@ -4,9 +4,8 @@
 #include <stdlib.h>
 #include "stm32l4xx_hal.h"
 #include <stdio.h>
-#include <time.h>
 #include <float.h>
-#include <list.h>
+#include "list.h"
 #include "main.h"
 #include <float.h>
 #include "date.h"
@@ -71,11 +70,12 @@ void CheckFrequency()
 
     if (date() - lastDateFrequency <= lastSwitchTime)
         return;
-		int smallest = 0;
-		uint8_t i =0;
-		for (; frequency_list[i] != INT32_MAX; i++) 
-			if (frequency_list[i] < smallest) smallest = frequency_list[i];
-    lastSwitchTime = 20 - smallest/100;
+    int smallest = 0;
+    uint8_t i = 0;
+    for (; frequency_list[i] != INT32_MAX; i++)
+        if (frequency_list[i] < smallest)
+            smallest = frequency_list[i];
+    lastSwitchTime = 20 - smallest / 100;
     lastDateFrequency = date();
     if (frequency_list[0] == INT32_MAX)
     {
