@@ -65,18 +65,25 @@ void RemoveFrequency(double freq)
 double lastDateFrequency = 0.0;
 int frequencyIndex = 0;
 int currentFrequency = 0;
+int lastSwitchTime = 13;
 void CheckFrequency()
 {
-    if (date() - lastDateFrequency <= 2)
+
+    if (date() - lastDateFrequency <= lastSwitchTime)
         return;
-		lastDateFrequency = date();
-		if (frequency_list[0] == INT32_MAX)
-		{
-			SetFrequency(0);
-			return;
-		}
-     // Update the last date frequency to now, to avoid spamming the buzzer
-    if (frequencyIndex >= 4 || frequency_list[frequencyIndex] == INT32_MAX)
+		int smallest = 0;
+		uint8_t i =0;
+		for (; frequency_list[i] != INT32_MAX; i++) 
+			if (frequency_list[i] < smallest) smallest = frequency_list[i];
+    lastSwitchTime = 20 - smallest/100;
+    lastDateFrequency = date();
+    if (frequency_list[0] == INT32_MAX)
+    {
+        SetFrequency(0);
+        return;
+    }
+    // Update the last date frequency to now, to avoid spamming the buzzer
+    if (frequencyIndex > 3 || frequency_list[frequencyIndex] == INT32_MAX)
     {
         frequencyIndex = 0;
     }
@@ -85,7 +92,7 @@ void CheckFrequency()
 
     // Set the frequency on the buzzer
     SetFrequency((double)freq);
-		frequencyIndex++;
+    frequencyIndex++;
     // Only play the first frequency in the list for now, can be extended to play multiple in sequence if needed
 }
 /**
@@ -94,10 +101,11 @@ void CheckFrequency()
  * @note gpt suggested this code for buzzer
  */
 void SetFrequency(double freq)
-{	
-		int freqInt = (int) freq;
-		if (currentFrequency == freqInt) return;
-		currentFrequency = freqInt;
+{
+    int freqInt = (int)freq;
+    if (currentFrequency == freqInt)
+        return;
+    currentFrequency = freqInt;
     if (freq <= 0)
     {
         // Stop the timer if frequency is 0

@@ -46,13 +46,13 @@ double peroid = 0.0;
 void keyPressCallback(enum KEYPAD key)
 {
 	AddFrequency(Frequencies[key]);
-	//Write_Char_LCD(KEYPAD_CHARS[key]);
+	Write_Char_LCD(KEYPAD_CHARS[key]);
 }
 void keyReleaseCallback(enum KEYPAD key)
 {
 	RemoveFrequency(Frequencies[key]);
 	// GPIOA->ODR &= ~(1 << 1);
-	//Write_Char_LCD(KEYPAD_CHARS[key]);
+	Write_Char_LCD(KEYPAD_CHARS[key]);
 }
 double average = 0;
 void switchPressCallback(enum SWITCHS key)
@@ -112,7 +112,9 @@ int run(void)
 	double prev_date = date();
 	double lastTickDate = date();
 	double lastPrint = date();
-	Write_String_LCD("THIS BOARD SUCKS BALLS! IT NEEDS TO BE THROWN IN THE TRASH!     ");
+	// Write_String_LCD("0123456789ABCDEF");
+	Write_String_LCD("0123456789ABCDEFG");
+	Clear_Display();
 	while (1)
 	{
 		CheckFrequency();
@@ -120,14 +122,6 @@ int run(void)
 		checkLCDWrites();
 		double current = date();
 		double tickTime = date() - lastTickDate;
-		if (peroid)
-		{
-			if (((current - prev_date) > peroid))
-			{
-				GPIOC->ODR ^= (1 << 9);
-				prev_date = current;
-			}
-		}
 
 		double total = 0;
 		for (int i = 0; i < 10; i++)

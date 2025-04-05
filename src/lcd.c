@@ -3,52 +3,56 @@
 #include "date.h"
 #include "lcd.h"
 #include "list.h"
-void Write_SR_LCD_Direct(uint8_t temp)
-{
-	uint8_t i;
-	uint8_t mask = 0b10000000;
-	for (i = 0; i < 8; i++)
-	{
-		if ((temp & mask) == 0)
-			GPIOB->ODR &= ~(1 << 5);
-		else
-			GPIOB->ODR |= (1 << 5);
+#include "stdio.h"
+#include "math.h"
+#define min(a, b) ((a) < (b) ? (a) : (b))
+// void Write_SR_LCD_Direct(uint8_t temp)
+// {
+// 	uint8_t i;
+// 	uint8_t mask = 0b10000000;
+// 	for (i = 0; i < 8; i++)
+// 	{
+// 		if ((temp & mask) == 0)
+// 			GPIOB->ODR &= ~(1 << 5);
+// 		else
+// 			GPIOB->ODR |= (1 << 5);
 
-		/*	Sclck */
-		GPIOA->ODR &= ~(1 << 5);
-		GPIOA->ODR |= (1 << 5);
-		Delay(1);
-		mask = mask >> 1;
+// 		/*	Sclck */
+// 		GPIOA->ODR &= ~(1 << 5);
+// 		GPIOA->ODR |= (1 << 5);
+// 		Delay(1);
+// 		mask = mask >> 1;
+// 	}
+
+// 	/*Latch*/
+// 	GPIOA->ODR |= (1 << 10);
+// 	GPIOA->ODR &= ~(1 << 10);
+// }
+uint8_t maskLCD = 0b10000000;
+uint8_t delayLCD = 0;
+uint8_t Write_SR_LCD_Direct_GEN(uint8_t temp)
+{
+	if (maskLCD == 0b00000000)
+	{
+		if (delayLCD++ < 1)
+			return 0;
+		GPIOA->ODR |= (1 << 10);
+		GPIOA->ODR &= ~(1 << 10);
+		maskLCD = 0b10000000; // Reset the mask for the next write
+		delayLCD = 0;
+		return 1;
 	}
 
-	/*Latch*/
-	GPIOA->ODR |= (1 << 10);
-	GPIOA->ODR &= ~(1 << 10);
-}
-void Write_SR_LCD_Direct_GEN(uint8_t temp, uint8_t i)
-{
-	if (i >= 8) // Prevent out-of-bounds writes
-		return;
-	uint8_t mask = 0b10000000 >> i;
-	// if i is greater than 8, just return false, this is to prevent an infinite loop in case of an error in the calling function
-	// for (i = 0; i < 8; i++)
-	// {
-	if ((temp & mask) == 0)
+	if ((temp & maskLCD) == 0)
 		GPIOB->ODR &= ~(1 << 5);
 	else
 		GPIOB->ODR |= (1 << 5);
 
-	/*	Sclck */
 	GPIOA->ODR &= ~(1 << 5);
 	GPIOA->ODR |= (1 << 5);
 
-	// 	mask = mask >> 1;
-	// }
-
-	/*Latch*/
-	GPIOA->ODR |= (1 << 10);
-	GPIOA->ODR &= ~(1 << 10);
-	return;
+	maskLCD = maskLCD >> 1;
+	return 0;
 }
 uint8_t *sr_writes = NULL;
 int sr_writeslength = 0;
@@ -72,17 +76,26 @@ void Write_SR_LCD(uint8_t temp)
 	sr_writes = new_list;
 	sr_writeslength++;
 }
+uint8_t currentWrite = 0;
+uint8_t writingInstruction = 0;
 uint8_t popWrites()
 {
 	if (sr_writes == NULL)
+	{
+		writingInstruction = 0;
 		return 0;
+	}
 	if (sr_writeslength == 0)
+	{
+		writingInstruction = 0;
 		return 0;
+	}
 	if (sr_writeslength == 1)
 	{
 		uint8_t last = sr_writes[0]; // if there is only one element, return it and set the list to NULL
 		free(sr_writes);
 		sr_writes = NULL;
+		writingInstruction = 1;
 		sr_writeslength = 0;
 		return last;
 	}
@@ -95,27 +108,27 @@ uint8_t popWrites()
 	free(sr_writes);
 	sr_writes = new_list;
 	sr_writeslength--;
+	writingInstruction = 1;
 	return last;
 }
 double lastDateLCD = 0;
-int indexLCD = 0;
-uint8_t currentWrite;
+
 void checkLCDWrites()
 {
-
-	if (sr_writes == NULL)
-		return;
-	if (sr_writeslength == 0)
-		return;
 	double currentDate = date();
 	if (currentDate - lastDateLCD < 10) // 1ms delay between writes to LCD
 		return;							// not enough time has passed since last write to LCD, return and wait for next check
 	lastDateLCD = currentDate;			// update the last date LCD was written to
-	if (indexLCD <= 0)
+	if (writingInstruction == 0)
+	{
 		currentWrite = popWrites();
-	Write_SR_LCD_Direct_GEN(currentWrite, indexLCD++);
-	if (indexLCD >= 8)
-		indexLCD = 0;
+		if (writingInstruction == 0)
+			return;
+	}
+	uint8_t done = Write_SR_LCD_Direct_GEN(currentWrite);
+	if (!done)
+		return;
+	writingInstruction = 0;
 }
 struct LCDCache cacheLCD;
 
@@ -127,10 +140,10 @@ void LCD_nibble_write(uint8_t temp, uint8_t s)
 	{
 		temp = temp & 0xF0;
 		temp = temp | 0x02; /*RS (bit 0) = 0 for Command EN (bit1)=high */
-		Write_SR_LCD_Direct(temp);
+		Write_SR_LCD(temp);
 
 		temp = temp & 0xFD; /*RS (bit 0) = 0 for Command EN (bit1) = low*/
-		Write_SR_LCD_Direct(temp);
+		Write_SR_LCD(temp);
 	}
 
 	/*writing data*/
@@ -138,44 +151,44 @@ void LCD_nibble_write(uint8_t temp, uint8_t s)
 	{
 		temp = temp & 0xF0;
 		temp = temp | 0x03; /*RS(bit 0)=1 for data EN (bit1) = high*/
-		Write_SR_LCD_Direct(temp);
+		Write_SR_LCD(temp);
 
 		temp = temp & 0xFD; /*RS(bit 0)=1 for data EN(bit1) = low*/
-		Write_SR_LCD_Direct(temp);
+		Write_SR_LCD(temp);
 	}
 }
-void LCD_nibble_write_direct(uint8_t temp, uint8_t s)
-{
+// void LCD_nibble_write_direct(uint8_t temp, uint8_t s)
+// {
 
-	/*writing instruction*/
-	if (s == 0)
-	{
-		temp = temp & 0xF0;
-		temp = temp | 0x02; /*RS (bit 0) = 0 for Command EN (bit1)=high */
-		Write_SR_LCD_Direct(temp);
+// 	/*writing instruction*/
+// 	if (s == 0)
+// 	{
+// 		temp = temp & 0xF0;
+// 		temp = temp | 0x02; /*RS (bit 0) = 0 for Command EN (bit1)=high */
+// 		Write_SR_LCD_Direct(temp);
 
-		temp = temp & 0xFD; /*RS (bit 0) = 0 for Command EN (bit1) = low*/
-		Write_SR_LCD_Direct(temp);
-	}
+// 		temp = temp & 0xFD; /*RS (bit 0) = 0 for Command EN (bit1) = low*/
+// 		Write_SR_LCD_Direct(temp);
+// 	}
 
-	/*writing data*/
-	else if (s == 1)
-	{
-		temp = temp & 0xF0;
-		temp = temp | 0x03; /*RS(bit 0)=1 for data EN (bit1) = high*/
-		Write_SR_LCD_Direct(temp);
+// 	/*writing data*/
+// 	else if (s == 1)
+// 	{
+// 		temp = temp & 0xF0;
+// 		temp = temp | 0x03; /*RS(bit 0)=1 for data EN (bit1) = high*/
+// 		Write_SR_LCD_Direct(temp);
 
-		temp = temp & 0xFD; /*RS(bit 0)=1 for data EN(bit1) = low*/
-		Write_SR_LCD_Direct(temp);
-	}
-}
-void Write_Instr_LCD_Direct(uint8_t code)
-{
-	LCD_nibble_write_direct(code & 0xF0, 0);
+// 		temp = temp & 0xFD; /*RS(bit 0)=1 for data EN(bit1) = low*/
+// 		Write_SR_LCD_Direct(temp);
+// 	}
+// }
+// void Write_Instr_LCD_Direct(uint8_t code)
+// {
+// 	LCD_nibble_write_direct(code & 0xF0, 0);
 
-	code = code << 4;
-	LCD_nibble_write_direct(code, 0);
-}
+// 	code = code << 4;
+// 	LCD_nibble_write_direct(code, 0);
+// }
 
 void Write_Instr_LCD(uint8_t code)
 {
@@ -210,6 +223,40 @@ void Write_String_LCD(char *temp)
 void Clear_Display()
 {
 	Write_Instr_LCD(0x01);
+	for (uint8_t i = 0; i < 32; i++)
+	{
+		cacheLCD.string[i] = 0;
+	}
+	cacheLCD.line = 0;
+	cacheLCD.position = 0;
+}
+
+/**
+ * @brief Get a substring from the LCD cache string, from index 'from' to 'to'
+ * @param from starting index (inclusive) values are clamped to 0-31, negative values are counted from the end of the string (e.g. -1 is the last character)
+ * @param to ending index (inclusive) values are clamped to 0-31, negative values are counted from the end of the string (e.g. -1 is the last character)
+ * @return char* the substring allocated in heap memory, caller must free it
+ * @note if 'from' is greater than 'to', the substring will be returned in reverse order. For example, Get_String_LCD(5, 2) will return the substring from index 2 to 5 in reverse order.
+ */
+char *Get_String_LCD(int8_t from, int8_t to)
+{
+	if (from > 31)
+		from = 31;
+	if (to > 31)
+		from = 31;
+	if (from < 0)
+		from = min(32 + from, 0);
+	if (to < 0)
+		to = min(32 + to, 0);
+	char *output = malloc(sizeof(int8_t) * ((abs(to - from) + 1)));
+	int8_t j = 0;
+	if (from > to)
+		for (int8_t i = to; i >= from; i--)
+			output[j++] = cacheLCD.string[i];
+	else
+		for (int8_t i = from; i >= to; i++)
+			output[j++] = cacheLCD.string[i];
+	return output;
 }
 void Set_LCD(char *string)
 {
@@ -265,26 +312,17 @@ void LCD_Init()
 	temp &= ~(0x03 << (2 * 5));
 	GPIOB->PUPDR = temp;
 	/* LCD controller reset sequence */
-	Delay(20);
-	LCD_nibble_write_direct(0x30, 0);
-	Delay(5);
-	LCD_nibble_write_direct(0x30, 0);
-	Delay(1);
-	LCD_nibble_write_direct(0x30, 0);
-	Delay(1);
-	LCD_nibble_write_direct(0x20, 0);
-	Delay(1);
+	LCD_nibble_write(0x30, 0);
+	LCD_nibble_write(0x30, 0);
+	LCD_nibble_write(0x30, 0);
+	LCD_nibble_write(0x20, 0);
 
-	Write_Instr_LCD_Direct(0x28);
-	Delay(1);
+	Write_Instr_LCD(0x28);
 	/* set 4 bit data LCD - two line display - 5x8 font*/
-	Write_Instr_LCD_Direct(0x0E);
-	Delay(1);
+	Write_Instr_LCD(0x0E);
 	/* turn on display, turn on cursor , turn off blinking */
-	Write_Instr_LCD_Direct(0x01);
-	Delay(1);
+	Write_Instr_LCD(0x01);
 	/* clear display screen and return to home position*/
-	Write_Instr_LCD_Direct(0x06);
-	Delay(1);
+	Write_Instr_LCD(0x06);
 	/* move cursor to right (entry mode set instruction)*/
 }
