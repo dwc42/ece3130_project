@@ -6,10 +6,16 @@
 	DWT->CYCCNT = 0;								// Reset counter
 	DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;			// Enable counter
 }**/
+/**
+ * from stack overflow
+ */
 static inline uint32_t LL_SYSTICK_IsActiveCounterFlag(void)
 {
 	return ((SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk) == (SysTick_CTRL_COUNTFLAG_Msk));
 }
+/**
+ * from stack overflow
+ */
 long getCurrentMicros(void)
 {
 	/* Ensure COUNTFLAG is reset by reading SysTick control and status register */
@@ -38,6 +44,10 @@ void dwt_check()
 }
 int freq = 80000000;
 **/
+/**
+ * @brief Get the current date in milliseconds since the system started
+ * @return double The current date in milliseconds
+ */
 double date()
 {
 	return ((double)getCurrentMicros()) / 1000.0;
