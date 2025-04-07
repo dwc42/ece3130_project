@@ -30,6 +30,24 @@
 // }
 uint8_t maskLCD = 0b10000000;
 uint8_t delayLCD = 0;
+void shiftLCD(uint8_t value)
+{
+
+	uint8_t offset = (value) ? 1 : -1;
+	cacheLCD.position += offset; // reset the position to 0 after shifting
+	if (cacheLCD.position > 250)
+	{
+		Set_CursorPosition(!cacheLCD.line, 15);
+	}
+	else if (cacheLCD.position > 15)
+	{
+		Set_CursorPosition(!cacheLCD.line, 0);
+	}
+	else
+	{
+		Write_Instr_LCD(0x10 | (value << 2));
+	}
+}
 uint8_t Write_SR_LCD_Direct_GEN(uint8_t temp)
 {
 	if (maskLCD == 0b00000000)
@@ -244,13 +262,6 @@ void Clear_Display()
 	cacheLCD.position = 0;
 }
 
-/**
- * @brief Get a substring from the LCD cache string, from index 'from' to 'to'
- * @param from starting index (inclusive) values are clamped to 0-31, negative values are counted from the end of the string (e.g. -1 is the last character)
- * @param to ending index (inclusive) values are clamped to 0-31, negative values are counted from the end of the string (e.g. -1 is the last character)
- * @return char* the substring allocated in heap memory, caller must free it
- * @note if 'from' is greater than 'to', the substring will be returned in reverse order. For example, Get_String_LCD(5, 2) will return the substring from index 2 to 5 in reverse order.
- */
 char *Get_String_LCD(int8_t from, int8_t to)
 {
 	if (from > 31)

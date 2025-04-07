@@ -252,43 +252,51 @@ int length(void **array)
 double check()
 {
 	double timetest = 0;
-	int switchPressed = 0;
-
+	int switchPressed = 0; // used to cancel the scan of the keypad if a switch is pressed
+	// clear the output data register for the rows
 	GPIOB->ODR &= ~(1 << 1);
 	GPIOB->ODR &= ~(1 << 2);
 	GPIOB->ODR &= ~(1 << 3);
 	GPIOB->ODR &= ~(1 << 4);
+	// scan the rows for the switches
 	for (int row = 0; row < 4; row++)
 	{
+		// check if Ith switch is pressed
 		int pressedCurrent = GPIOB->IDR & (0x1 << (11 - row));
 		switchPressed += pressedCurrent;
 		if (!Events.switchsubcribed)
 			continue;
-		if (!pressedCurrent)
+
+		if (!pressedCurrent) // check for release event
 		{
-			if (!Events.keyPadPressed[row])
+			if (!Events.keyPadPressed[row]) // check if the switch has fired the event before
 				continue;
 
-			Events.switchPressTicks[row] = 0;
-			enum SWITCHS key = SWITCH_ARRAY[row];
+			Events.switchPressTicks[row] = 0;	  // reset the ticks for the switch
+			enum SWITCHS key = SWITCH_ARRAY[row]; // get the key from the array
+
+			// call all the callbacks for the switch release event
 			int callbacksLength = length(Events.onSwitchReleaseCallbacks);
 			for (int i = 0; i < callbacksLength; i++)
 			{
 				Events.onSwitchReleaseCallbacks[i](key);
 			}
+			// set the switch pressed to 0
 			Events.switchPressed[row] = 0;
 			continue;
 		}
-		enum SWITCHS key = SWITCH_ARRAY[row];
-		int pressed = Events.switchPressed[row];
+		enum SWITCHS key = SWITCH_ARRAY[row];	 // get the key from the array
+		int pressed = Events.switchPressed[row]; // check if the switch is pressed before
 
 		if (pressed)
 			continue;
-		int ticks = Events.switchPressTicks[row]++;
-		if (ticks < Events.countToUnbounce)
+		int ticks = Events.switchPressTicks[row]++; // increment the ticks for debouncing of the switch
+		if (ticks < Events.countToUnbounce)			// check if the switch is pressed for the required ticks
 			continue;
 
-		Events.switchPressed[row] = 1;
+		Events.switchPressed[row] = 1; // set the switch pressed to 1 in the array
+
+		// call all the callbacks for the switch press event
 		int callbacksLength = length(Events.onSwitchPressCallbacks);
 		for (int i = 0; i < callbacksLength; i++)
 		{
@@ -297,54 +305,62 @@ double check()
 	}
 
 	if (switchPressed || !Events.keypadsubcribed)
-		return timetest;
-	for (int col = 0; col < 4; col++)
+		return timetest; // return if a switch is pressed or if the keypad is not subscribed
+
+	for (int col = 0; col < 4; col++) // scan all the cols
 	{
 
 		uint32_t temp = GPIOB->ODR;
-		GPIOB->ODR |= (1 << (1 + col));
+		GPIOB->ODR |= (1 << (1 + col)); // set the col to high
 
 		temp = GPIOB->ODR;
 		GPIOB->ODR = temp;
 		for (int row = 0; row < 4; row++)
 		{
 
-			int pressedCurrent = (GPIOB->IDR & (0x1 << (8 + row)));
+			int pressedCurrent = (GPIOB->IDR & (0x1 << (8 + row))); // check if the row is pressed
 			if (!pressedCurrent)
 			{
 
-				Events.keyPadPressTicks[row][col] = 0;
+				Events.keyPadPressTicks[row][col] = 0; // reset the ticks for the key
 
-				if (Events.keyPadPressed[row][col])
+				if (Events.keyPadPressed[row][col]) // check if the key has fired the event before
 				{
 
-					enum KEYPAD key = KEYPAD_MATRIX[row][col];
-					int callbacksLength = length(Events.onKeyPadReleaseCallbacks);
+					enum KEYPAD key = KEYPAD_MATRIX[row][col]; // get the key from the array
+
+					// call all the callbacks for the key release event
+					int callbacksLength = length(Events.onKeyPadReleaseCallbacks); //
 					for (int i = 0; i < callbacksLength; i++)
 					{
 						Events.onKeyPadReleaseCallbacks[i](key);
 					}
 				}
+				// set the key pressed to 0 in the array
 				Events.keyPadPressed[row][col] = 0;
 				continue;
 			}
+			// check if the key is pressed
 			enum KEYPAD key = KEYPAD_MATRIX[row][col];
+			// check if the key is pressed before
 			int pressed = Events.keyPadPressed[row][col];
 
 			if (pressed)
 				continue;
-			int ticks = Events.keyPadPressTicks[row][col]++;
+			int ticks = Events.keyPadPressTicks[row][col]++; // increment the ticks for debouncing of the key
 			if (ticks < Events.countToUnbounce)
-				continue;
+				continue; // check if the key is pressed for the required ticks
 
-			Events.keyPadPressed[row][col] = 1;
+			Events.keyPadPressed[row][col] = 1; // set the key pressed to 1 in the array
+
+			// call all the callbacks for the key press event
 			int callbacksLength = length(Events.onKeyPadPressCallbacks);
 			for (int i = 0; i < callbacksLength; i++)
 			{
 				Events.onKeyPadPressCallbacks[i](key);
 			}
 		}
-		GPIOB->ODR &= ~(1 << (col + 1));
+		GPIOB->ODR &= ~(1 << (col + 1)); // clear the col to low
 	}
 	return timetest;
 }
