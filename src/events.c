@@ -7,7 +7,6 @@
 struct EventsType Events;
 void Delay(unsigned int n)
 {
-	int i;
 	HAL_Delay(n);
 	/*1ms*/
 }
