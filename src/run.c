@@ -69,7 +69,7 @@ void keyPressCallback(enum KEYPAD key)
 		char string[3] = {0, 0, 0};
 		if (key > 99)
 			return;
-		sprintf(string, "%d", key);
+		sprintf(string, "%X", key);
 		char writeString[11];
 		strcpy(writeString, "Freq>K"); // Copy the base string into the buffer
 		strcat(writeString, string);   // Append the `string`
@@ -117,7 +117,7 @@ void switchPressCallback(enum SWITCHS key)
 					char freqString[6] = {0, 0, 0, 0, 0, 0};
 					if (key > 99)
 						return;
-					sprintf(keyString, "%d", key);
+					sprintf(keyString, "%X", key);
 					sprintf(freqString, "%d", freq);
 					strcpy(writeString, "Freq>K");	// Copy the base string into the buffer
 					strcat(writeString, keyString); // Append the `string`
