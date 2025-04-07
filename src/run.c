@@ -35,7 +35,15 @@ void EnableClock()
 // 	return str;
 // }
 
-int Frequencies[16] = {33, 37, 169, 175, 196, 220, 247, 26, 294, 330, 349, 392, 440, 494, 523};
+
+uint8_t presetIndex = 0;
+
+int Frequencies[3][16] = 
+{
+{131, 147, 165, 175, 196, 220, 247, 262, 294, 330, 349, 392, 440, 494, 523},
+{33, 37, 41, 44, 49, 55, 62, 65, 73, 82, 87, 98, 110, 123, 131},
+{523, 587, 659, 698, 784, 880, 988, 1047, 1175, 1319, 1397, 1568, 1760, 1975, 2093}
+};
 
 /*double Frequencies[16] = {1, 2, 3, 4,
 						  5, 6, 7, 8,
@@ -54,12 +62,13 @@ void numberBoxCallback(struct BeforeCharWriteEventType *event)
 	if (event->c >= '0' || event->c <= '9')
 		return; // only allow numbers in the frequency display box
 	event->cancel = 1;
-}
+};
+
 void keyPressCallback(enum KEYPAD key)
 {
 	if (setFreq < -1)
 	{
-		AddFrequency(Frequencies[key]);
+		AddFrequency(Frequencies[presetIndex][key]);
 		return;
 	}
 	if (setFreq == -1)
@@ -69,7 +78,7 @@ void keyPressCallback(enum KEYPAD key)
 		char string[3] = {0, 0, 0};
 		if (key > 99)
 			return;
-		sprintf(string, "%X", key);
+		sprintf(string, "%d", key);
 		char writeString[11];
 		strcpy(writeString, "Freq>K"); // Copy the base string into the buffer
 		strcat(writeString, string);   // Append the `string`
@@ -84,7 +93,7 @@ void keyPressCallback(enum KEYPAD key)
 void keyReleaseCallback(enum KEYPAD key)
 {
 	if (setFreq < -1)
-		RemoveFrequency(Frequencies[key]);
+		RemoveFrequency(Frequencies[presetIndex][key]);
 	// GPIOA->ODR &= ~(1 << 1);
 	// Write_Char_LCD(KEYPAD_CHARS[key]);
 }
@@ -96,43 +105,12 @@ void switchPressCallback(enum SWITCHS key)
 	{
 	case BUTTON_SWITCH2:
 	{
-
-		setFreq = -1;
-		Set_LCD("Pick Key to set Freq:"); // Prompt the user to pick a key frequency, this will be used for buzzer
+		presetIndex = (++presetIndex)%3;
 		break;
 	}
 	case BUTTON_SWITCH3:
 	{
-		if (setFreq > -1)
-		{
-			char *stringNum = Get_String_LCD(10, 14);
-			if (stringNum)
-			{
-				int freq = atof(stringNum);
-				if (freq >= 0)
-				{
-					Frequencies[setFreq] = freq; // set the frequency in the array for the buzzer to use
-					char writeString[33];
-					char keyString[3] = {0, 0, 0};
-					char freqString[6] = {0, 0, 0, 0, 0, 0};
-					if (key > 99)
-						return;
-					sprintf(keyString, "%X", key);
-					sprintf(freqString, "%d", freq);
-					strcpy(writeString, "Freq>K");	// Copy the base string into the buffer
-					strcat(writeString, keyString); // Append the `string`
-					strcat(writeString, " is      ");
-					strcat(writeString, freqString);
-					strcat(writeString, " Hz");
-					setFreq = -2;
-					Set_LCD(writeString);
-				}
-			}
-			// Events.unsubscribeEvent(&numberBoxCallback); // unsubscribe the number box callback to allow normal operation again
-			setFreq = -2;
-			free(stringNum); // free the allocated memory for the string
-		}
-
+		
 		break;
 	}
 	case BUTTON_SWITCH4:

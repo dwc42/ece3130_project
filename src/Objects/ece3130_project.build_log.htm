@@ -5,11 +5,11 @@
 <h2>Tool Versions:</h2>
 IDE-Version: µVision V5.41.0.0
 Copyright (C) 2024 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: Dow Cox, Tennessee Tech University, LIC=----
+License Information: Bernie Friesel, Tennessee Tech University, LIC=----
  
 Tool Versions:
 Toolchain:       MDK-Lite  Version: 5.41.0.0
-Toolchain Path:  C:\Users\mrpat\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin
+Toolchain Path:  C:\Users\dinof\Desktop\Micro-Comp\ARM\ARMCLANG\Bin
 C Compiler:      ArmClang.exe V6.22
 Assembler:       Armasm.exe V6.22
 Linker/Locator:  ArmLink.exe V6.22
@@ -21,16 +21,148 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.3.0.0
 Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
-C:\Users\mrpat\OneDrive\Documents\ECE3130\Hardware\ece3130_project\src\ece3130_project.uvprojx
-Project File Date:  04/05/2025
+C:\Users\dinof\Desktop\CSC 1310\Projects\Program 1\Program-1-main\ece3130_project\src\ece3130_project.uvprojx
+Project File Date:  04/07/2025
 
 <h2>Output:</h2>
-*** Using Compiler 'V6.22', folder: 'C:\Users\mrpat\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin'
-Build target 'Target_1'
+*** Using Compiler 'V6.22', folder: 'C:\Users\dinof\Desktop\Micro-Comp\ARM\ARMCLANG\Bin'
+Rebuild target 'Target_1'
+run.c(108): warning: multiple unsequenced modifications to 'presetIndex' [-Wunsequenced]
+  108 |                 presetIndex = (++presetIndex)%3;
+      |                             ~  ^
+1 warning generated.
 compiling run.c...
+compiling buzzer.c...
+compiling main.c...
+compiling date.c...
+compiling list.c...
+compiling lcd.c...
+events.c(10): warning: unused variable 'i' [-Wunused-variable]
+   10 |         int i;
+      |             ^
+events.c(62): warning: unused variable 'keyb2' [-Wunused-variable]
+   62 |                 int keyb2 = keyPadIB2[i];
+      |                     ^~~~~
+events.c(73): warning: incompatible pointer types passing 'void (**)(enum KEYPAD)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+   73 |         int size = length(Events.onKeyPadPressCallbacks);
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\events.h(70): note: passing argument to parameter 'array' here
+   70 | int length(void **array);
+      |                   ^
+events.c(87): warning: incompatible pointer types passing 'void (**)(enum KEYPAD)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+   87 |         int size = length(Events.onKeyPadReleaseCallbacks);
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\events.h(70): note: passing argument to parameter 'array' here
+   70 | int length(void **array);
+      |                   ^
+events.c(101): warning: incompatible pointer types passing 'void (**)(enum SWITCHS)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+  101 |         int size = length(Events.onSwitchReleaseCallbacks);
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\events.h(70): note: passing argument to parameter 'array' here
+   70 | int length(void **array);
+      |                   ^
+events.c(115): warning: incompatible pointer types passing 'void (**)(enum SWITCHS)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+  115 |         int size = length(Events.onSwitchPressCallbacks);
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\events.h(70): note: passing argument to parameter 'array' here
+   70 | int length(void **array);
+      |                   ^
+events.c(129): warning: incompatible pointer types passing 'void (**)(struct BeforeCharWriteEventType *)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+  129 |         int size = length(Events.beforeCharWriteCallbacks);
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\events.h(70): note: passing argument to parameter 'array' here
+   70 | int length(void **array);
+      |                   ^
+events.c(146): warning: incompatible pointer types passing 'void (**)(struct BeforeCharWriteEventType *)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+  146 |         int size = length(Events.beforeCharWriteCallbacks);
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\events.h(70): note: passing argument to parameter 'array' here
+   70 | int length(void **array);
+      |                   ^
+events.c(162): warning: comparing a pointer to a null character constant; did you mean to compare to NULL? [-Wpointer-compare]
+  162 |         for (int i = 0; callbackArray[i] != '\0'; i++)
+      |                                             ^~~~
+      |                                             (void *)0
+events.c(181): warning: incompatible pointer types passing 'void (**)(enum KEYPAD)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+  181 |                         length(Events.onKeyPadPressCallbacks)))
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\events.h(70): note: passing argument to parameter 'array' here
+   70 | int length(void **array);
+      |                   ^
+events.c(187): warning: incompatible pointer types passing 'void (**)(enum KEYPAD)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+  187 |                         length(Events.onKeyPadReleaseCallbacks)))
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\events.h(70): note: passing argument to parameter 'array' here
+   70 | int length(void **array);
+      |                   ^
+events.c(193): warning: incompatible pointer types passing 'void (**)(enum SWITCHS)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+  193 |                         length(Events.onSwitchReleaseCallbacks)))
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\events.h(70): note: passing argument to parameter 'array' here
+   70 | int length(void **array);
+      |                   ^
+events.c(200): warning: incompatible pointer types passing 'void (**)(enum SWITCHS)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+  200 |                         length(Events.onSwitchPressCallbacks)))
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\events.h(70): note: passing argument to parameter 'array' here
+   70 | int length(void **array);
+      |                   ^
+events.c(206): warning: incompatible pointer types passing 'void (**)(struct BeforeCharWriteEventType *)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+  206 |                         length(Events.beforeCharWriteCallbacks)))
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\events.h(70): note: passing argument to parameter 'array' here
+   70 | int length(void **array);
+      |                   ^
+events.c(275): warning: incompatible pointer types passing 'void (**)(enum SWITCHS)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+  275 |                         int callbacksLength = length(Events.onSwitchReleaseCallbacks);
+      |                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+events.c(243): note: passing argument to parameter 'array' here
+  243 | int length(void **array)
+      |                   ^
+events.c(293): warning: incompatible pointer types passing 'void (**)(enum SWITCHS)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+  293 |                 int callbacksLength = length(Events.onSwitchPressCallbacks);
+      |                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+events.c(243): note: passing argument to parameter 'array' here
+  243 | int length(void **array)
+      |                   ^
+events.c(323): warning: incompatible pointer types passing 'void (**)(enum KEYPAD)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+  323 |                                         int callbacksLength = length(Events.onKeyPadReleaseCallbacks);
+      |                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+events.c(243): note: passing argument to parameter 'array' here
+  243 | int length(void **array)
+      |                   ^
+events.c(342): warning: incompatible pointer types passing 'void (**)(enum KEYPAD)' to parameter of type 'void **' [-Wincompatible-pointer-types]
+  342 |                         int callbacksLength = length(Events.onKeyPadPressCallbacks);
+      |                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+events.c(243): note: passing argument to parameter 'array' here
+  243 | int length(void **array)
+      |                   ^
+18 warnings generated.
+compiling events.c...
+compiling system_stm32l4xx.c...
+compiling stm32l4xx_hal_msp.c...
+compiling stm32l4xx_it.c...
+assembling startup_stm32l476xx.s...
+compiling stm32l4xx_hal.c...
+compiling stm32l4xx_hal_tim_ex.c...
+compiling stm32l4xx_hal_rcc.c...
+compiling stm32l4xx_hal_flash_ex.c...
+compiling stm32l4xx_hal_rcc_ex.c...
+compiling stm32l4xx_hal_flash.c...
+compiling stm32l4xx_hal_i2c.c...
+compiling stm32l4xx_hal_tim.c...
+compiling stm32l4xx_hal_flash_ramfunc.c...
+compiling stm32l4xx_hal_gpio.c...
+compiling stm32l4xx_hal_i2c_ex.c...
+compiling stm32l4xx_hal_dma_ex.c...
+compiling stm32l4xx_hal_dma.c...
+compiling stm32l4xx_hal_pwr.c...
+compiling stm32l4xx_hal_cortex.c...
+compiling stm32l4xx_hal_exti.c...
+compiling stm32l4xx_hal_pwr_ex.c...
 linking...
-Program Size: Code=24294 RO-data=1010 RW-data=124 ZI-data=1960  
-".\Objects\ece3130_project.axf" - 0 Error(s), 0 Warning(s).
+Program Size: Code=17318 RO-data=490 RW-data=252 ZI-data=1968  
+".\Objects\ece3130_project.axf" - 0 Error(s), 19 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -53,14 +185,14 @@ Package Vendor: Keil
   ./STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Inc
   ./STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy
   ./STM32CubeMX/Target_1/STM32CubeMX/Inc
-  C:/Users/mrpat/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include
+  C:/Users/dinof/Desktop/Micro-Comp/ARM/CMSIS/6.1.0/CMSIS/Core/Include
 
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE@6.1.0
 
    * Component: Keil::Device:CubeMX@1.0.0
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:04
 </pre>
 </body>
 </html>
