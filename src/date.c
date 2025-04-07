@@ -44,10 +44,7 @@ void dwt_check()
 }
 int freq = 80000000;
 **/
-/**
- * @brief Get the current date in milliseconds since the system started
- * @return double The current date in milliseconds
- */
+
 double date()
 {
 	return ((double)getCurrentMicros()) / 1000.0;
