@@ -110,7 +110,6 @@ void switchPressCallback(enum SWITCHS key)
 	}
 	case BUTTON_SWITCH3:
 	{
-		
 		break;
 	}
 	case BUTTON_SWITCH4:
