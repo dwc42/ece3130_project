@@ -105,6 +105,7 @@ Section Cross References
     events.o(.text.check) refers to events.o(.data.SWITCH_ARRAY) for SWITCH_ARRAY
     events.o(.text.check) refers to events.o(.data.KEYPAD_MATRIX) for KEYPAD_MATRIX
     events.o(.ARM.exidx.text.check) refers to events.o(.text.check) for [Anonymous Symbol]
+    lcd.o(.text.shiftLCD) refers to lcd.o(.bss.cacheLCD) for cacheLCD
     lcd.o(.text.shiftLCD) refers to lcd.o(.text.LCD_nibble_write) for LCD_nibble_write
     lcd.o(.ARM.exidx.text.shiftLCD) refers to lcd.o(.text.shiftLCD) for [Anonymous Symbol]
     lcd.o(.text.Set_CursorPosition) refers to lcd.o(.bss.cacheLCD) for cacheLCD
