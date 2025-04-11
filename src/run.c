@@ -39,10 +39,14 @@ int modeCycle = 0;
 uint8_t presetIndex = 0;
 
 char switch_Menu[4][4];
-uint8_t compareStrings(char* string1, char* string2) {
-	for (int i = 0; string1[i] != '\0'; i++) {
-		if (string2[i] == '\0') return 0;
-		if (string1[i] != string2[i]) return 0;
+uint8_t compareStrings(char *string1, char *string2)
+{
+	for (int i = 0; string1[i] != '\0'; i++)
+	{
+		if (string2[i] == '\0')
+			return 0;
+		if (string1[i] != string2[i])
+			return 0;
 	}
 	return 1;
 }
@@ -52,40 +56,39 @@ void update_SW_Menu()
 	char sector5New[4];
 	char sector6New[4];
 	char sector7New[4];
-	switch(modeCycle)
+	switch (modeCycle)
 	{
-		case 0:
+	case 0:
+	{
+		if (presetIndex == 0)
 		{
-				if(presetIndex==0)
-				{
-					sector4New = "3&4";
-					
-				}
-				else if(presetIndex==1)
-				{
-				
-					sector4New = "1&2";
-				}
-				else if(presetIndex==2)
-				{
-					sector4New = "5&6";
-				}
+			strcpy(sector4New, "3&4");
+		}
+		else if (presetIndex == 1)
+		{
 
-				break;
-			}
+			strcpy(sector4New, "1&2");
+		}
+		else if (presetIndex == 2)
+		{
+			strcpy(sector4New, "5&6");
+		}
+
+		break;
 	}
-	if (!compareStrings(sector4New, switch_Menu[0])) {
-		switch_Menu[0] = sector4New;
-		Write_String_Sector_LCD(4, sector4New)
+	}
+	if (!compareStrings(sector4New, switch_Menu[0]))
+	{
+		strcpy(switch_Menu[0], sector4New);
+		Write_String_Sector_LCD(4, sector4New);
 	}
 }
 
-int Frequencies[3][16] = 
-{
-{131, 147, 165, 175, 196, 220, 247, 262, 294, 330, 349, 392, 440, 494, 523},
-{33, 37, 41, 44, 49, 55, 62, 65, 73, 82, 87, 98, 110, 123, 131},
-{523, 587, 659, 698, 784, 880, 988, 1047, 1175, 1319, 1397, 1568, 1760, 1975, 2093}
-};
+int Frequencies[3][16] =
+	{
+		{131, 147, 165, 175, 196, 220, 247, 262, 294, 330, 349, 392, 440, 494, 523},
+		{33, 37, 41, 44, 49, 55, 62, 65, 73, 82, 87, 98, 110, 123, 131},
+		{523, 587, 659, 698, 784, 880, 988, 1047, 1175, 1319, 1397, 1568, 1760, 1975, 2093}};
 
 /*double Frequencies[16] = {1, 2, 3, 4,
 						  5, 6, 7, 8,
@@ -108,44 +111,42 @@ void numberBoxCallback(struct BeforeCharWriteEventType *event)
 
 void keyPressCallback(enum KEYPAD key)
 {
-	if (modeCycle == 0) return;
+	if (modeCycle == 0)
+		return;
 	AddFrequency(Frequencies[presetIndex][key]);
 }
 
-
 void keyReleaseCallback(enum KEYPAD key)
 {
-	if (modeCycle ==0) 
+	if (modeCycle == 0)
 	{
 		RemoveFrequency(Frequencies[presetIndex][key]);
 	}
-	else if(modeCycle ==1)
+	else if (modeCycle == 1)
 	{
-		RemoveFrequency(Frequencies[presetIndex+1][key]);
+		RemoveFrequency(Frequencies[presetIndex + 1][key]);
 	}
-	else if(modeCycle ==2)
+	else if (modeCycle == 2)
 	{
-		RemoveFrequency(Frequencies[presetIndex+2][key]);
+		RemoveFrequency(Frequencies[presetIndex + 2][key]);
 	}
-	
+
 	return;
 }
 
 void switchPressCallback(enum SWITCHS key)
 {
-	
+
 	switch (key)
 	{
-		
-		
+
 	case BUTTON_SWITCH2:
 	{
-		
-		modeCycle = (++modeCycle)%3;
-		
-			}
-		break;
+
+		modeCycle = (++modeCycle) % 3;
 	}
+	break;
+
 	case BUTTON_SWITCH3:
 	{
 		break;
@@ -154,33 +155,32 @@ void switchPressCallback(enum SWITCHS key)
 	{
 		break;
 	}
-	case BUTTON_SWITCH5:       // this will be our Mode Cycle 
+	case BUTTON_SWITCH5: // this will be our Mode Cycle
 	{
-			  modeCycle =(++modeCycle)%3;
-	
-		
+		modeCycle = (++modeCycle) % 3;
+
 		// if(modeCycle == 0)
 		// {
 		// 	Set_LCD( "mode 0");
 		// 	presetIndex = (++presetIndex)%3;
 		// }
-		
+
 		// else if(modeCycle == 1)
 		// {
 		// 	Set_LCD("mode 1");
 		// }
-		
+
 		// else if(modeCycle ==2)
 		// {
 		// 		Set_LCD( "mode2");
 		// 		presetIndex = presetIndex+2;
 		// }
-		
+
 		break;
 	}
-	update_SW_Menu();
+		update_SW_Menu();
+	}
 }
-
 
 // double ticksArray[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -237,5 +237,3 @@ int run(void)
 		// lastTickDate = date();
 	}
 }
-
-
