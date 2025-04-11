@@ -334,3 +334,12 @@ void LCD_Init()
 	Write_Instr_LCD(0x06);
 	/* move cursor to right (entry mode set instruction)*/
 }
+
+void Write_String_Sector_LCD(uint8_t sector, char* string)
+{
+	uint8_t lastPosition = cacheLCD.position;
+	uint8_t lastLine = cacheLCD.line;
+	Set_CursorPosition(sector/4, sector%4);
+	Write_String_LCD(string);
+	Set_CursorPosition(lastLine, lastPosition);
+}
