@@ -35,7 +35,15 @@ void EnableClock()
 // 	return str;
 // }
 
-int Frequencies[16] = {33, 37, 169, 175, 196, 220, 247, 26, 294, 330, 349, 392, 440, 494, 523};
+int current_Mode = 0;
+uint8_t presetIndex = 0;
+
+int Frequencies[3][16] = 
+{
+{131, 147, 165, 175, 196, 220, 247, 262, 294, 330, 349, 392, 440, 494, 523},
+{33, 37, 41, 44, 49, 55, 62, 65, 73, 82, 87, 98, 110, 123, 131},
+{523, 587, 659, 698, 784, 880, 988, 1047, 1175, 1319, 1397, 1568, 1760, 1975, 2093}
+};
 
 /*double Frequencies[16] = {1, 2, 3, 4,
 						  5, 6, 7, 8,
@@ -55,41 +63,45 @@ void numberBoxCallback(struct BeforeCharWriteEventType *event)
 	if (event->c >= '0' || event->c <= '9')
 		return; // only allow numbers in the frequency display box
 	event->cancel = 1;
-}
+};
+
 void keyPressCallback(enum KEYPAD key)
 {
-	if (setFreq < -1)
+	if (modeCycle == 0)
 	{
-		AddFrequency(Frequencies[key]);
-		return;
+		AddFrequency(Frequencies[presetIndex][key]);
 	}
-	if (setFreq == -1)
+	else if(modeCycle == 1)
 	{
-		// Set the frequency to the current key pressed, this will be used for buzzer
-		setFreq = key;
-		char string[3] = {0, 0, 0};
-		if (key > 99)
-			return;
-		sprintf(string, "%d", key);
-		char writeString[11];
-		strcpy(writeString, "Freq>K"); // Copy the base string into the buffer
-		strcat(writeString, string);   // Append the `string`
-		strcat(writeString, ": ");
-		Set_LCD(writeString);
-
-		// subscribe to the number box callback to limit input to numbers only in the frequency box
-		return;
+		AddFrequency(Frequencies[presetIndex+1][key]);
 	}
-	Write_Char_LCD(KEYPAD_CHARS[key]);
+	
+	else if(modeCycle ==2)
+	{
+		AddFrequency(Frequencies[presetIndex+2][key]);
+	}
+	return;
 }
+
+
 void keyReleaseCallback(enum KEYPAD key)
 {
-	if (setFreq < -1)
-		RemoveFrequency(Frequencies[key]);
-	// GPIOA->ODR &= ~(1 << 1);
-	// Write_Char_LCD(KEYPAD_CHARS[key]);
+	if (modeCycle ==0) 
+	{
+		RemoveFrequency(Frequencies[presetIndex][key]);
+	}
+	else if(modeCycle ==1)
+	{
+		RemoveFrequency(Frequencies[presetIndex+1][key]);
+	}
+	else if(modeCycle ==2)
+	{
+		RemoveFrequency(Frequencies[presetIndex+2][key]);
+	}
+	
+	
+	return;
 }
-// double average = 0;
 
 void switchPressCallback(enum SWITCHS key)
 {
@@ -97,43 +109,31 @@ void switchPressCallback(enum SWITCHS key)
 	{
 	case BUTTON_SWITCH2:
 	{
-
-		setFreq = -1;
-		Set_LCD("Pick Key to set Freq:"); // Prompt the user to pick a key frequency, this will be used for buzzer
+		current_Mode =(++current_Mode)%3;
+	
+		
+		if(current_Mode == 0)
+		{
+			Set_LCD( "mode 0");
+			presetIndex = (++presetIndex)%3;
+		}
+		
+		else if(current_Mode == 1)
+		{
+			Set_LCD("mode 1");
+		}
+		
+		else if(current_Mode ==2)
+		{
+				Set_LCD( "mode2");
+				presetIndex = presetIndex+2;
+		}
+		
 		break;
 	}
 	case BUTTON_SWITCH3:
 	{
-		if (setFreq > -1)
-		{
-			char *stringNum = Get_String_LCD(10, 14);
-			if (stringNum)
-			{
-				int freq = atof(stringNum);
-				if (freq >= 0)
-				{
-					Frequencies[setFreq] = freq; // set the frequency in the array for the buzzer to use
-					char writeString[33];
-					char keyString[3] = {0, 0, 0};
-					char freqString[6] = {0, 0, 0, 0, 0, 0};
-					if (key > 99)
-						return;
-					sprintf(keyString, "%d", key);
-					sprintf(freqString, "%d", freq);
-					strcpy(writeString, "Freq>K");	// Copy the base string into the buffer
-					strcat(writeString, keyString); // Append the `string`
-					strcat(writeString, " is      ");
-					strcat(writeString, freqString);
-					strcat(writeString, " Hz");
-					setFreq = -2;
-					Set_LCD(writeString);
-				}
-			}
-			// Events.unsubscribeEvent(&numberBoxCallback); // unsubscribe the number box callback to allow normal operation again
-			setFreq = -2;
-			free(stringNum); // free the allocated memory for the string
-		}
-
+		
 		break;
 	}
 	case BUTTON_SWITCH4:
@@ -142,24 +142,26 @@ void switchPressCallback(enum SWITCHS key)
 	}
 	case BUTTON_SWITCH5:       // this will be our Mode Cycle 
 	{
-			  
-				 modeCycle = (++modeCycle)%3;	
+			  modeCycle = (++modeCycle)%3;
+				if( current_Mode ==0)
+				{	
 			
-				if(modeCycle ==0)
-				{
-					Set_LCD ("Mode 0");
+					if(modeCycle ==0)
+					{
+						Set_LCD ("3&4");
 					
-				}
-				else if(modeCycle==1)
-			{
+					}
+					else if(modeCycle==1)
+				{
 				
-				Set_LCD("Mode1");
-			}
-			else if(modeCycle==2)
-			{
-				Set_LCD("Mode2");
-			}
+					Set_LCD("1&2");
+				}
+				else if(modeCycle==2)
+				{
+					Set_LCD("5&6");
+				}
 			
+			}
 		
 		break;
 	}
