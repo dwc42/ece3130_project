@@ -35,15 +35,13 @@ void EnableClock()
 // 	return str;
 // }
 
-
 uint8_t presetIndex = 0;
 
-int Frequencies[3][16] = 
-{
-{131, 147, 165, 175, 196, 220, 247, 262, 294, 330, 349, 392, 440, 494, 523},
-{33, 37, 41, 44, 49, 55, 62, 65, 73, 82, 87, 98, 110, 123, 131},
-{523, 587, 659, 698, 784, 880, 988, 1047, 1175, 1319, 1397, 1568, 1760, 1975, 2093}
-};
+int Frequencies[3][16] =
+	{
+		{131, 147, 165, 175, 196, 220, 247, 262, 294, 330, 349, 392, 440, 494, 523},
+		{33, 37, 41, 44, 49, 55, 62, 65, 73, 82, 87, 98, 110, 123, 131},
+		{523, 587, 659, 698, 784, 880, 988, 1047, 1175, 1319, 1397, 1568, 1760, 1975, 2093}};
 
 /*double Frequencies[16] = {1, 2, 3, 4,
 						  5, 6, 7, 8,
@@ -105,12 +103,12 @@ void switchPressCallback(enum SWITCHS key)
 	{
 	case BUTTON_SWITCH2:
 	{
-		presetIndex = (++presetIndex)%3;
+		presetIndex = (++presetIndex) % 3;
 		break;
 	}
 	case BUTTON_SWITCH3:
 	{
-		
+
 		break;
 	}
 	case BUTTON_SWITCH4:
@@ -134,10 +132,13 @@ int run(void)
 {
 
 	EnableClock();
+	enable_tim_clocks();
 	// Init_LED(1);
 	// Init_LED(0);
 	LCD_Init();
 	InitEvents();
+	Init_buzzerEXT(0);
+	Init_buzzerEXT(1);
 	/*DWT_Init();*/
 	/*Write_Char_LCD('o');*/
 	/*Write_String_LCD(line1);
@@ -148,7 +149,6 @@ int run(void)
 	Events.onKeyPadRelease(keyReleaseCallback);
 	Events.onSwitchPress(switchPressCallback);
 	Events.beforeCharWrite(numberBoxCallback);
-	Init_buzzer();
 	// Write_String_LCD("0123456789ABCDEF");
 	// Write_String_LCD("0123456789ABCDEFG");
 	// Clear_Display();

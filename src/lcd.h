@@ -73,9 +73,9 @@ void Set_Cursor(uint8_t value);
  */
 void Set_Cursor_Blinking();
 /**
- * @brief Shifts the LCD display left(0) or right(1)
+ * @brief Shifts the LCD Cursor left(0) or right(1)
  */
-void shiftLCD(uint8_t value);
+void Shift_Cursor_LCD(uint8_t value);
 /** * @brief LCD cache structure, used to store the current state of the LCD display
  * @struct LCDCache
  * @note string: the string currently displayed on the LCD, 32 characters + null terminator
