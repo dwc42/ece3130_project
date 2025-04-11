@@ -105,11 +105,47 @@ void keyReleaseCallback(enum KEYPAD key)
 
 void switchPressCallback(enum SWITCHS key)
 {
+	
 	switch (key)
 	{
+		
+		
 	case BUTTON_SWITCH2:
 	{
-		current_Mode =(++current_Mode)%3;
+		
+		modeCycle = (++modeCycle)%3;
+				if( current_Mode ==0)
+				{	
+			
+					if(modeCycle ==0)
+					{
+						Set_LCD ("3&4");
+					
+					}
+					else if(modeCycle==1)
+				{
+				
+					Set_LCD("1&2");
+				}
+				else if(modeCycle==2)
+				{
+					Set_LCD("5&6");
+				}
+		
+			}
+		break;
+	}
+	case BUTTON_SWITCH3:
+	{
+		break;
+	}
+	case BUTTON_SWITCH4:
+	{
+		break;
+	}
+	case BUTTON_SWITCH5:       // this will be our Mode Cycle 
+	{
+			  current_Mode =(++current_Mode)%3;
 	
 		
 		if(current_Mode == 0)
@@ -131,41 +167,7 @@ void switchPressCallback(enum SWITCHS key)
 		
 		break;
 	}
-	case BUTTON_SWITCH3:
-	{
-		
-		break;
-	}
-	case BUTTON_SWITCH4:
-	{
-		break;
-	}
-	case BUTTON_SWITCH5:       // this will be our Mode Cycle 
-	{
-			  modeCycle = (++modeCycle)%3;
-				if( current_Mode ==0)
-				{	
-			
-					if(modeCycle ==0)
-					{
-						Set_LCD ("3&4");
-					
-					}
-					else if(modeCycle==1)
-				{
-				
-					Set_LCD("1&2");
-				}
-				else if(modeCycle==2)
-				{
-					Set_LCD("5&6");
-				}
-			
-			}
-		
-		break;
-	}
-	}
+}
 }
 
 // double ticksArray[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -223,3 +225,5 @@ int run(void)
 		// lastTickDate = date();
 	}
 }
+
+

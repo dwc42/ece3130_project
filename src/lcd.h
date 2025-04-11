@@ -108,4 +108,6 @@ void Set_Text_Write_Shift(uint8_t value);
  * @brief Inializes the LCD
  */
 void LCD_Init();
+
+void Write_String_Sector_LCD(uint8_t sector, char* string);
 #endif /* __LCD_H */

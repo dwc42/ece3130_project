@@ -27,14 +27,14 @@ Project File Date:  04/07/2025
 <h2>Output:</h2>
 *** Using Compiler 'V6.22', folder: 'C:\Users\austi\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'Target_1'
-run.c(112): warning: multiple unsequenced modifications to 'current_Mode' [-Wunsequenced]
-  112 |                 current_Mode =(++current_Mode)%3;
-      |                              ~ ^
-run.c(118): warning: multiple unsequenced modifications to 'presetIndex' [-Wunsequenced]
-  118 |                         presetIndex = (++presetIndex)%3;
-      |                                     ~  ^
-run.c(145): warning: multiple unsequenced modifications to 'modeCycle' [-Wunsequenced]
-  145 |                           modeCycle = (++modeCycle)%3;
+run.c(116): warning: multiple unsequenced modifications to 'modeCycle' [-Wunsequenced]
+  116 |                 modeCycle = (++modeCycle)%3;
+      |                           ~  ^
+run.c(148): warning: multiple unsequenced modifications to 'current_Mode' [-Wunsequenced]
+  148 |                           current_Mode =(++current_Mode)%3;
+      |                                        ~ ^
+run.c(154): warning: multiple unsequenced modifications to 'presetIndex' [-Wunsequenced]
+  154 |                         presetIndex = (++presetIndex)%3;
       |                                     ~  ^
 3 warnings generated.
 compiling run.c...
