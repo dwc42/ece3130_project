@@ -27,20 +27,52 @@ Project File Date:  04/07/2025
 <h2>Output:</h2>
 *** Using Compiler 'V6.22', folder: 'C:\Users\austi\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'Target_1'
-run.c(116): warning: multiple unsequenced modifications to 'modeCycle' [-Wunsequenced]
-  116 |                 modeCycle = (++modeCycle)%3;
+run.c(61): error: array type 'char[4]' is not assignable
+   61 |                                         sector4New = "3&4";
+      |                                         ~~~~~~~~~~ ^
+run.c(67): error: array type 'char[4]' is not assignable
+   67 |                                         sector4New = "1&2";
+      |                                         ~~~~~~~~~~ ^
+run.c(71): error: array type 'char[4]' is not assignable
+   71 |                                         sector4New = "5&6";
+      |                                         ~~~~~~~~~~ ^
+run.c(78): error: array type 'char[4]' is not assignable
+   78 |                 switch_Menu[0] = sector4New;
+      |                 ~~~~~~~~~~~~~~ ^
+run.c(79): error: expected ';' after expression
+   79 |                 Write_String_Sector_LCD(4, sector4New)
+      |                                                       ^
+      |                                                       ;
+run.c(137): warning: enumeration values 'BUTTON_SWITCH3', 'BUTTON_SWITCH4', and 'BUTTON_SWITCH5' not handled in switch [-Wswitch]
+  137 |         switch (key)
+      |                 ^~~
+run.c(149): error: 'case' statement not in switch statement
+  149 |         case BUTTON_SWITCH3:
+      |         ^
+run.c(151): error: 'break' statement not in loop or switch statement
+  151 |                 break;
+      |                 ^
+run.c(153): error: 'case' statement not in switch statement
+  153 |         case BUTTON_SWITCH4:
+      |         ^
+run.c(155): error: 'break' statement not in loop or switch statement
+  155 |                 break;
+      |                 ^
+run.c(157): error: 'case' statement not in switch statement
+  157 |         case BUTTON_SWITCH5:       // this will be our Mode Cycle 
+      |         ^
+run.c(179): error: 'break' statement not in loop or switch statement
+  179 |                 break;
+      |                 ^
+run.c(144): warning: multiple unsequenced modifications to 'modeCycle' [-Wunsequenced]
+  144 |                 modeCycle = (++modeCycle)%3;
       |                           ~  ^
-run.c(148): warning: multiple unsequenced modifications to 'current_Mode' [-Wunsequenced]
-  148 |                           current_Mode =(++current_Mode)%3;
-      |                                        ~ ^
-run.c(154): warning: multiple unsequenced modifications to 'presetIndex' [-Wunsequenced]
-  154 |                         presetIndex = (++presetIndex)%3;
-      |                                     ~  ^
-3 warnings generated.
+run.c(159): warning: multiple unsequenced modifications to 'modeCycle' [-Wunsequenced]
+  159 |                           modeCycle =(++modeCycle)%3;
+      |                                     ~ ^
+3 warnings and 11 errors generated.
 compiling run.c...
-linking...
-Program Size: Code=16898 RO-data=490 RW-data=236 ZI-data=1976  
-".\Objects\ece3130_project.axf" - 0 Error(s), 3 Warning(s).
+".\Objects\ece3130_project.axf" - 11 Error(s), 3 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -70,7 +102,8 @@ Package Vendor: Keil
    * Component: ARM::CMSIS:CORE@6.1.0
 
    * Component: Keil::Device:CubeMX@1.0.0
-Build Time Elapsed:  00:00:01
+Target not created.
+Build Time Elapsed:  00:00:00
 </pre>
 </body>
 </html>

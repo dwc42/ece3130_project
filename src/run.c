@@ -35,8 +35,50 @@ void EnableClock()
 // 	return str;
 // }
 
-int current_Mode = 0;
+int modeCycle = 0;
 uint8_t presetIndex = 0;
+
+char switch_Menu[4][4];
+uint8_t compareStrings(char* string1, char* string2) {
+	for (int i = 0; string1[i] != '\0'; i++) {
+		if (string2[i] == '\0') return 0;
+		if (string1[i] != string2[i]) return 0;
+	}
+	return 1;
+}
+void update_SW_Menu()
+{
+	char sector4New[4];
+	char sector5New[4];
+	char sector6New[4];
+	char sector7New[4];
+	switch(modeCycle)
+	{
+		case 0:
+		{
+				if(presetIndex==0)
+				{
+					sector4New = "3&4";
+					
+				}
+				else if(presetIndex==1)
+				{
+				
+					sector4New = "1&2";
+				}
+				else if(presetIndex==2)
+				{
+					sector4New = "5&6";
+				}
+
+				break;
+			}
+	}
+	if (!compareStrings(sector4New, switch_Menu[0])) {
+		switch_Menu[0] = sector4New;
+		Write_String_Sector_LCD(4, sector4New)
+	}
+}
 
 int Frequencies[3][16] = 
 {
@@ -51,7 +93,6 @@ int Frequencies[3][16] =
 						  12, 13, 14, 15};*/
 double peroid = 0.0;
 int setFreq = -2;
-int modeCycle;
 void numberBoxCallback(struct BeforeCharWriteEventType *event)
 {
 	if (setFreq < 0)
@@ -67,20 +108,8 @@ void numberBoxCallback(struct BeforeCharWriteEventType *event)
 
 void keyPressCallback(enum KEYPAD key)
 {
-	if (modeCycle == 0)
-	{
-		AddFrequency(Frequencies[presetIndex][key]);
-	}
-	else if(modeCycle == 1)
-	{
-		AddFrequency(Frequencies[presetIndex+1][key]);
-	}
-	
-	else if(modeCycle ==2)
-	{
-		AddFrequency(Frequencies[presetIndex+2][key]);
-	}
-	return;
+	if (modeCycle == 0) return;
+	AddFrequency(Frequencies[presetIndex][key]);
 }
 
 
@@ -99,7 +128,6 @@ void keyReleaseCallback(enum KEYPAD key)
 		RemoveFrequency(Frequencies[presetIndex+2][key]);
 	}
 	
-	
 	return;
 }
 
@@ -114,23 +142,6 @@ void switchPressCallback(enum SWITCHS key)
 	{
 		
 		modeCycle = (++modeCycle)%3;
-				if( current_Mode ==0)
-				{	
-			
-					if(modeCycle ==0)
-					{
-						Set_LCD ("3&4");
-					
-					}
-					else if(modeCycle==1)
-				{
-				
-					Set_LCD("1&2");
-				}
-				else if(modeCycle==2)
-				{
-					Set_LCD("5&6");
-				}
 		
 			}
 		break;
@@ -145,30 +156,31 @@ void switchPressCallback(enum SWITCHS key)
 	}
 	case BUTTON_SWITCH5:       // this will be our Mode Cycle 
 	{
-			  current_Mode =(++current_Mode)%3;
+			  modeCycle =(++modeCycle)%3;
 	
 		
-		if(current_Mode == 0)
-		{
-			Set_LCD( "mode 0");
-			presetIndex = (++presetIndex)%3;
-		}
+		// if(modeCycle == 0)
+		// {
+		// 	Set_LCD( "mode 0");
+		// 	presetIndex = (++presetIndex)%3;
+		// }
 		
-		else if(current_Mode == 1)
-		{
-			Set_LCD("mode 1");
-		}
+		// else if(modeCycle == 1)
+		// {
+		// 	Set_LCD("mode 1");
+		// }
 		
-		else if(current_Mode ==2)
-		{
-				Set_LCD( "mode2");
-				presetIndex = presetIndex+2;
-		}
+		// else if(modeCycle ==2)
+		// {
+		// 		Set_LCD( "mode2");
+		// 		presetIndex = presetIndex+2;
+		// }
 		
 		break;
 	}
+	update_SW_Menu();
 }
-}
+
 
 // double ticksArray[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 
