@@ -34,4 +34,10 @@ void removeFromIntegers(int **list, int value, int precision);
  * @param list point to an array of doubles with a DBL_MAX at the end
  * @return the length of the list
  */
+
+struct Press
+{
+	int pressDate;
+	int RecordingIndex
+}
 #endif /*__LIST_H*/
