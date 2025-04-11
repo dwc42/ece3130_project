@@ -73,11 +73,11 @@ void update_SW_Menu()
 		{
 			strcpy(sector4New, "5&6");
 		}
-
+		
 		break;
 	}
 	}
-	if (!compareStrings(sector4New, switch_Menu[0]))
+	if (sector4New[0] && !compareStrings(sector4New, switch_Menu[0]))
 	{
 		strcpy(switch_Menu[0], sector4New);
 		Write_String_Sector_LCD(4, sector4New);
@@ -111,27 +111,16 @@ void numberBoxCallback(struct BeforeCharWriteEventType *event)
 
 void keyPressCallback(enum KEYPAD key)
 {
-	if (modeCycle == 0)
+	if (modeCycle)
 		return;
 	AddFrequency(Frequencies[presetIndex][key]);
 }
 
 void keyReleaseCallback(enum KEYPAD key)
 {
-	if (modeCycle == 0)
-	{
+	if (modeCycle) return;
 		RemoveFrequency(Frequencies[presetIndex][key]);
-	}
-	else if (modeCycle == 1)
-	{
-		RemoveFrequency(Frequencies[presetIndex + 1][key]);
-	}
-	else if (modeCycle == 2)
-	{
-		RemoveFrequency(Frequencies[presetIndex + 2][key]);
-	}
 
-	return;
 }
 
 void switchPressCallback(enum SWITCHS key)
@@ -143,7 +132,7 @@ void switchPressCallback(enum SWITCHS key)
 	case BUTTON_SWITCH2:
 	{
 
-		modeCycle = (++modeCycle) % 3;
+		presetIndex = (presetIndex + 1) % 3;
 	}
 	break;
 
@@ -157,7 +146,7 @@ void switchPressCallback(enum SWITCHS key)
 	}
 	case BUTTON_SWITCH5: // this will be our Mode Cycle
 	{
-		modeCycle = (++modeCycle) % 3;
+		modeCycle = (modeCycle + 1) % 3;
 
 		// if(modeCycle == 0)
 		// {
@@ -178,8 +167,9 @@ void switchPressCallback(enum SWITCHS key)
 
 		break;
 	}
-		update_SW_Menu();
+		
 	}
+	update_SW_Menu();
 }
 
 // double ticksArray[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -210,6 +200,7 @@ int run(void)
 	// Write_String_LCD("0123456789ABCDEF");
 	// Write_String_LCD("0123456789ABCDEFG");
 	// Clear_Display();
+	update_SW_Menu();
 	while (1)
 	{
 		CheckFrequency();
