@@ -43,6 +43,7 @@ int Frequencies[16] = {33, 37, 169, 175, 196, 220, 247, 26, 294, 330, 349, 392, 
 						  12, 13, 14, 15};*/
 double peroid = 0.0;
 int setFreq = -2;
+int modeCycle;
 void numberBoxCallback(struct BeforeCharWriteEventType *event)
 {
 	if (setFreq < 0)
@@ -139,8 +140,27 @@ void switchPressCallback(enum SWITCHS key)
 	{
 		break;
 	}
-	case BUTTON_SWITCH5:
+	case BUTTON_SWITCH5:       // this will be our Mode Cycle 
 	{
+			  
+				 modeCycle = (++modeCycle)%3;	
+			
+				if(modeCycle ==0)
+				{
+					Set_LCD ("Mode 0");
+					
+				}
+				else if(modeCycle==1)
+			{
+				
+				Set_LCD("Mode1");
+			}
+			else if(modeCycle==2)
+			{
+				Set_LCD("Mode2");
+			}
+			
+		
 		break;
 	}
 	}

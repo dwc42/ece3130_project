@@ -5,11 +5,11 @@
 <h2>Tool Versions:</h2>
 IDE-Version: µVision V5.41.0.0
 Copyright (C) 2024 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: Dow Cox, Tennessee Tech University, LIC=----
+License Information: Austin DuCrest, Student, LIC=----
  
 Tool Versions:
 Toolchain:       MDK-Lite  Version: 5.41.0.0
-Toolchain Path:  C:\Users\mrpat\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin
+Toolchain Path:  C:\Users\austi\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin
 C Compiler:      ArmClang.exe V6.22
 Assembler:       Armasm.exe V6.22
 Linker/Locator:  ArmLink.exe V6.22
@@ -21,13 +21,20 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.3.0.0
 Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
-C:\Users\mrpat\OneDrive\Documents\ECE3130\Hardware\ece3130_project\src\ece3130_project.uvprojx
-Project File Date:  04/05/2025
+C:\Users\austi\OneDrive\Documents\School Stuff\Class Stuff\Engineering Folder\ECE 3130\Project\ece3130_project\src\ece3130_project.uvprojx
+Project File Date:  04/07/2025
 
 <h2>Output:</h2>
-*** Using Compiler 'V6.22', folder: 'C:\Users\mrpat\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin'
+*** Using Compiler 'V6.22', folder: 'C:\Users\austi\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'Target_1'
-".\Objects\ece3130_project.axf" - 0 Error(s), 0 Warning(s).
+run.c(146): warning: multiple unsequenced modifications to 'modeCycle' [-Wunsequenced]
+  146 |                                  modeCycle = (++modeCycle)%3;   
+      |                                            ~  ^
+1 warning generated.
+compiling run.c...
+linking...
+Program Size: Code=24296 RO-data=968 RW-data=124 ZI-data=1968  
+".\Objects\ece3130_project.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -50,14 +57,14 @@ Package Vendor: Keil
   ./STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Inc
   ./STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy
   ./STM32CubeMX/Target_1/STM32CubeMX/Inc
-  C:/Users/mrpat/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include
+  C:/Users/austi/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include
 
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE@6.1.0
 
    * Component: Keil::Device:CubeMX@1.0.0
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>
