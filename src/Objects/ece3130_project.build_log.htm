@@ -27,10 +27,14 @@ Project File Date:  04/05/2025
 <h2>Output:</h2>
 *** Using Compiler 'V6.22', folder: 'C:\Users\mrpat\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'Target_1'
-compiling buzzer.c...
+run.c(206): warning: multiple unsequenced modifications to 'presetIndex' [-Wunsequenced]
+  206 |                 presetIndex = (++presetIndex) % 3;
+      |                             ~  ^
+1 warning generated.
+compiling run.c...
 linking...
-Program Size: Code=17450 RO-data=490 RW-data=384 ZI-data=2192  
-".\Objects\ece3130_project.axf" - 0 Error(s), 0 Warning(s).
+Program Size: Code=17182 RO-data=490 RW-data=376 ZI-data=2184  
+".\Objects\ece3130_project.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 

@@ -110,7 +110,7 @@ int pushPress(struct Press **list, struct Press item)
 		*list = malloc(sizeof(struct Press) * 2); // allocate space for one integer and INT32_MAX terminator
 		(*list)[0] = item;
 		(*list)[1] = PressVoid; // set the terminator
-		return;
+		return 0;
 	}
 	int len = lengthPress(*list);
 	struct Press *new_list = malloc((sizeof(struct Press) * (len + 2)));
@@ -131,7 +131,7 @@ int pushSample(struct Sample **list, struct Sample item)
 		*list = malloc(sizeof(struct Sample) * 2); // allocate space for one integer and INT32_MAX terminator
 		(*list)[0] = item;
 		(*list)[1] = SampleVoid; // set the terminator
-		return;
+		return 0;
 	}
 	int len = lengthSample(*list);
 	struct Sample *new_list = malloc((sizeof(struct Sample) * (len + 2)));

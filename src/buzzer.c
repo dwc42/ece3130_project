@@ -73,7 +73,7 @@ struct timer
 };
 struct timer timers[4] = {
     {GPIOC, GPIO_PIN_9, GPIO_AF2_TIM3, TIM_OCMODE_PWM1, TIM_CHANNEL_4, TIM3},
-    {GPIOA, GPIO_PIN_0, GPIO_AF1_TIM1, TIM_OCMODE_PWM1, TIM_CHANNEL_1, TIM1},
+    {GPIOA, GPIO_PIN_8, GPIO_AF1_TIM1, TIM_OCMODE_PWM1, TIM_CHANNEL_1, TIM1},
     {GPIOB, GPIO_PIN_1, GPIO_AF2_TIM2, TIM_OCMODE_PWM1, TIM_CHANNEL_2, TIM2},
     {GPIOC, GPIO_PIN_2, GPIO_AF2_TIM4, TIM_OCMODE_PWM1, TIM_CHANNEL_4, TIM4}};
 void Init_buzzerEXT(uint8_t timer)
@@ -194,7 +194,7 @@ void SetFrequency(double freq, uint8_t timer)
         while (1)
             ;
     }
-
+    //__HAL_TIM_MOE_ENABLE(&htimEXT[timer]);
     // Restart the timer with the new configuration
     if (HAL_TIM_PWM_Start(&htimEXT[timer], timers[timer].TIM_CHANNEL) != HAL_OK)
     {

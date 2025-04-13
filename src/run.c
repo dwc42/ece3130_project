@@ -34,6 +34,106 @@ void EnableClock()
 // 	str[1] = '\0';
 // 	return str;
 // }
+void Test_LED_With_Timer(void)
+{
+	// Enable GPIOA clock
+	__HAL_RCC_GPIOA_CLK_ENABLE();
+	// Enable TIM1 clock
+	__HAL_RCC_TIM1_CLK_ENABLE();
+
+	// Configure PA0 as TIM1 Channel 1
+	GPIO_InitTypeDef GPIO_InitStruct = {0};
+	GPIO_InitStruct.Pin = GPIO_PIN_0;
+	GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+	GPIO_InitStruct.Alternate = GPIO_AF1_TIM1; // Alternate function for TIM1
+	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+	// Configure TIM1 for PWM
+	TIM_HandleTypeDef htim1 = {0};
+	htim1.Instance = TIM1;
+	htim1.Init.Prescaler = 7200 - 1; // 10 kHz timer clock
+	htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
+	htim1.Init.Period = 10000 - 1; // 1 Hz PWM frequency
+	htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+
+	if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
+	{
+		// Initialization error
+		while (1)
+			;
+	}
+
+	TIM_OC_InitTypeDef sConfigOC = {0};
+	sConfigOC.OCMode = TIM_OCMODE_PWM1;
+	sConfigOC.Pulse = 5000; // 50% duty cycle
+	sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+
+	if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+	{
+		// Configuration error
+		while (1)
+			;
+	}
+
+	// Enable main output for TIM1
+	__HAL_TIM_MOE_ENABLE(&htim1);
+
+	// Start PWM
+	if (HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1) != HAL_OK)
+	{
+		// Start error
+		while (1)
+			;
+	}
+}
+void Init_buzzer()
+{
+	uint32_t temp;
+
+	temp = GPIOC->MODER;
+	temp &= ~(0x03 << (2 * 9));
+	temp |= (0x01 << (2 * 9));
+	GPIOC->MODER = temp;
+
+	temp = GPIOC->OTYPER;
+	temp &= ~(0x01 << 9);
+	GPIOC->OTYPER = temp;
+
+	temp = GPIOC->PUPDR;
+	temp &= ~(0x03 << (2 * 9));
+	GPIOC->PUPDR = temp;
+
+	// GPIOC->MODER &= ~(0x03 << (2 * 9));
+	// GPIOC->OTYPER &= ~(0x01 << 9);
+	// GPIOC->PUPDR &= ~(0x03 << (2 * 9));
+}
+void Init_LED()
+{
+	uint32_t temp;
+	RCC->AHB2ENR |= RCC_AHB2ENR_GPIOCEN; /* enable GPIOC clock */
+
+	temp = GPIOA->MODER;
+	temp &= ~(0x03 << (2 * 1));
+	temp |= (0x01 << (2 * 1));
+	GPIOC->MODER = temp;
+
+	temp = GPIOA->OTYPER;
+	temp &= ~(0x01 << 1);
+	GPIOC->OTYPER = temp;
+
+	temp = GPIOA->PUPDR;
+	temp &= ~(0x03 << (2 * 1));
+	GPIOC->PUPDR = temp;
+
+	// GPIOC->MODER &= ~(0x03 << (2 * 9));
+	// GPIOC->MODER |= (0x01 << (2 * 9));
+	// GPIOC->OTYPER &= ~(0x01 << 9);
+	// GPIOC->PUPDR &= ~(0x03 << (2 * 9));
+}
 
 uint8_t presetIndex = 0;
 
@@ -137,8 +237,13 @@ int run(void)
 	// Init_LED(0);
 	LCD_Init();
 	InitEvents();
-	Init_buzzerEXT(0);
 	Init_buzzerEXT(1);
+	// Init_buzzerEXT(0);
+	Init_buzzer();
+	//   Init_buzzerEXT(0);
+	//  Init_buzzerEXT(1);
+	//  Init_buzzerEXT(0);
+	//  Test_LED_With_Timer();
 	/*DWT_Init();*/
 	/*Write_Char_LCD('o');*/
 	/*Write_String_LCD(line1);
@@ -152,9 +257,10 @@ int run(void)
 	// Write_String_LCD("0123456789ABCDEF");
 	// Write_String_LCD("0123456789ABCDEFG");
 	// Clear_Display();
+	SetFrequency(500, 0);
 	while (1)
 	{
-		CheckFrequency();
+		// CheckFrequency();
 		check();
 		checkLCDWrites();
 		// double current = date();
