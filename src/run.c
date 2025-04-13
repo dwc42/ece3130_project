@@ -237,7 +237,7 @@ int run(void)
 	// Init_LED(0);
 	LCD_Init();
 	InitEvents();
-	Init_buzzerEXT(1);
+	Init_buzzerEXT(3);
 	// Init_buzzerEXT(0);
 	Init_buzzer();
 	//   Init_buzzerEXT(0);
@@ -257,7 +257,7 @@ int run(void)
 	// Write_String_LCD("0123456789ABCDEF");
 	// Write_String_LCD("0123456789ABCDEFG");
 	// Clear_Display();
-	SetFrequency(500, 1);
+	SetFrequency(500, 3);
 	while (1)
 	{
 		// CheckFrequency();
