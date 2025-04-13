@@ -34,12 +34,6 @@ void EnableClock()
 // 	str[1] = '\0';
 // 	return str;
 // }
-void Test_LED_With_Timer(void)
-{
-	// Enable GPIOA clock
-	__HAL_RCC_GPIOA_CLK_ENABLE();
-	// Enable TIM1 clock
-	__HAL_RCC_TIM1_CLK_ENABLE();
 
 int modeCycle = 0;
 uint8_t presetIndex = 0;
@@ -124,9 +118,9 @@ void keyPressCallback(enum KEYPAD key)
 
 void keyReleaseCallback(enum KEYPAD key)
 {
-	if (modeCycle) return;
-		RemoveFrequency(Frequencies[presetIndex][key]);
-
+	if (modeCycle)
+		return;
+	RemoveFrequency(Frequencies[presetIndex][key]);
 }
 
 void switchPressCallback(enum SWITCHS key)
@@ -174,7 +168,6 @@ void switchPressCallback(enum SWITCHS key)
 
 		break;
 	}
-
 	}
 	update_SW_Menu();
 }
@@ -204,7 +197,7 @@ int run(void)
 	//  Test_LED_With_Timer();
 	/*DWT_Init();*/
 	/*Write_Char_LCD('o');*/
-	Write_String_LCD("HELLO");
+	Write_String_LCD("HELLO1");
 	// Write_String_LCD(line2);
 	Events.onKeyPadPress(keyPressCallback);
 	Events.onKeyPadRelease(keyReleaseCallback);
