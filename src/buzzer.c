@@ -58,9 +58,10 @@ TIM_HandleTypeDef htimEXT[4] = {{0}, {0}, {0}, {0}};
 // }
 void enable_tim_clocks()
 {
-    __HAL_RCC_TIM1_CLK_ENABLE();
     __HAL_RCC_TIM2_CLK_ENABLE();
     __HAL_RCC_TIM3_CLK_ENABLE();
+    __HAL_RCC_TIM4_CLK_ENABLE();
+    __HAL_RCC_TIM5_CLK_ENABLE();
 }
 struct timer
 {
@@ -73,7 +74,7 @@ struct timer
 };
 struct timer timers[4] = {
     {GPIOC, GPIO_PIN_9, GPIO_AF2_TIM3, TIM_OCMODE_PWM1, TIM_CHANNEL_4, TIM3},
-    {GPIOA, GPIO_PIN_8, GPIO_AF1_TIM1, TIM_OCMODE_PWM1, TIM_CHANNEL_1, TIM1},
+    {GPIOB, GPIO_PIN_6, GPIO_AF2_TIM4, TIM_OCMODE_PWM1, TIM_CHANNEL_1, TIM4},
     {GPIOB, GPIO_PIN_1, GPIO_AF2_TIM2, TIM_OCMODE_PWM1, TIM_CHANNEL_2, TIM2},
     {GPIOC, GPIO_PIN_2, GPIO_AF2_TIM4, TIM_OCMODE_PWM1, TIM_CHANNEL_4, TIM4}};
 void Init_buzzerEXT(uint8_t timer)
