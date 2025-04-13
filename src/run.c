@@ -34,6 +34,12 @@ void EnableClock()
 // 	str[1] = '\0';
 // 	return str;
 // }
+void Test_LED_With_Timer(void)
+{
+	// Enable GPIOA clock
+	__HAL_RCC_GPIOA_CLK_ENABLE();
+	// Enable TIM1 clock
+	__HAL_RCC_TIM1_CLK_ENABLE();
 
 int modeCycle = 0;
 uint8_t presetIndex = 0;
@@ -73,7 +79,7 @@ void update_SW_Menu()
 		{
 			strcpy(sector4New, "5&6");
 		}
-		
+
 		break;
 	}
 	}
@@ -138,6 +144,7 @@ void switchPressCallback(enum SWITCHS key)
 
 	case BUTTON_SWITCH3:
 	{
+
 		break;
 	}
 	case BUTTON_SWITCH4:
@@ -167,7 +174,7 @@ void switchPressCallback(enum SWITCHS key)
 
 		break;
 	}
-		
+
 	}
 	update_SW_Menu();
 }
@@ -182,25 +189,34 @@ int run(void)
 {
 
 	EnableClock();
+	enable_tim_clocks();
 	// Init_LED(1);
 	// Init_LED(0);
 	LCD_Init();
 	InitEvents();
+	Init_buzzerEXT(0);
+	Init_buzzerEXT(1);
+	Init_buzzerEXT(2);
+	Init_buzzerEXT(3);
+	//   Init_buzzerEXT(0);
+	//  Init_buzzerEXT(1);
+	//  Init_buzzerEXT(0);
+	//  Test_LED_With_Timer();
 	/*DWT_Init();*/
 	/*Write_Char_LCD('o');*/
-	/*Write_String_LCD(line1);
-	Write_Instr_LCD(0xc0);
-		move to line */
+	Write_String_LCD("HELLO");
 	// Write_String_LCD(line2);
 	Events.onKeyPadPress(keyPressCallback);
 	Events.onKeyPadRelease(keyReleaseCallback);
 	Events.onSwitchPress(switchPressCallback);
 	Events.beforeCharWrite(numberBoxCallback);
-	Init_buzzer();
 	// Write_String_LCD("0123456789ABCDEF");
 	// Write_String_LCD("0123456789ABCDEFG");
 	// Clear_Display();
 	update_SW_Menu();
+	int lastTime = date();
+	int index = 0;
+	HAL_Delay(1000);
 	while (1)
 	{
 		CheckFrequency();
@@ -219,12 +235,25 @@ int run(void)
 		// }
 		// ticksArray[0] = tickTime;
 		// average = total / 10;
-		// /*if (date() - lastPrint > 1000)
-		// {
-		// 	char *str = doubleToString(average, 3);
-		// 	Set_LCD(str);
-		// 	lastPrint = date();
-		// }*/
-		// lastTickDate = date();
+
+		if (date() - lastTime > 1000)
+		{
+			if (index == 0)
+				SetFrequency(200, 3);
+			else if (index == 1)
+			{
+				SetFrequency(0, 3);
+			}
+			else if (index == 4)
+			{
+				SetFrequency(250, 3);
+			}
+			else if (index == 5)
+			{
+				SetFrequency(0, 3);
+			}
+			index = (index + 1) % 8;
+			lastTime = date();
+		}
 	}
 }

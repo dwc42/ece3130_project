@@ -34,4 +34,25 @@ void removeFromIntegers(int **list, int value, int precision);
  * @param list point to an array of doubles with a DBL_MAX at the end
  * @return the length of the list
  */
+
+struct Press
+{
+	int pressDate;
+	int RecordingIndex;
+};
+struct Sample
+{
+	int timeSinceFirstPressStart;
+	int timeSinceFirstPressEnd;
+	int frequency;
+};
+extern struct Press PressVoid;
+extern struct Sample SampleVoid;
+int lengthPress(struct Press *list);
+int lengthSample(struct Sample *list);
+int pushPress(struct Press **list, struct Press item);
+int pushSample(struct Sample **list, struct Sample item);
+int *indexOfLengthPress(struct Press *list, struct Press item);
+void removeFromPresses(struct Press **list, struct Press value);
+
 #endif /*__LIST_H*/
