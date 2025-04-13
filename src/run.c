@@ -92,24 +92,24 @@ void Test_LED_With_Timer(void)
 }
 void Init_buzzer()
 {
-	uint32_t temp;
+	// uint32_t temp;
 
-	temp = GPIOC->MODER;
-	temp &= ~(0x03 << (2 * 9));
-	temp |= (0x01 << (2 * 9));
-	GPIOC->MODER = temp;
+	// temp = GPIOC->MODER;
+	// temp &= ~(0x03 << (2 * 9));
+	// temp |= (0x01 << (2 * 9));
+	// GPIOC->MODER = temp;
 
-	temp = GPIOC->OTYPER;
-	temp &= ~(0x01 << 9);
-	GPIOC->OTYPER = temp;
+	// temp = GPIOC->OTYPER;
+	// temp &= ~(0x01 << 9);
+	// GPIOC->OTYPER = temp;
 
-	temp = GPIOC->PUPDR;
-	temp &= ~(0x03 << (2 * 9));
-	GPIOC->PUPDR = temp;
+	// temp = GPIOC->PUPDR;
+	// temp &= ~(0x03 << (2 * 9));
+	// GPIOC->PUPDR = temp;
 
-	// GPIOC->MODER &= ~(0x03 << (2 * 9));
-	// GPIOC->OTYPER &= ~(0x01 << 9);
-	// GPIOC->PUPDR &= ~(0x03 << (2 * 9));
+	GPIOC->MODER &= ~(0x03 << (2 * 9));
+	GPIOC->OTYPER &= ~(0x01 << 9);
+	GPIOC->PUPDR &= ~(0x03 << (2 * 9));
 }
 void Init_LED()
 {

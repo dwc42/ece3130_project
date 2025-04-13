@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\ece3130_project.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\ece3130_project.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6220000: Last Updated: Sat Apr 12 20:34:56 2025
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6220000: Last Updated: Sat Apr 12 20:55:12 2025
 <BR><P>
 <H3>Maximum Stack Usage =        216 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1065,7 +1065,7 @@ Global Symbols
 <P><STRONG><a name="[6]"></a>SVC_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32l4xx_it.o(.text.SVC_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32l476xx.o(RESET)
 </UL>
-<P><STRONG><a name="[ae]"></a>SetFrequency</STRONG> (Thumb, 240 bytes, Stack size 48 bytes, buzzer.o(.text.SetFrequency))
+<P><STRONG><a name="[ae]"></a>SetFrequency</STRONG> (Thumb, 264 bytes, Stack size 48 bytes, buzzer.o(.text.SetFrequency))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = SetFrequency &rArr; __aeabi_dmul
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PWM_Start
@@ -1299,7 +1299,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RemoveFrequency
 </UL>
 
-<P><STRONG><a name="[ca]"></a>run</STRONG> (Thumb, 168 bytes, Stack size 0 bytes, run.o(.text.run))
+<P><STRONG><a name="[ca]"></a>run</STRONG> (Thumb, 160 bytes, Stack size 0 bytes, run.o(.text.run))
 <BR><BR>[Stack]<UL><LI>Max Depth = 128 + Unknown Stack Size
 <LI>Call Chain = run &rArr; checkLCDWrites &rArr; date &rArr; getCurrentMicros &rArr; __aeabi_dmul
 </UL>
