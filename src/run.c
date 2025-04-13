@@ -237,18 +237,17 @@ int run(void)
 	// Init_LED(0);
 	LCD_Init();
 	InitEvents();
+	Init_buzzerEXT(0);
+	Init_buzzerEXT(1);
+	Init_buzzerEXT(2);
 	Init_buzzerEXT(3);
-	// Init_buzzerEXT(0);
-	Init_buzzer();
 	//   Init_buzzerEXT(0);
 	//  Init_buzzerEXT(1);
 	//  Init_buzzerEXT(0);
 	//  Test_LED_With_Timer();
 	/*DWT_Init();*/
 	/*Write_Char_LCD('o');*/
-	/*Write_String_LCD(line1);
-	Write_Instr_LCD(0xc0);
-		move to line */
+	Write_String_LCD("HELLO");
 	// Write_String_LCD(line2);
 	Events.onKeyPadPress(keyPressCallback);
 	Events.onKeyPadRelease(keyReleaseCallback);
@@ -257,10 +256,12 @@ int run(void)
 	// Write_String_LCD("0123456789ABCDEF");
 	// Write_String_LCD("0123456789ABCDEFG");
 	// Clear_Display();
-	SetFrequency(500, 3);
+	int lastTime = date();
+	int index = 0;
+	HAL_Delay(1000);
 	while (1)
 	{
-		// CheckFrequency();
+		CheckFrequency();
 		check();
 		checkLCDWrites();
 		// double current = date();
@@ -276,12 +277,25 @@ int run(void)
 		// }
 		// ticksArray[0] = tickTime;
 		// average = total / 10;
-		// /*if (date() - lastPrint > 1000)
-		// {
-		// 	char *str = doubleToString(average, 3);
-		// 	Set_LCD(str);
-		// 	lastPrint = date();
-		// }*/
-		// lastTickDate = date();
+
+		if (date() - lastTime > 1000)
+		{
+			if (index == 0)
+				SetFrequency(200, 3);
+			else if (index == 1)
+			{
+				SetFrequency(0, 3);
+			}
+			else if (index == 4)
+			{
+				SetFrequency(250, 3);
+			}
+			else if (index == 5)
+			{
+				SetFrequency(0, 3);
+			}
+			index = (index + 1) % 8;
+			lastTime = date();
+		}
 	}
 }

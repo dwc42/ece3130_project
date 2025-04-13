@@ -58,25 +58,25 @@ TIM_HandleTypeDef htimEXT[4] = {{0}, {0}, {0}, {0}};
 // }
 void enable_tim_clocks()
 {
-    __HAL_RCC_TIM1_CLK_ENABLE();
     __HAL_RCC_TIM2_CLK_ENABLE();
     __HAL_RCC_TIM3_CLK_ENABLE();
     __HAL_RCC_TIM4_CLK_ENABLE();
+    __HAL_RCC_TIM5_CLK_ENABLE();
 }
 struct timer
 {
     GPIO_TypeDef *GPIO;
     uint16_t GPIO_PIN;
-    uint32_t GPIO_AF2_TIM;
+    uint32_t GPIO_AF_TIM;
     uint64_t TIM_OCMODE_PWM;
     uint32_t TIM_CHANNEL;
     TIM_TypeDef *TIM;
 };
 struct timer timers[4] = {
     {GPIOC, GPIO_PIN_9, GPIO_AF2_TIM3, TIM_OCMODE_PWM1, TIM_CHANNEL_4, TIM3},
-    {GPIOA, GPIO_PIN_8, GPIO_AF1_TIM1, TIM_OCMODE_PWM1, TIM_CHANNEL_1, TIM1},
+    {GPIOA, GPIO_PIN_0, GPIO_AF1_TIM2, TIM_OCMODE_PWM1, TIM_CHANNEL_1, TIM2},
     {GPIOB, GPIO_PIN_6, GPIO_AF2_TIM4, TIM_OCMODE_PWM1, TIM_CHANNEL_1, TIM4},
-    {GPIOB, GPIO_PIN_10, GPIO_AF1_TIM2, TIM_OCMODE_PWM1, TIM_CHANNEL_3, TIM2}};
+    {GPIOA, GPIO_PIN_1, GPIO_AF2_TIM5, TIM_OCMODE_PWM1, TIM_CHANNEL_2, TIM5}};
 void Init_buzzerEXT(uint8_t timer)
 {
     // Initialize the frequency list if it hasn't been done yet
@@ -87,10 +87,10 @@ void Init_buzzerEXT(uint8_t timer)
 
     // Configure PC9 (TIM3 Channel 4) as Alternate Function Push-Pull
     GPIO_InitStruct.Pin = timers[timer].GPIO_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;                 // Alternate Function Push-Pull
-    GPIO_InitStruct.Pull = GPIO_NOPULL;                     // No pull-up or pull-down
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;           // High speed
-    GPIO_InitStruct.Alternate = timers[timer].GPIO_AF2_TIM; // Alternate function for TIM3
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;                // Alternate Function Push-Pull
+    GPIO_InitStruct.Pull = GPIO_NOPULL;                    // No pull-up or pull-down
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;          // High speed
+    GPIO_InitStruct.Alternate = timers[timer].GPIO_AF_TIM; // Alternate function for TIM3
     HAL_GPIO_Init(timers[timer].GPIO, &GPIO_InitStruct);
 
     // Configure TIM3 for PWM mode
@@ -118,7 +118,7 @@ void RemoveFrequency(double freq)
 }
 double lastDateFrequency = 0.0;
 int frequencyIndex = 0;
-int currentFrequency = 0;
+int currentFrequency[4] = {0, 0, 0, 0};
 int lastSwitchTime = 13;
 void CheckFrequency()
 {
@@ -134,7 +134,7 @@ void CheckFrequency()
     lastDateFrequency = date();
     if (frequency_list[0] == INT32_MAX)
     {
-        SetFrequency(0, 1);
+        SetFrequency(0, 0);
         return;
     }
     // Update the last date frequency to now, to avoid spamming the buzzer
@@ -146,7 +146,7 @@ void CheckFrequency()
     int freq = frequency_list[frequencyIndex];
 
     // Set the frequency on the buzzer
-    SetFrequency((double)freq, 1);
+    SetFrequency((double)freq, 0);
     frequencyIndex++;
     // Only play the first frequency in the list for now, can be extended to play multiple in sequence if needed
 }
@@ -158,9 +158,9 @@ void CheckFrequency()
 void SetFrequency(double freq, uint8_t timer)
 {
     int freqInt = (int)freq;
-    if (currentFrequency == freqInt)
+    if (currentFrequency[timer] == freqInt)
         return;
-    currentFrequency = freqInt;
+    currentFrequency[timer] = freqInt;
     if (freq <= 0)
     {
         // Stop the timer if frequency is 0
@@ -196,7 +196,24 @@ void SetFrequency(double freq, uint8_t timer)
             ;
     }
     if (timers[timer].TIM == TIM1)
+    {
+        TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
+        sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_ENABLE;
+        sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_ENABLE;
+        sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
+        sBreakDeadTimeConfig.DeadTime = 0; // No dead-time
+        sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
+        sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
+        sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_ENABLE;
+
+        if (HAL_TIMEx_ConfigBreakDeadTime(&htimEXT[timer], &sBreakDeadTimeConfig) != HAL_OK)
+        {
+            // Configuration error
+            while (1)
+                ;
+        }
         __HAL_TIM_MOE_ENABLE(&htimEXT[timer]);
+    }
     // Restart the timer with the new configuration
     if (HAL_TIM_PWM_Start(&htimEXT[timer], timers[timer].TIM_CHANNEL) != HAL_OK)
     {
