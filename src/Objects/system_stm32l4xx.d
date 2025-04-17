@@ -2,7 +2,7 @@
   STM32CubeMX\Target_1\STM32CubeMX\Src\system_stm32l4xx.c \
   STM32CubeMX\Target_1\STM32CubeMX\Drivers\CMSIS\Device\ST\STM32L4xx\Include\stm32l4xx.h \
   STM32CubeMX\Target_1\STM32CubeMX\Drivers\CMSIS\Device\ST\STM32L4xx\Include\stm32l476xx.h \
-  C:\Users\mrpat\AppData\Local\Arm\Packs\ARM\CMSIS\6.1.0\CMSIS\Core\Include\core_cm4.h \
+  C:\Users\dinof\Desktop\Micro-Comp\ARM\CMSIS\6.1.0\CMSIS\Core\Include\core_cm4.h \
   STM32CubeMX\Target_1\STM32CubeMX\Drivers\CMSIS\Device\ST\STM32L4xx\Include\system_stm32l4xx.h \
   STM32CubeMX\Target_1\STM32CubeMX\Drivers\STM32L4xx_HAL_Driver\Inc\stm32l4xx_hal.h \
   STM32CubeMX\Target_1\STM32CubeMX\Inc\stm32l4xx_hal_conf.h \
