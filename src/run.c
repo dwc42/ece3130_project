@@ -76,18 +76,23 @@ void update_SW_Menu()
 		}
 		strcpy(sector7New, "M#0");
 		strcpy(sector5New, "TRC");
+		//strcpy(sector6New, "TPB");
 		break;
 	}
 	case 1:
 	{
+		strcpy(sector4New, "PDD");
 		strcpy(sector5New, "TRP");
 		strcpy(sector7New, "M#1");
+		//strcpy(sector6New, "   ");
 		break;
 	}
 	case 2:
 	{
+		strcpy(sector4New, "   ");
 		strcpy(sector5New, "TRP");
 		strcpy(sector7New, "M#2");
+		//strcpy(sector6New, "   ");
 		break;
 	}
 	}
@@ -228,7 +233,7 @@ int run(void)
 	//  Test_LED_With_Timer();
 	/*DWT_Init();*/
 	/*Write_Char_LCD('o');*/
-	Write_String_LCD("EIEIEo");
+	Write_String_LCD("Sounds");
 	// Write_String_LCD(line2);
 	Events.onKeyPadPress(keyPressCallback);
 	Events.onKeyPadRelease(keyReleaseCallback);
