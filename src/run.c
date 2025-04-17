@@ -63,7 +63,7 @@ void update_SW_Menu()
 		if (presetIndex == 0)
 		{
 			strcpy(sector4New, "3&4");
-			strcpy(sector7New, "          M#0");
+			strcpy(sector7New, "M#0");
 		}
 		else if (presetIndex == 1)
 		{
@@ -79,7 +79,7 @@ void update_SW_Menu()
 	}
 	case 1:
 	{
-		strcpy(sector4New, "M#1");
+		strcpy(sector7New, "M#1");
 		break;
 	}
 	case 2:
@@ -214,7 +214,7 @@ int run(void)
 	//  Test_LED_With_Timer();
 	/*DWT_Init();*/
 	/*Write_Char_LCD('o');*/
-	Write_String_LCD("HELLO1");
+	Write_String_LCD("EIEIEo");
 	// Write_String_LCD(line2);
 	Events.onKeyPadPress(keyPressCallback);
 	Events.onKeyPadRelease(keyReleaseCallback);
