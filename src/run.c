@@ -76,11 +76,43 @@ void update_SW_Menu()
 
 		break;
 	}
+	case 1:
+	{
+		
+		break;
+	}
+	case 2:
+	{
+		
+		break;
+	}
+	case 3:
+	{
+		if(presetIndex == 0)
+		{
+			strcpy(sector7New, "M#0");
+		}
+		if(presetIndex == 1)
+		{
+			strcpy(sector7New, "M#1");
+		}
+		if(presetIndex ==2)
+		{
+			strcpy(sector7New, "M#2");
+		}
+		break;
+	}
 	}
 	if (sector4New[0] && !compareStrings(sector4New, switch_Menu[0]))
 	{
 		strcpy(switch_Menu[0], sector4New);
 		Write_String_Sector_LCD(4, sector4New);
+	}
+	
+	if(sector7New[0] && !compareStrings(sector7New, switch_Menu[3]))
+	{
+		strcpy(switch_Menu[3], sector7New);
+		Write_String_Sector_LCD(7, sector7New);
 	}
 }
 

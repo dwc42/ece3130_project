@@ -227,10 +227,8 @@ Section Cross References
     run.o(.text.keyReleaseCallback) refers to buzzer.o(.text.RemoveFrequency) for RemoveFrequency
     run.o(.ARM.exidx.text.keyReleaseCallback) refers to run.o(.text.keyReleaseCallback) for [Anonymous Symbol]
     run.o(.text.switchPressCallback) refers to run.o(.bss.presetIndex) for presetIndex
+    run.o(.text.switchPressCallback) refers to run.o(.text.update_SW_Menu) for update_SW_Menu
     run.o(.text.switchPressCallback) refers to run.o(.bss.modeCycle) for modeCycle
-    run.o(.text.switchPressCallback) refers to run.o(.bss.switch_Menu) for switch_Menu
-    run.o(.text.switchPressCallback) refers to strcpy.o(.text) for strcpy
-    run.o(.text.switchPressCallback) refers to lcd.o(.text.Write_String_Sector_LCD) for Write_String_Sector_LCD
     run.o(.ARM.exidx.text.switchPressCallback) refers to run.o(.text.switchPressCallback) for [Anonymous Symbol]
     run.o(.text.run) refers to buzzer.o(.text.enable_tim_clocks) for enable_tim_clocks
     run.o(.text.run) refers to lcd.o(.text.LCD_Init) for LCD_Init
@@ -242,10 +240,7 @@ Section Cross References
     run.o(.text.run) refers to run.o(.text.keyReleaseCallback) for keyReleaseCallback
     run.o(.text.run) refers to run.o(.text.switchPressCallback) for switchPressCallback
     run.o(.text.run) refers to run.o(.text.numberBoxCallback) for numberBoxCallback
-    run.o(.text.run) refers to run.o(.bss.presetIndex) for presetIndex
-    run.o(.text.run) refers to run.o(.bss.switch_Menu) for switch_Menu
-    run.o(.text.run) refers to strcpy.o(.text) for strcpy
-    run.o(.text.run) refers to lcd.o(.text.Write_String_Sector_LCD) for Write_String_Sector_LCD
+    run.o(.text.run) refers to run.o(.text.update_SW_Menu) for update_SW_Menu
     run.o(.text.run) refers to date.o(.text.date) for date
     run.o(.text.run) refers to stm32l4xx_hal.o(.text.HAL_Delay) for HAL_Delay
     run.o(.text.run) refers to run.o(.rodata..Lswitch.table.run) for .Lswitch.table.run
@@ -1227,7 +1222,6 @@ Removing Unused input sections from the image.
     Removing run.o(.ARM.exidx.text.EnableClock), (8 bytes).
     Removing run.o(.text.compareStrings), (120 bytes).
     Removing run.o(.ARM.exidx.text.compareStrings), (8 bytes).
-    Removing run.o(.text.update_SW_Menu), (170 bytes).
     Removing run.o(.ARM.exidx.text.update_SW_Menu), (8 bytes).
     Removing run.o(.ARM.exidx.text.numberBoxCallback), (8 bytes).
     Removing run.o(.ARM.exidx.text.keyPressCallback), (8 bytes).
@@ -1960,7 +1954,7 @@ Removing Unused input sections from the image.
     Removing stm32l4xx_hal_exti.o(.text.HAL_EXTI_GenerateSWI), (30 bytes).
     Removing stm32l4xx_hal_exti.o(.ARM.exidx.text.HAL_EXTI_GenerateSWI), (8 bytes).
 
-814 unused section(s) (total 41750 bytes) removed from the image.
+813 unused section(s) (total 41580 bytes) removed from the image.
 
 ==============================================================================
 
@@ -2236,47 +2230,48 @@ Image Symbol Table
     [Anonymous Symbol]                       0x080034b8   Section        0  list.o(.text.pushInteger)
     [Anonymous Symbol]                       0x080035a8   Section        0  list.o(.text.removeFromIntegers)
     [Anonymous Symbol]                       0x08003738   Section        0  run.o(.text.run)
-    [Anonymous Symbol]                       0x08003910   Section        0  events.o(.text.runBeforeCharWriteCallbacks)
-    [Anonymous Symbol]                       0x08003974   Section        0  events.o(.text.subscribeKeyPad)
-    [Anonymous Symbol]                       0x08003a74   Section        0  events.o(.text.subscribeSwitch)
-    [Anonymous Symbol]                       0x08003b14   Section        0  run.o(.text.switchPressCallback)
-    $v0                                      0x08003c08   Number         0  daddsub_clz.o(x$fpl$dadd)
-    x$fpl$dadd                               0x08003c08   Section      336  daddsub_clz.o(x$fpl$dadd)
-    _dadd1                                   0x08003c19   Thumb Code     0  daddsub_clz.o(x$fpl$dadd)
-    $v0                                      0x08003d58   Number         0  dcmpi.o(x$fpl$dcmpinf)
-    x$fpl$dcmpinf                            0x08003d58   Section       24  dcmpi.o(x$fpl$dcmpinf)
-    $v0                                      0x08003d70   Number         0  ddiv.o(x$fpl$ddiv)
-    x$fpl$ddiv                               0x08003d70   Section      696  ddiv.o(x$fpl$ddiv)
-    ddiv_entry                               0x08003d77   Thumb Code     0  ddiv.o(x$fpl$ddiv)
-    $v0                                      0x08004028   Number         0  deqf.o(x$fpl$deqf)
-    x$fpl$deqf                               0x08004028   Section      120  deqf.o(x$fpl$deqf)
-    $v0                                      0x080040a0   Number         0  dfix.o(x$fpl$dfix)
-    x$fpl$dfix                               0x080040a0   Section       94  dfix.o(x$fpl$dfix)
-    $v0                                      0x08004100   Number         0  dfixu.o(x$fpl$dfixu)
-    x$fpl$dfixu                              0x08004100   Section       90  dfixu.o(x$fpl$dfixu)
-    $v0                                      0x0800415a   Number         0  dflt_clz.o(x$fpl$dflt)
-    x$fpl$dflt                               0x0800415a   Section       46  dflt_clz.o(x$fpl$dflt)
-    $v0                                      0x08004188   Number         0  dflt_clz.o(x$fpl$dfltu)
-    x$fpl$dfltu                              0x08004188   Section       38  dflt_clz.o(x$fpl$dfltu)
-    $v0                                      0x080041b0   Number         0  dgeqf.o(x$fpl$dgeqf)
-    x$fpl$dgeqf                              0x080041b0   Section      120  dgeqf.o(x$fpl$dgeqf)
-    $v0                                      0x08004228   Number         0  dleqf.o(x$fpl$dleqf)
-    x$fpl$dleqf                              0x08004228   Section      120  dleqf.o(x$fpl$dleqf)
-    $v0                                      0x080042a0   Number         0  dmul.o(x$fpl$dmul)
-    x$fpl$dmul                               0x080042a0   Section      340  dmul.o(x$fpl$dmul)
-    $v0                                      0x080043f4   Number         0  dnaninf.o(x$fpl$dnaninf)
-    x$fpl$dnaninf                            0x080043f4   Section      156  dnaninf.o(x$fpl$dnaninf)
-    $v0                                      0x08004490   Number         0  dretinf.o(x$fpl$dretinf)
-    x$fpl$dretinf                            0x08004490   Section       12  dretinf.o(x$fpl$dretinf)
-    $v0                                      0x0800449c   Number         0  daddsub_clz.o(x$fpl$dsub)
-    x$fpl$dsub                               0x0800449c   Section      476  daddsub_clz.o(x$fpl$dsub)
-    _dsub1                                   0x080044ad   Thumb Code     0  daddsub_clz.o(x$fpl$dsub)
-    $v0                                      0x08004678   Number         0  dcmp.o(x$fpl$fcmp)
-    x$fpl$fcmp                               0x08004678   Section       84  dcmp.o(x$fpl$fcmp)
-    $v0                                      0x080046cc   Number         0  fpinit.o(x$fpl$fpinit)
-    x$fpl$fpinit                             0x080046cc   Section       26  fpinit.o(x$fpl$fpinit)
-    x$fpl$usenofp                            0x080046e6   Section        0  usenofp.o(x$fpl$usenofp)
-    .Lswitch.table.run                       0x080046e8   Data          48  run.o(.rodata..Lswitch.table.run)
+    [Anonymous Symbol]                       0x08003878   Section        0  events.o(.text.runBeforeCharWriteCallbacks)
+    [Anonymous Symbol]                       0x080038dc   Section        0  events.o(.text.subscribeKeyPad)
+    [Anonymous Symbol]                       0x080039dc   Section        0  events.o(.text.subscribeSwitch)
+    [Anonymous Symbol]                       0x08003a7c   Section        0  run.o(.text.switchPressCallback)
+    [Anonymous Symbol]                       0x08003acc   Section        0  run.o(.text.update_SW_Menu)
+    $v0                                      0x08003bc0   Number         0  daddsub_clz.o(x$fpl$dadd)
+    x$fpl$dadd                               0x08003bc0   Section      336  daddsub_clz.o(x$fpl$dadd)
+    _dadd1                                   0x08003bd1   Thumb Code     0  daddsub_clz.o(x$fpl$dadd)
+    $v0                                      0x08003d10   Number         0  dcmpi.o(x$fpl$dcmpinf)
+    x$fpl$dcmpinf                            0x08003d10   Section       24  dcmpi.o(x$fpl$dcmpinf)
+    $v0                                      0x08003d28   Number         0  ddiv.o(x$fpl$ddiv)
+    x$fpl$ddiv                               0x08003d28   Section      696  ddiv.o(x$fpl$ddiv)
+    ddiv_entry                               0x08003d2f   Thumb Code     0  ddiv.o(x$fpl$ddiv)
+    $v0                                      0x08003fe0   Number         0  deqf.o(x$fpl$deqf)
+    x$fpl$deqf                               0x08003fe0   Section      120  deqf.o(x$fpl$deqf)
+    $v0                                      0x08004058   Number         0  dfix.o(x$fpl$dfix)
+    x$fpl$dfix                               0x08004058   Section       94  dfix.o(x$fpl$dfix)
+    $v0                                      0x080040b8   Number         0  dfixu.o(x$fpl$dfixu)
+    x$fpl$dfixu                              0x080040b8   Section       90  dfixu.o(x$fpl$dfixu)
+    $v0                                      0x08004112   Number         0  dflt_clz.o(x$fpl$dflt)
+    x$fpl$dflt                               0x08004112   Section       46  dflt_clz.o(x$fpl$dflt)
+    $v0                                      0x08004140   Number         0  dflt_clz.o(x$fpl$dfltu)
+    x$fpl$dfltu                              0x08004140   Section       38  dflt_clz.o(x$fpl$dfltu)
+    $v0                                      0x08004168   Number         0  dgeqf.o(x$fpl$dgeqf)
+    x$fpl$dgeqf                              0x08004168   Section      120  dgeqf.o(x$fpl$dgeqf)
+    $v0                                      0x080041e0   Number         0  dleqf.o(x$fpl$dleqf)
+    x$fpl$dleqf                              0x080041e0   Section      120  dleqf.o(x$fpl$dleqf)
+    $v0                                      0x08004258   Number         0  dmul.o(x$fpl$dmul)
+    x$fpl$dmul                               0x08004258   Section      340  dmul.o(x$fpl$dmul)
+    $v0                                      0x080043ac   Number         0  dnaninf.o(x$fpl$dnaninf)
+    x$fpl$dnaninf                            0x080043ac   Section      156  dnaninf.o(x$fpl$dnaninf)
+    $v0                                      0x08004448   Number         0  dretinf.o(x$fpl$dretinf)
+    x$fpl$dretinf                            0x08004448   Section       12  dretinf.o(x$fpl$dretinf)
+    $v0                                      0x08004454   Number         0  daddsub_clz.o(x$fpl$dsub)
+    x$fpl$dsub                               0x08004454   Section      476  daddsub_clz.o(x$fpl$dsub)
+    _dsub1                                   0x08004465   Thumb Code     0  daddsub_clz.o(x$fpl$dsub)
+    $v0                                      0x08004630   Number         0  dcmp.o(x$fpl$fcmp)
+    x$fpl$fcmp                               0x08004630   Section       84  dcmp.o(x$fpl$fcmp)
+    $v0                                      0x08004684   Number         0  fpinit.o(x$fpl$fpinit)
+    x$fpl$fpinit                             0x08004684   Section       26  fpinit.o(x$fpl$fpinit)
+    x$fpl$usenofp                            0x0800469e   Section        0  usenofp.o(x$fpl$usenofp)
+    .Lswitch.table.run                       0x080046a0   Data          48  run.o(.rodata..Lswitch.table.run)
     .bss                                     0x20000170   Section       96  libspace.o(.bss)
     Heap_Mem                                 0x20000420   Data         512  startup_stm32l476xx.o(HEAP)
     HEAP                                     0x20000420   Section      512  startup_stm32l476xx.o(HEAP)
@@ -2565,56 +2560,57 @@ Image Symbol Table
     onSwitchRelease                          0x080033e9   Thumb Code   208  events.o(.text.onSwitchRelease)
     pushInteger                              0x080034b9   Thumb Code   238  list.o(.text.pushInteger)
     removeFromIntegers                       0x080035a9   Thumb Code   396  list.o(.text.removeFromIntegers)
-    run                                      0x08003739   Thumb Code   456  run.o(.text.run)
-    runBeforeCharWriteCallbacks              0x08003911   Thumb Code   100  events.o(.text.runBeforeCharWriteCallbacks)
-    subscribeKeyPad                          0x08003975   Thumb Code   254  events.o(.text.subscribeKeyPad)
-    subscribeSwitch                          0x08003a75   Thumb Code   160  events.o(.text.subscribeSwitch)
-    switchPressCallback                      0x08003b15   Thumb Code   244  run.o(.text.switchPressCallback)
-    __aeabi_dadd                             0x08003c09   Thumb Code     0  daddsub_clz.o(x$fpl$dadd)
-    _dadd                                    0x08003c09   Thumb Code   332  daddsub_clz.o(x$fpl$dadd)
-    __fpl_dcmp_Inf                           0x08003d59   Thumb Code    24  dcmpi.o(x$fpl$dcmpinf)
-    __aeabi_ddiv                             0x08003d71   Thumb Code     0  ddiv.o(x$fpl$ddiv)
-    _ddiv                                    0x08003d71   Thumb Code   560  ddiv.o(x$fpl$ddiv)
-    __aeabi_cdcmpeq                          0x08004029   Thumb Code     0  deqf.o(x$fpl$deqf)
-    _dcmpeq                                  0x08004029   Thumb Code   120  deqf.o(x$fpl$deqf)
-    __aeabi_d2iz                             0x080040a1   Thumb Code     0  dfix.o(x$fpl$dfix)
-    _dfix                                    0x080040a1   Thumb Code    94  dfix.o(x$fpl$dfix)
-    __aeabi_d2uiz                            0x08004101   Thumb Code     0  dfixu.o(x$fpl$dfixu)
-    _dfixu                                   0x08004101   Thumb Code    90  dfixu.o(x$fpl$dfixu)
-    __aeabi_i2d                              0x0800415b   Thumb Code     0  dflt_clz.o(x$fpl$dflt)
-    _dflt                                    0x0800415b   Thumb Code    46  dflt_clz.o(x$fpl$dflt)
-    __aeabi_ui2d                             0x08004189   Thumb Code     0  dflt_clz.o(x$fpl$dfltu)
-    _dfltu                                   0x08004189   Thumb Code    38  dflt_clz.o(x$fpl$dfltu)
-    __aeabi_cdcmpge                          0x080041b1   Thumb Code     0  dgeqf.o(x$fpl$dgeqf)
-    _dcmpge                                  0x080041b1   Thumb Code   120  dgeqf.o(x$fpl$dgeqf)
-    __aeabi_cdcmple                          0x08004229   Thumb Code     0  dleqf.o(x$fpl$dleqf)
-    _dcmple                                  0x08004229   Thumb Code   120  dleqf.o(x$fpl$dleqf)
-    __fpl_dcmple_InfNaN                      0x0800428b   Thumb Code     0  dleqf.o(x$fpl$dleqf)
-    __aeabi_dmul                             0x080042a1   Thumb Code     0  dmul.o(x$fpl$dmul)
-    _dmul                                    0x080042a1   Thumb Code   332  dmul.o(x$fpl$dmul)
-    __fpl_dnaninf                            0x080043f5   Thumb Code   156  dnaninf.o(x$fpl$dnaninf)
-    __fpl_dretinf                            0x08004491   Thumb Code    12  dretinf.o(x$fpl$dretinf)
-    __aeabi_dsub                             0x0800449d   Thumb Code     0  daddsub_clz.o(x$fpl$dsub)
-    _dsub                                    0x0800449d   Thumb Code   472  daddsub_clz.o(x$fpl$dsub)
-    __aeabi_dcmpeq                           0x08004679   Thumb Code     0  dcmp.o(x$fpl$fcmp)
-    _deq                                     0x08004679   Thumb Code    14  dcmp.o(x$fpl$fcmp)
-    _dneq                                    0x08004687   Thumb Code    14  dcmp.o(x$fpl$fcmp)
-    __aeabi_dcmpgt                           0x08004695   Thumb Code     0  dcmp.o(x$fpl$fcmp)
-    _dgr                                     0x08004695   Thumb Code    14  dcmp.o(x$fpl$fcmp)
-    __aeabi_dcmpge                           0x080046a3   Thumb Code     0  dcmp.o(x$fpl$fcmp)
-    _dgeq                                    0x080046a3   Thumb Code    14  dcmp.o(x$fpl$fcmp)
-    __aeabi_dcmple                           0x080046b1   Thumb Code     0  dcmp.o(x$fpl$fcmp)
-    _dleq                                    0x080046b1   Thumb Code    14  dcmp.o(x$fpl$fcmp)
-    __aeabi_dcmplt                           0x080046bf   Thumb Code     0  dcmp.o(x$fpl$fcmp)
-    _dls                                     0x080046bf   Thumb Code    14  dcmp.o(x$fpl$fcmp)
-    _fp_init                                 0x080046cd   Thumb Code    26  fpinit.o(x$fpl$fpinit)
-    __fplib_config_fpu_vfp                   0x080046e5   Thumb Code     0  fpinit.o(x$fpl$fpinit)
-    __fplib_config_pureend_doubles           0x080046e5   Thumb Code     0  fpinit.o(x$fpl$fpinit)
-    __I$use$fp                               0x080046e6   Number         0  usenofp.o(x$fpl$usenofp)
-    AHBPrescTable                            0x08004718   Data          16  system_stm32l4xx.o(.rodata.AHBPrescTable)
-    MSIRangeTable                            0x08004728   Data          48  system_stm32l4xx.o(.rodata.MSIRangeTable)
-    Region$$Table$$Base                      0x08004758   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08004778   Number         0  anon$$obj.o(Region$$Table)
+    run                                      0x08003739   Thumb Code   304  run.o(.text.run)
+    runBeforeCharWriteCallbacks              0x08003879   Thumb Code   100  events.o(.text.runBeforeCharWriteCallbacks)
+    subscribeKeyPad                          0x080038dd   Thumb Code   254  events.o(.text.subscribeKeyPad)
+    subscribeSwitch                          0x080039dd   Thumb Code   160  events.o(.text.subscribeSwitch)
+    switchPressCallback                      0x08003a7d   Thumb Code    78  run.o(.text.switchPressCallback)
+    update_SW_Menu                           0x08003acd   Thumb Code   244  run.o(.text.update_SW_Menu)
+    __aeabi_dadd                             0x08003bc1   Thumb Code     0  daddsub_clz.o(x$fpl$dadd)
+    _dadd                                    0x08003bc1   Thumb Code   332  daddsub_clz.o(x$fpl$dadd)
+    __fpl_dcmp_Inf                           0x08003d11   Thumb Code    24  dcmpi.o(x$fpl$dcmpinf)
+    __aeabi_ddiv                             0x08003d29   Thumb Code     0  ddiv.o(x$fpl$ddiv)
+    _ddiv                                    0x08003d29   Thumb Code   560  ddiv.o(x$fpl$ddiv)
+    __aeabi_cdcmpeq                          0x08003fe1   Thumb Code     0  deqf.o(x$fpl$deqf)
+    _dcmpeq                                  0x08003fe1   Thumb Code   120  deqf.o(x$fpl$deqf)
+    __aeabi_d2iz                             0x08004059   Thumb Code     0  dfix.o(x$fpl$dfix)
+    _dfix                                    0x08004059   Thumb Code    94  dfix.o(x$fpl$dfix)
+    __aeabi_d2uiz                            0x080040b9   Thumb Code     0  dfixu.o(x$fpl$dfixu)
+    _dfixu                                   0x080040b9   Thumb Code    90  dfixu.o(x$fpl$dfixu)
+    __aeabi_i2d                              0x08004113   Thumb Code     0  dflt_clz.o(x$fpl$dflt)
+    _dflt                                    0x08004113   Thumb Code    46  dflt_clz.o(x$fpl$dflt)
+    __aeabi_ui2d                             0x08004141   Thumb Code     0  dflt_clz.o(x$fpl$dfltu)
+    _dfltu                                   0x08004141   Thumb Code    38  dflt_clz.o(x$fpl$dfltu)
+    __aeabi_cdcmpge                          0x08004169   Thumb Code     0  dgeqf.o(x$fpl$dgeqf)
+    _dcmpge                                  0x08004169   Thumb Code   120  dgeqf.o(x$fpl$dgeqf)
+    __aeabi_cdcmple                          0x080041e1   Thumb Code     0  dleqf.o(x$fpl$dleqf)
+    _dcmple                                  0x080041e1   Thumb Code   120  dleqf.o(x$fpl$dleqf)
+    __fpl_dcmple_InfNaN                      0x08004243   Thumb Code     0  dleqf.o(x$fpl$dleqf)
+    __aeabi_dmul                             0x08004259   Thumb Code     0  dmul.o(x$fpl$dmul)
+    _dmul                                    0x08004259   Thumb Code   332  dmul.o(x$fpl$dmul)
+    __fpl_dnaninf                            0x080043ad   Thumb Code   156  dnaninf.o(x$fpl$dnaninf)
+    __fpl_dretinf                            0x08004449   Thumb Code    12  dretinf.o(x$fpl$dretinf)
+    __aeabi_dsub                             0x08004455   Thumb Code     0  daddsub_clz.o(x$fpl$dsub)
+    _dsub                                    0x08004455   Thumb Code   472  daddsub_clz.o(x$fpl$dsub)
+    __aeabi_dcmpeq                           0x08004631   Thumb Code     0  dcmp.o(x$fpl$fcmp)
+    _deq                                     0x08004631   Thumb Code    14  dcmp.o(x$fpl$fcmp)
+    _dneq                                    0x0800463f   Thumb Code    14  dcmp.o(x$fpl$fcmp)
+    __aeabi_dcmpgt                           0x0800464d   Thumb Code     0  dcmp.o(x$fpl$fcmp)
+    _dgr                                     0x0800464d   Thumb Code    14  dcmp.o(x$fpl$fcmp)
+    __aeabi_dcmpge                           0x0800465b   Thumb Code     0  dcmp.o(x$fpl$fcmp)
+    _dgeq                                    0x0800465b   Thumb Code    14  dcmp.o(x$fpl$fcmp)
+    __aeabi_dcmple                           0x08004669   Thumb Code     0  dcmp.o(x$fpl$fcmp)
+    _dleq                                    0x08004669   Thumb Code    14  dcmp.o(x$fpl$fcmp)
+    __aeabi_dcmplt                           0x08004677   Thumb Code     0  dcmp.o(x$fpl$fcmp)
+    _dls                                     0x08004677   Thumb Code    14  dcmp.o(x$fpl$fcmp)
+    _fp_init                                 0x08004685   Thumb Code    26  fpinit.o(x$fpl$fpinit)
+    __fplib_config_fpu_vfp                   0x0800469d   Thumb Code     0  fpinit.o(x$fpl$fpinit)
+    __fplib_config_pureend_doubles           0x0800469d   Thumb Code     0  fpinit.o(x$fpl$fpinit)
+    __I$use$fp                               0x0800469e   Number         0  usenofp.o(x$fpl$usenofp)
+    AHBPrescTable                            0x080046d0   Data          16  system_stm32l4xx.o(.rodata.AHBPrescTable)
+    MSIRangeTable                            0x080046e0   Data          48  system_stm32l4xx.o(.rodata.MSIRangeTable)
+    Region$$Table$$Base                      0x08004710   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x08004730   Number         0  anon$$obj.o(Region$$Table)
     Frequencies                              0x20000000   Data         192  run.o(.data.Frequencies)
     KEYPAD_MATRIX                            0x200000c0   Data          16  events.o(.data.KEYPAD_MATRIX)
     SWITCH_ARRAY                             0x200000d0   Data           4  events.o(.data.SWITCH_ARRAY)
@@ -2654,9 +2650,9 @@ Memory Map of the image
 
   Image Entry point : 0x0800027d
 
-  Load Region LR_1 (Base: 0x08000000, Size: 0x000048e8, Max: 0xffffffff, ABSOLUTE, COMPRESSED[0x00004840])
+  Load Region LR_1 (Base: 0x08000000, Size: 0x000048a0, Max: 0xffffffff, ABSOLUTE, COMPRESSED[0x000047f8])
 
-    Execution Region ER_RO (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00004778, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00004730, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -2845,39 +2841,41 @@ Memory Map of the image
     0x080035a6   0x080035a6   0x00000002   PAD
     0x080035a8   0x080035a8   0x0000018c   Code   RO          135    .text.removeFromIntegers  list.o
     0x08003734   0x08003734   0x00000004   PAD
-    0x08003738   0x08003738   0x000001d8   Code   RO          173    .text.run           run.o
-    0x08003910   0x08003910   0x00000064   Code   RO           59    .text.runBeforeCharWriteCallbacks  events.o
-    0x08003974   0x08003974   0x000000fe   Code   RO           43    .text.subscribeKeyPad  events.o
-    0x08003a72   0x08003a72   0x00000002   PAD
-    0x08003a74   0x08003a74   0x000000a0   Code   RO           45    .text.subscribeSwitch  events.o
-    0x08003b14   0x08003b14   0x000000f4   Code   RO          171    .text.switchPressCallback  run.o
-    0x08003c08   0x08003c08   0x00000150   Code   RO         1166    x$fpl$dadd          fz_wm.l(daddsub_clz.o)
-    0x08003d58   0x08003d58   0x00000018   Code   RO         1321    x$fpl$dcmpinf       fz_wm.l(dcmpi.o)
-    0x08003d70   0x08003d70   0x000002b8   Code   RO         1175    x$fpl$ddiv          fz_wm.l(ddiv.o)
-    0x08004028   0x08004028   0x00000078   Code   RO         1271    x$fpl$deqf          fz_wm.l(deqf.o)
-    0x080040a0   0x080040a0   0x0000005e   Code   RO         1178    x$fpl$dfix          fz_wm.l(dfix.o)
-    0x080040fe   0x080040fe   0x00000002   PAD
-    0x08004100   0x08004100   0x0000005a   Code   RO         1182    x$fpl$dfixu         fz_wm.l(dfixu.o)
-    0x0800415a   0x0800415a   0x0000002e   Code   RO         1187    x$fpl$dflt          fz_wm.l(dflt_clz.o)
-    0x08004188   0x08004188   0x00000026   Code   RO         1186    x$fpl$dfltu         fz_wm.l(dflt_clz.o)
-    0x080041ae   0x080041ae   0x00000002   PAD
-    0x080041b0   0x080041b0   0x00000078   Code   RO         1273    x$fpl$dgeqf         fz_wm.l(dgeqf.o)
-    0x08004228   0x08004228   0x00000078   Code   RO         1275    x$fpl$dleqf         fz_wm.l(dleqf.o)
-    0x080042a0   0x080042a0   0x00000154   Code   RO         1192    x$fpl$dmul          fz_wm.l(dmul.o)
-    0x080043f4   0x080043f4   0x0000009c   Code   RO         1277    x$fpl$dnaninf       fz_wm.l(dnaninf.o)
-    0x08004490   0x08004490   0x0000000c   Code   RO         1279    x$fpl$dretinf       fz_wm.l(dretinf.o)
-    0x0800449c   0x0800449c   0x000001dc   Code   RO         1168    x$fpl$dsub          fz_wm.l(daddsub_clz.o)
-    0x08004678   0x08004678   0x00000054   Code   RO         1172    x$fpl$fcmp          fz_wm.l(dcmp.o)
-    0x080046cc   0x080046cc   0x0000001a   Code   RO         1323    x$fpl$fpinit        fz_wm.l(fpinit.o)
-    0x080046e6   0x080046e6   0x00000000   Code   RO         1281    x$fpl$usenofp       fz_wm.l(usenofp.o)
-    0x080046e6   0x080046e6   0x00000002   PAD
-    0x080046e8   0x080046e8   0x00000030   Data   RO          181    .rodata..Lswitch.table.run  run.o
-    0x08004718   0x08004718   0x00000010   Data   RO          261    .rodata.AHBPrescTable  system_stm32l4xx.o
-    0x08004728   0x08004728   0x00000030   Data   RO          263    .rodata.MSIRangeTable  system_stm32l4xx.o
-    0x08004758   0x08004758   0x00000020   Data   RO         1413    Region$$Table       anon$$obj.o
+    0x08003738   0x08003738   0x00000140   Code   RO          173    .text.run           run.o
+    0x08003878   0x08003878   0x00000064   Code   RO           59    .text.runBeforeCharWriteCallbacks  events.o
+    0x080038dc   0x080038dc   0x000000fe   Code   RO           43    .text.subscribeKeyPad  events.o
+    0x080039da   0x080039da   0x00000002   PAD
+    0x080039dc   0x080039dc   0x000000a0   Code   RO           45    .text.subscribeSwitch  events.o
+    0x08003a7c   0x08003a7c   0x0000004e   Code   RO          171    .text.switchPressCallback  run.o
+    0x08003aca   0x08003aca   0x00000002   PAD
+    0x08003acc   0x08003acc   0x000000f4   Code   RO          163    .text.update_SW_Menu  run.o
+    0x08003bc0   0x08003bc0   0x00000150   Code   RO         1166    x$fpl$dadd          fz_wm.l(daddsub_clz.o)
+    0x08003d10   0x08003d10   0x00000018   Code   RO         1321    x$fpl$dcmpinf       fz_wm.l(dcmpi.o)
+    0x08003d28   0x08003d28   0x000002b8   Code   RO         1175    x$fpl$ddiv          fz_wm.l(ddiv.o)
+    0x08003fe0   0x08003fe0   0x00000078   Code   RO         1271    x$fpl$deqf          fz_wm.l(deqf.o)
+    0x08004058   0x08004058   0x0000005e   Code   RO         1178    x$fpl$dfix          fz_wm.l(dfix.o)
+    0x080040b6   0x080040b6   0x00000002   PAD
+    0x080040b8   0x080040b8   0x0000005a   Code   RO         1182    x$fpl$dfixu         fz_wm.l(dfixu.o)
+    0x08004112   0x08004112   0x0000002e   Code   RO         1187    x$fpl$dflt          fz_wm.l(dflt_clz.o)
+    0x08004140   0x08004140   0x00000026   Code   RO         1186    x$fpl$dfltu         fz_wm.l(dflt_clz.o)
+    0x08004166   0x08004166   0x00000002   PAD
+    0x08004168   0x08004168   0x00000078   Code   RO         1273    x$fpl$dgeqf         fz_wm.l(dgeqf.o)
+    0x080041e0   0x080041e0   0x00000078   Code   RO         1275    x$fpl$dleqf         fz_wm.l(dleqf.o)
+    0x08004258   0x08004258   0x00000154   Code   RO         1192    x$fpl$dmul          fz_wm.l(dmul.o)
+    0x080043ac   0x080043ac   0x0000009c   Code   RO         1277    x$fpl$dnaninf       fz_wm.l(dnaninf.o)
+    0x08004448   0x08004448   0x0000000c   Code   RO         1279    x$fpl$dretinf       fz_wm.l(dretinf.o)
+    0x08004454   0x08004454   0x000001dc   Code   RO         1168    x$fpl$dsub          fz_wm.l(daddsub_clz.o)
+    0x08004630   0x08004630   0x00000054   Code   RO         1172    x$fpl$fcmp          fz_wm.l(dcmp.o)
+    0x08004684   0x08004684   0x0000001a   Code   RO         1323    x$fpl$fpinit        fz_wm.l(fpinit.o)
+    0x0800469e   0x0800469e   0x00000000   Code   RO         1281    x$fpl$usenofp       fz_wm.l(usenofp.o)
+    0x0800469e   0x0800469e   0x00000002   PAD
+    0x080046a0   0x080046a0   0x00000030   Data   RO          181    .rodata..Lswitch.table.run  run.o
+    0x080046d0   0x080046d0   0x00000010   Data   RO          261    .rodata.AHBPrescTable  system_stm32l4xx.o
+    0x080046e0   0x080046e0   0x00000030   Data   RO          263    .rodata.MSIRangeTable  system_stm32l4xx.o
+    0x08004710   0x08004710   0x00000020   Data   RO         1413    Region$$Table       anon$$obj.o
 
 
-    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x08004778, Size: 0x00000170, Max: 0xffffffff, ABSOLUTE, COMPRESSED[0x000000c8])
+    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x08004730, Size: 0x00000170, Max: 0xffffffff, ABSOLUTE, COMPRESSED[0x000000c8])
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -2896,34 +2894,34 @@ Memory Map of the image
     0x2000016c   COMPRESSED   0x00000004   Data   RW          667    .data.uwTickPrio    stm32l4xx_hal.o
 
 
-    Execution Region ER_ZI (Exec base: 0x20000170, Load base: 0x08004840, Size: 0x000008b0, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_ZI (Exec base: 0x20000170, Load base: 0x080047f8, Size: 0x000008b0, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x20000170        -       0x00000060   Zero   RW         1287    .bss                c_w.l(libspace.o)
     0x200001d0        -       0x00000058   Zero   RW           74    .bss.Events         events.o
     0x20000228        -       0x00000023   Zero   RW          115    .bss.cacheLCD       lcd.o
-    0x2000024b   0x08004840   0x00000001   PAD
+    0x2000024b   0x080047f8   0x00000001   PAD
     0x2000024c        -       0x00000010   Zero   RW           19    .bss.currentFrequency  buzzer.o
     0x2000025c        -       0x00000001   Zero   RW          118    .bss.currentWrite   lcd.o
     0x2000025d        -       0x00000001   Zero   RW          114    .bss.delayLCD       lcd.o
-    0x2000025e   0x08004840   0x00000002   PAD
+    0x2000025e   0x080047f8   0x00000002   PAD
     0x20000260        -       0x00000004   Zero   RW           18    .bss.frequencyIndex  buzzer.o
     0x20000264        -       0x00000004   Zero   RW           16    .bss.frequency_list  buzzer.o
     0x20000268        -       0x0000004c   Zero   RW          196    .bss.htim2          main.o
     0x200002b4        -       0x00000130   Zero   RW           14    .bss.htimEXT        buzzer.o
-    0x200003e4   0x08004840   0x00000004   PAD
+    0x200003e4   0x080047f8   0x00000004   PAD
     0x200003e8        -       0x00000008   Zero   RW           17    .bss.lastDateFrequency  buzzer.o
     0x200003f0        -       0x00000008   Zero   RW          120    .bss.lastDateLCD    lcd.o
     0x200003f8        -       0x00000004   Zero   RW          175    .bss.modeCycle      run.o
     0x200003fc        -       0x00000001   Zero   RW          176    .bss.presetIndex    run.o
-    0x200003fd   0x08004840   0x00000003   PAD
+    0x200003fd   0x080047f8   0x00000003   PAD
     0x20000400        -       0x00000004   Zero   RW          116    .bss.sr_writes      lcd.o
     0x20000404        -       0x00000004   Zero   RW          117    .bss.sr_writeslength  lcd.o
     0x20000408        -       0x00000010   Zero   RW          177    .bss.switch_Menu    run.o
     0x20000418        -       0x00000004   Zero   RW          669    .bss.uwTick         stm32l4xx_hal.o
     0x2000041c        -       0x00000001   Zero   RW          119    .bss.writingInstruction  lcd.o
-    0x2000041d   0x08004840   0x00000003   PAD
+    0x2000041d   0x080047f8   0x00000003   PAD
     0x20000420        -       0x00000200   Zero   RW          247    HEAP                startup_stm32l476xx.o
     0x20000620        -       0x00000400   Zero   RW          246    STACK               startup_stm32l476xx.o
 
@@ -2935,30 +2933,30 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       924         32          0        132        336       9188   buzzer.o
-       200         16          0          0          0       1332   date.o
-      2494          8          0         20         88      15913   events.o
-      1588          8          0          1         54      10676   lcd.o
-       634          0          0          0          0       8237   list.o
-       358          0          0          0         76       8137   main.o
-       872         16         48        196         21       5656   run.o
-        64         26        392          0       1536        964   startup_stm32l476xx.o
-       198          0          0          5          4       9028   stm32l4xx_hal.o
-       162          0          0          0          0      10896   stm32l4xx_hal_cortex.o
-       476          0          0          0          0       5440   stm32l4xx_hal_gpio.o
-       174          0          0          0          0       5794   stm32l4xx_hal_msp.o
-       156          0          0          0          0       9773   stm32l4xx_hal_pwr_ex.o
-      2430          0          0          0          0      11939   stm32l4xx_hal_rcc.o
-        18          0          0          0          0      13832   stm32l4xx_hal_rcc_ex.o
-      2432         22          0          0          0      60891   stm32l4xx_hal_tim.o
-       356          0          0          0          0      23382   stm32l4xx_hal_tim_ex.o
-        20          0          0          0          0       1258   stm32l4xx_it.o
-        18          0         64          4          0       3177   system_stm32l4xx.o
+       924         32          0        132        336       9220   buzzer.o
+       200         16          0          0          0       1369   date.o
+      2494          8          0         20         88      15956   events.o
+      1588          8          0          1         54      10708   lcd.o
+       634          0          0          0          0       8266   list.o
+       358          0          0          0         76       8174   main.o
+       798         16         48        196         21       5238   run.o
+        64         26        392          0       1536        992   startup_stm32l476xx.o
+       198          0          0          5          4       9065   stm32l4xx_hal.o
+       162          0          0          0          0      10933   stm32l4xx_hal_cortex.o
+       476          0          0          0          0       5472   stm32l4xx_hal_gpio.o
+       174          0          0          0          0       5826   stm32l4xx_hal_msp.o
+       156          0          0          0          0       9810   stm32l4xx_hal_pwr_ex.o
+      2430          0          0          0          0      11971   stm32l4xx_hal_rcc.o
+        18          0          0          0          0      13864   stm32l4xx_hal_rcc_ex.o
+      2432         22          0          0          0      60923   stm32l4xx_hal_tim.o
+       356          0          0          0          0      23414   stm32l4xx_hal_tim_ex.o
+        20          0          0          0          0       1287   stm32l4xx_it.o
+        18          0         64          4          0       3214   system_stm32l4xx.o
 
     ----------------------------------------------------------------------
-     13664        128        536        368       2128     215513   Object Totals
+     13592        128        536        368       2128     215702   Object Totals
          0          0         32          0          0          0   (incl. Generated)
-        90          0          0         10         13          0   (incl. Padding)
+        92          0          0         10         13          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -3038,15 +3036,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     17760        398        536        368       2224     217137   Grand Totals
-     17760        398        536        200       2224     217137   ELF Image Totals (compressed)
-     17760        398        536        200          0          0   ROM Totals
+     17688        398        536        368       2224     217326   Grand Totals
+     17688        398        536        200       2224     217326   ELF Image Totals (compressed)
+     17688        398        536        200          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                18296 (  17.87kB)
+    Total RO  Size (Code + RO Data)                18224 (  17.80kB)
     Total RW  Size (RW Data + ZI Data)              2592 (   2.53kB)
-    Total ROM Size (Code + RO Data + RW Data)      18496 (  18.06kB)
+    Total ROM Size (Code + RO Data + RW Data)      18424 (  17.99kB)
 
 ==============================================================================
 
