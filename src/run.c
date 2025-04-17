@@ -210,6 +210,7 @@ int run(void)
 	int lastTime = date();
 	int index = 0;
 	HAL_Delay(1000);
+	//SetFrequency(1, 3);
 	while (1)
 	{
 		CheckFrequency();
@@ -232,7 +233,7 @@ int run(void)
 		if (date() - lastTime > 1000)
 		{
 			if (index == 0)
-				SetFrequency(200, 3);
+				SetFrequency(330, 3);
 			else if (index == 1)
 			{
 				SetFrequency(0, 3);
