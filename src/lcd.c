@@ -339,7 +339,7 @@ void Write_String_Sector_LCD(uint8_t sector, char* string)
 {
 	uint8_t lastPosition = cacheLCD.position;
 	uint8_t lastLine = cacheLCD.line;
-	Set_CursorPosition(sector/4, sector%4);
+	Set_CursorPosition(sector/4, (sector%4)*4);
 	Write_String_LCD(string);
 	Set_CursorPosition(lastLine, lastPosition);
 }
