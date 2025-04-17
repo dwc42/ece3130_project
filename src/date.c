@@ -28,7 +28,7 @@ long getCurrentMicros(void)
 		m = HAL_GetTick();
 		u = tms - SysTick->VAL;
 	}
-	return (m * 1000 * 7.2 + (u * 1000 * 7.2) / tms);
+	return (m * 1000 + (u * 1000) / tms);
 }
 /**int lastValue = 0;
 int completeCycles = 0;

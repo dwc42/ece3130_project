@@ -8,6 +8,7 @@
 #include "buzzer.h"
 #include "date.h"
 #include <string.h>
+#include <math.h>
 void SystemClock_Config(void);
 
 void EnableClock()
@@ -34,7 +35,42 @@ void EnableClock()
 // 	str[1] = '\0';
 // 	return str;
 // }
+char *intToString(int number)
+{
+	// Handle special case for 0
+	if (number == 0)
+	{
+		char *str = malloc(2); // "0" + null terminator
+		if (str == NULL)
+		{
+			printf("Memory allocation failed\n");
+			return NULL;
+		}
+		str[0] = '0';
+		str[1] = '\0';
+		return str;
+	}
 
+	// Calculate the number of digits using log10
+	int numDigits = (int)log10(abs(number)) + 1; // Number of digits in the number
+	if (number < 0)
+	{
+		numDigits++; // Add 1 for the negative sign
+	}
+
+	// Allocate memory for the string (digits + null terminator)
+	char *str = malloc(numDigits + 1);
+	if (str == NULL)
+	{
+		printf("Memory allocation failed\n");
+		return NULL;
+	}
+
+	// Convert the integer to a string
+	sprintf(str, "%d", number);
+	str[numDigits - 1] = '\0'; // Null-terminate the string
+	return str;
+}
 int modeCycle = 0;
 uint8_t presetIndex = 0;
 
@@ -238,9 +274,10 @@ int run(void)
 	// Write_String_LCD("0123456789ABCDEFG");
 	// Clear_Display();
 	update_SW_Menu();
-	int lastTime = date();
+
 	int index = 0;
 	HAL_Delay(1000);
+	int lastTime = (int)date();
 	// SetFrequency(1, 3);
 	while (1)
 	{
@@ -261,8 +298,16 @@ int run(void)
 		// ticksArray[0] = tickTime;
 		// average = total / 10;
 
-		if (date() - lastTime > 1000)
+		if ((int)date() - lastTime > 1000)
 		{
+			int test = (int)date();
+			
+			for (int i = 15; i >= 0; i--) {
+				Set_CursorPosition(0, i);
+				Write_Char_LCD((test % 10) + '0');
+				test/= 10;
+			}
+			
 			if (index == 0)
 				SetFrequency(330, 3);
 			else if (index == 1)
