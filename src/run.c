@@ -109,7 +109,7 @@ void update_SW_Menu()
 		Write_String_Sector_LCD(4, sector4New);
 	}
 	
-	if(sector7New[0] && !compareStrings(sector7New, switch_Menu[0]))
+	if(sector7New[0] && !compareStrings(sector7New, switch_Menu[3]))
 	{
 		strcpy(switch_Menu[3], sector7New);
 		Write_String_Sector_LCD(7, sector7New);

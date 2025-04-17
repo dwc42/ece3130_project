@@ -1,5 +1,5 @@
 /src/Listings
-/src/Objects/** 
+/src/Objects/
 src/ece3130_project.uvguix.mrpat
 src/ece3130_project.uvoptx
 src/Listings/ece3130_project.map
@@ -11,3 +11,5 @@ src/Objects/ece3130_project.axf
 src/ece3130_project.uvguix.mrpat
 src/ece3130_project.uvoptx
 src/Listings/ece3130_project.map
+src/Listings/ece3130_project.map
+src/ece3130_project.uvguix.mrpat
