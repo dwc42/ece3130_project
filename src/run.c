@@ -63,7 +63,7 @@ void update_SW_Menu()
 		if (presetIndex == 0)
 		{
 			strcpy(sector4New, "3&4");
-			strcpy(sector7New, "M#0");
+			
 		}
 		else if (presetIndex == 1)
 		{
@@ -74,16 +74,20 @@ void update_SW_Menu()
 		{
 			strcpy(sector4New, "5&6");
 		}
-
+		strcpy(sector7New, "M#0");
+		strcpy(sector5New, "TRC");
+		strcpy(sector6New, "TPB");
 		break;
 	}
 	case 1:
 	{
+		strcpy(sector5New, "TRP");
 		strcpy(sector7New, "M#1");
 		break;
 	}
 	case 2:
 	{
+		strcpy(sector5New, "TRP");
 		strcpy(sector7New, "M#2");
 		break;
 	}
@@ -98,6 +102,16 @@ void update_SW_Menu()
 	{
 		strcpy(switch_Menu[3], sector7New);
 		Write_String_Sector_LCD(7, sector7New);
+	}
+	if(sector5New[0] && !compareStrings(sector5New, switch_Menu[1]))
+	{
+		strcpy(switch_Menu[1], sector5New);
+		Write_String_Sector_LCD(5, sector5New);
+	}
+	if(sector6New[0] && !compareStrings(sector6New, switch_Menu[2]))
+	{
+		strcpy(switch_Menu[2], sector6New);
+		Write_String_Sector_LCD(6, sector6New);
 	}
 }
 
