@@ -1,6 +1,13 @@
 /src/Listings
-/src/Objects
+/src/Objects/** 
 src/ece3130_project.uvguix.mrpat
 src/ece3130_project.uvoptx
 src/Listings/ece3130_project.map
 src/Objects/ece3130_project.build_log.htm
+src/Objects/ece3130_project_Target_1.dep
+src/Objects/ece3130_project.htm
+src/Objects/ece3130_project.build_log.htm
+src/Objects/ece3130_project.axf
+src/ece3130_project.uvguix.mrpat
+src/ece3130_project.uvoptx
+src/Listings/ece3130_project.map

@@ -30,7 +30,7 @@
 // }
 uint8_t maskLCD = 0b10000000;
 uint8_t delayLCD = 0;
-void shiftLCD(uint8_t value)
+void Shift_Cursor_LCD(uint8_t value)
 {
 
 	uint8_t offset = (value) ? 1 : -1;

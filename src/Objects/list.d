@@ -1,1 +1,1 @@
-./objects/list.o: list.c
+./objects/list.o: list.c list.h

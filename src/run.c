@@ -76,11 +76,43 @@ void update_SW_Menu()
 
 		break;
 	}
+	case 1:
+	{
+		
+		break;
 	}
-	if (!compareStrings(sector4New, switch_Menu[0]))
+	case 2:
+	{
+		
+		break;
+	}
+	case 3:
+	{
+		if(presetIndex == 0)
+		{
+			strcpy(sector7New, "M#0");
+		}
+		if(presetIndex == 1)
+		{
+			strcpy(sector7New, "M#1");
+		}
+		if(presetIndex ==2)
+		{
+			strcpy(sector7New, "M#2");
+		}
+		break;
+	}
+	}
+	if (sector4New[0] && !compareStrings(sector4New, switch_Menu[0]))
 	{
 		strcpy(switch_Menu[0], sector4New);
 		Write_String_Sector_LCD(4, sector4New);
+	}
+	
+	if(sector7New[0] && !compareStrings(sector7New, switch_Menu[0]))
+	{
+		strcpy(switch_Menu[3], sector7New);
+		Write_String_Sector_LCD(7, sector7New);
 	}
 }
 
@@ -111,27 +143,16 @@ void numberBoxCallback(struct BeforeCharWriteEventType *event)
 
 void keyPressCallback(enum KEYPAD key)
 {
-	if (modeCycle == 0)
+	if (modeCycle)
 		return;
 	AddFrequency(Frequencies[presetIndex][key]);
 }
 
 void keyReleaseCallback(enum KEYPAD key)
 {
-	if (modeCycle == 0)
-	{
-		RemoveFrequency(Frequencies[presetIndex][key]);
-	}
-	else if (modeCycle == 1)
-	{
-		RemoveFrequency(Frequencies[presetIndex + 1][key]);
-	}
-	else if (modeCycle == 2)
-	{
-		RemoveFrequency(Frequencies[presetIndex + 2][key]);
-	}
-
-	return;
+	if (modeCycle)
+		return;
+	RemoveFrequency(Frequencies[presetIndex][key]);
 }
 
 void switchPressCallback(enum SWITCHS key)
@@ -143,12 +164,13 @@ void switchPressCallback(enum SWITCHS key)
 	case BUTTON_SWITCH2:
 	{
 
-		modeCycle = (++modeCycle) % 3;
+		presetIndex = (presetIndex + 1) % 3;
 	}
 	break;
 
 	case BUTTON_SWITCH3:
 	{
+
 		break;
 	}
 	case BUTTON_SWITCH4:
@@ -157,7 +179,7 @@ void switchPressCallback(enum SWITCHS key)
 	}
 	case BUTTON_SWITCH5: // this will be our Mode Cycle
 	{
-		modeCycle = (++modeCycle) % 3;
+		modeCycle = (modeCycle + 1) % 3;
 
 		// if(modeCycle == 0)
 		// {
@@ -178,8 +200,8 @@ void switchPressCallback(enum SWITCHS key)
 
 		break;
 	}
-		update_SW_Menu();
 	}
+	update_SW_Menu();
 }
 
 // double ticksArray[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -192,24 +214,35 @@ int run(void)
 {
 
 	EnableClock();
+	enable_tim_clocks();
 	// Init_LED(1);
 	// Init_LED(0);
 	LCD_Init();
 	InitEvents();
+	Init_buzzerEXT(0);
+	Init_buzzerEXT(1);
+	Init_buzzerEXT(2);
+	Init_buzzerEXT(3);
+	//   Init_buzzerEXT(0);
+	//  Init_buzzerEXT(1);
+	//  Init_buzzerEXT(0);
+	//  Test_LED_With_Timer();
 	/*DWT_Init();*/
 	/*Write_Char_LCD('o');*/
-	/*Write_String_LCD(line1);
-	Write_Instr_LCD(0xc0);
-		move to line */
+	Write_String_LCD("HELLO1");
 	// Write_String_LCD(line2);
 	Events.onKeyPadPress(keyPressCallback);
 	Events.onKeyPadRelease(keyReleaseCallback);
 	Events.onSwitchPress(switchPressCallback);
 	Events.beforeCharWrite(numberBoxCallback);
-	Init_buzzer();
 	// Write_String_LCD("0123456789ABCDEF");
 	// Write_String_LCD("0123456789ABCDEFG");
 	// Clear_Display();
+	update_SW_Menu();
+	int lastTime = date();
+	int index = 0;
+	HAL_Delay(1000);
+	//SetFrequency(1, 3);
 	while (1)
 	{
 		CheckFrequency();
@@ -228,12 +261,25 @@ int run(void)
 		// }
 		// ticksArray[0] = tickTime;
 		// average = total / 10;
-		// /*if (date() - lastPrint > 1000)
-		// {
-		// 	char *str = doubleToString(average, 3);
-		// 	Set_LCD(str);
-		// 	lastPrint = date();
-		// }*/
-		// lastTickDate = date();
+
+		if (date() - lastTime > 1000)
+		{
+			if (index == 0)
+				SetFrequency(330, 3);
+			else if (index == 1)
+			{
+				SetFrequency(0, 3);
+			}
+			else if (index == 4)
+			{
+				SetFrequency(250, 3);
+			}
+			else if (index == 5)
+			{
+				SetFrequency(0, 3);
+			}
+			index = (index + 1) % 8;
+			lastTime = date();
+		}
 	}
 }
