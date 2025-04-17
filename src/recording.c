@@ -7,13 +7,18 @@
 #include "math.h"
 #include "run.h"
 
-struct Sample **ListSample;
-struct Press **ListPress;
+struct Sample *ListSample;
+struct Press ListPress[16];
 
 void init()
 {
     ListSample = malloc(sizeof(struct Sample));
     ListSample[0] = SampleVoid;
+    ListSample = malloc(sizeof(struct Sample));
+    for (int i = 0; i < 16; i++)
+    {
+        ListPress[i] = PressVoid;
+    }
 }
 
 void recordMusicPress(enum KEYPAD key)
@@ -23,7 +28,8 @@ void recordMusicPress(enum KEYPAD key)
     int frequency = Frequencies[presetIndex][key];
     int sampleIndex = pushSample(&ListSample, *sample);
     press->RecordingIndex = sampleIndex;
-
+    press->pressDate = date();
+    ListSample[sampleIndex] = *sample;
 };
 
 void recordMusicRelease()
@@ -31,6 +37,4 @@ void recordMusicRelease()
     frequency = Frequencies[presetIndex][key];
 
     struct Sample *sample = malloc(sizeof(struct Sample));
-
-
 };
