@@ -138,9 +138,8 @@ void CheckFrequency()
     }
     // Update the last date frequency to now, to avoid spamming the buzzer
     int i = 0;
-    for (int frequencyIndex=0; frequencyIndex > 3; frequencyIndex++)
+    for (int frequencyIndex=0; frequencyIndex <= 3; frequencyIndex++)
     {
-        int index = i++;
         if(frequency_list[i] == INT32_MAX){
             SetFrequency(0, frequencyIndex);
         }
