@@ -119,18 +119,17 @@ void RemoveFrequency(double freq)
 double lastDateFrequency = 0.0;
 int frequencyIndex = 0;
 int currentFrequency[4] = {0, 0, 0, 0};
-int lastSwitchTime = 13;
+int lastSwitchTime = 1;
 void CheckFrequency()
 {
 
     if (date() - lastDateFrequency <= lastSwitchTime)
         return;
     int smallest = 0;
-    uint8_t i = 0;
-    for (; frequency_list[i] != INT32_MAX; i++)
+   /* for (; frequency_list[i] != INT32_MAX; i++)
         if (frequency_list[i] < smallest)
             smallest = frequency_list[i];
-    lastSwitchTime = 20 - smallest / 100;
+    lastSwitchTime = 20 - smallest / 100;*/
     lastDateFrequency = date();
     if (frequency_list[0] == INT32_MAX)
     {
@@ -138,17 +137,18 @@ void CheckFrequency()
         return;
     }
     // Update the last date frequency to now, to avoid spamming the buzzer
-    if (frequencyIndex > 3 || frequency_list[frequencyIndex] == INT32_MAX)
+    int i = 0;
+    for (int frequencyIndex=0; frequencyIndex > 3; frequencyIndex++)
     {
-        frequencyIndex = 0;
+        int index = i++;
+        if(frequency_list[i] == INT32_MAX){
+            SetFrequency(0, frequencyIndex);
+        }
+        else{
+            i++;
+            SetFrequency(frequency_list[frequencyIndex], frequencyIndex);
+        }
     }
-    // Get the frequency from the list
-    int freq = frequency_list[frequencyIndex];
-
-    // Set the frequency on the buzzer
-    SetFrequency((double)freq, 0);
-    frequencyIndex++;
-    // Only play the first frequency in the list for now, can be extended to play multiple in sequence if needed
 }
 /**
  * @brief Set the frequency of the buzzer

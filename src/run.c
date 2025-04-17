@@ -112,18 +112,23 @@ void update_SW_Menu()
 		}
 		strcpy(sector7New, "M#0");
 		strcpy(sector5New, "TRC");
+		//strcpy(sector6New, "TPB");
 		break;
 	}
 	case 1:
 	{
+		strcpy(sector4New, "PDD");
 		strcpy(sector5New, "TRP");
 		strcpy(sector7New, "M#1");
+		//strcpy(sector6New, "   ");
 		break;
 	}
 	case 2:
 	{
+		strcpy(sector4New, "   ");
 		strcpy(sector5New, "TRP");
 		strcpy(sector7New, "M#2");
+		//strcpy(sector6New, "   ");
 		break;
 	}
 	}
@@ -264,7 +269,7 @@ int run(void)
 	//  Test_LED_With_Timer();
 	/*DWT_Init();*/
 	/*Write_Char_LCD('o');*/
-	Write_String_LCD("EIEIEo");
+	Write_String_LCD("Sounds");
 	// Write_String_LCD(line2);
 	Events.onKeyPadPress(keyPressCallback);
 	Events.onKeyPadRelease(keyReleaseCallback);
@@ -298,16 +303,16 @@ int run(void)
 		// ticksArray[0] = tickTime;
 		// average = total / 10;
 
-		if ((int)date() - lastTime > 1000)
+		/*if (date() - lastTime > 1000)
 		{
 			int test = (int)date();
-			
+
 			for (int i = 15; i >= 0; i--) {
 				Set_CursorPosition(0, i);
 				Write_Char_LCD((test % 10) + '0');
 				test/= 10;
 			}
-			
+
 			if (index == 0)
 				SetFrequency(330, 3);
 			else if (index == 1)
@@ -324,6 +329,6 @@ int run(void)
 			}
 			index = (index + 1) % 8;
 			lastTime = date();
-		}
+		}*/
 	}
 }
