@@ -27,22 +27,20 @@ Project File Date:  04/07/2025
 <h2>Output:</h2>
 *** Using Compiler 'V6.22', folder: 'C:\Users\austi\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'Target_1'
-assembling startup_stm32l476xx.s...
-compiling stm32l4xx_hal_i2c_ex.c...
-compiling stm32l4xx_hal_dma_ex.c...
-compiling stm32l4xx_hal_i2c.c...
 run.c(56): warning: unused variable 'sector5New' [-Wunused-variable]
    56 |         char sector5New[4];
       |              ^~~~~~~~~~
 run.c(57): warning: unused variable 'sector6New' [-Wunused-variable]
    57 |         char sector6New[4];
       |              ^~~~~~~~~~
-2 warnings generated.
+run.c(66): warning: 'strcpy' will always overflow; destination buffer has size 4, but the source string has length 14 (including NUL byte) [-Wfortify-source]
+   66 |                         strcpy(sector7New, "          M#0");
+      |                         ^
+3 warnings generated.
 compiling run.c...
-compiling list.c...
 linking...
-Program Size: Code=17688 RO-data=536 RW-data=368 ZI-data=2224  
-".\Objects\ece3130_project.axf" - 0 Error(s), 2 Warning(s).
+Program Size: Code=17744 RO-data=536 RW-data=368 ZI-data=2224  
+".\Objects\ece3130_project.axf" - 0 Error(s), 3 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -72,7 +70,7 @@ Package Vendor: Keil
    * Component: ARM::CMSIS:CORE@6.1.0
 
    * Component: Keil::Device:CubeMX@1.0.0
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>

@@ -63,6 +63,7 @@ void update_SW_Menu()
 		if (presetIndex == 0)
 		{
 			strcpy(sector4New, "3&4");
+			strcpy(sector7New, "          M#0");
 		}
 		else if (presetIndex == 1)
 		{
@@ -78,28 +79,12 @@ void update_SW_Menu()
 	}
 	case 1:
 	{
-		
+		strcpy(sector4New, "M#1");
 		break;
 	}
 	case 2:
 	{
-		
-		break;
-	}
-	case 3:
-	{
-		if(presetIndex == 0)
-		{
-			strcpy(sector7New, "M#0");
-		}
-		if(presetIndex == 1)
-		{
-			strcpy(sector7New, "M#1");
-		}
-		if(presetIndex ==2)
-		{
-			strcpy(sector7New, "M#2");
-		}
+		strcpy(sector7New, "M#2");
 		break;
 	}
 	}
