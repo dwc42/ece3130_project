@@ -261,7 +261,7 @@ int run(void)
 		// ticksArray[0] = tickTime;
 		// average = total / 10;
 
-		if (date() - lastTime > 1000)
+		/*if (date() - lastTime > 1000)
 		{
 			if (index == 0)
 				SetFrequency(330, 3);
@@ -279,6 +279,6 @@ int run(void)
 			}
 			index = (index + 1) % 8;
 			lastTime = date();
-		}
+		}*/
 	}
 }
