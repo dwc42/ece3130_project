@@ -52,10 +52,11 @@ uint8_t compareStrings(char *string1, char *string2)
 }
 void update_SW_Menu()
 {
-	char sector4New[4];
-	char sector5New[4];
-	char sector6New[4];
-	char sector7New[4];
+	char sector4New[4] = {0, 0, 0, 0};
+	char sector5New[4] = {0, 0, 0, 0};
+	char sector6New[4] = {0, 0, 0, 0};
+	char sector7New[4] = {0, 0, 0, 0};
+	;
 	switch (modeCycle)
 	{
 	case 0:
@@ -63,7 +64,6 @@ void update_SW_Menu()
 		if (presetIndex == 0)
 		{
 			strcpy(sector4New, "3&4");
-			
 		}
 		else if (presetIndex == 1)
 		{
@@ -76,39 +76,44 @@ void update_SW_Menu()
 		}
 		strcpy(sector7New, "M#0");
 		strcpy(sector5New, "TRC");
-		strcpy(sector6New, "TPB");
+		//strcpy(sector6New, "TPB");
 		break;
 	}
 	case 1:
 	{
+		strcpy(sector4New, "PDD");
 		strcpy(sector5New, "TRP");
 		strcpy(sector7New, "M#1");
+		//strcpy(sector6New, "   ");
 		break;
 	}
 	case 2:
 	{
+		strcpy(sector4New, "   ");
 		strcpy(sector5New, "TRP");
 		strcpy(sector7New, "M#2");
+		//strcpy(sector6New, "   ");
 		break;
 	}
 	}
+
 	if (sector4New[0] && !compareStrings(sector4New, switch_Menu[0]))
 	{
 		strcpy(switch_Menu[0], sector4New);
 		Write_String_Sector_LCD(4, sector4New);
 	}
-	
-	if(sector7New[0] && !compareStrings(sector7New, switch_Menu[3]))
+
+	if (sector7New[0] && !compareStrings(sector7New, switch_Menu[3]))
 	{
 		strcpy(switch_Menu[3], sector7New);
 		Write_String_Sector_LCD(7, sector7New);
 	}
-	if(sector5New[0] && !compareStrings(sector5New, switch_Menu[1]))
+	if (sector5New[0] && !compareStrings(sector5New, switch_Menu[1]))
 	{
 		strcpy(switch_Menu[1], sector5New);
 		Write_String_Sector_LCD(5, sector5New);
 	}
-	if(sector6New[0] && !compareStrings(sector6New, switch_Menu[2]))
+	if (sector6New[0] && !compareStrings(sector6New, switch_Menu[2]))
 	{
 		strcpy(switch_Menu[2], sector6New);
 		Write_String_Sector_LCD(6, sector6New);
@@ -228,7 +233,7 @@ int run(void)
 	//  Test_LED_With_Timer();
 	/*DWT_Init();*/
 	/*Write_Char_LCD('o');*/
-	Write_String_LCD("EIEIEo");
+	Write_String_LCD("Sounds");
 	// Write_String_LCD(line2);
 	Events.onKeyPadPress(keyPressCallback);
 	Events.onKeyPadRelease(keyReleaseCallback);
@@ -241,7 +246,7 @@ int run(void)
 	int lastTime = date();
 	int index = 0;
 	HAL_Delay(1000);
-	//SetFrequency(1, 3);
+	// SetFrequency(1, 3);
 	while (1)
 	{
 		CheckFrequency();
