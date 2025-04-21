@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <math.h>
+#include <stdint.h>
 #include "stm32l4xx_hal.h"
 /**void DWT_Init(void)
 {
@@ -12,6 +14,18 @@
 static inline uint32_t LL_SYSTICK_IsActiveCounterFlag(void)
 {
 	return ((SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk) == (SysTick_CTRL_COUNTFLAG_Msk));
+}
+uint32_t lastTick = 0;
+uint16_t ticks = 0;
+void checkDate()
+{
+	
+	if (HAL_GetTick() >= lastTick){
+		lastTick = HAL_GetTick();
+		return;
+	}
+	lastTick = HAL_GetTick();
+	ticks++;
 }
 /**
  * from stack overflow
@@ -28,7 +42,10 @@ long getCurrentMicros(void)
 		m = HAL_GetTick();
 		u = tms - SysTick->VAL;
 	}
-	return (m * 1000 + (u * 1000) / tms);
+	volatile long test = pow(2, 32);
+ volatile long val = (ticks) ? ticks *  test : 0;
+	volatile long end = val + m * 1000 + (u * 1000) / tms;
+	return end;
 }
 /**int lastValue = 0;
 int completeCycles = 0;

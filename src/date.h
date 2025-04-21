@@ -7,4 +7,5 @@
  * @return double The current date in milliseconds
  */
 double date();
+void checkDate();
 #endif /*__MAIN_h*/

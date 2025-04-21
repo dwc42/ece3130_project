@@ -170,8 +170,8 @@ void update_SW_Menu()
 int Frequencies[3][16] =
 	{
 		{131, 147, 165, 175, 196, 220, 247, 262, 294, 330, 349, 392, 440, 494, 523, 999},
-		{33, 37, 41, 44, 49, 55, 62, 65, 73, 82, 87, 98, 110, 123, 13,9991},
-		{523, 587, 659, 698, 784, 880, 988, 1047, 1175, 1319, 1397, 1568, 1760, 1975, 2093,999}};
+		{33, 37, 41, 44, 49, 55, 62, 65, 73, 82, 87, 98, 110, 123, 13, 9991},
+		{523, 587, 659, 698, 784, 880, 988, 1047, 1175, 1319, 1397, 1568, 1760, 1975, 2093, 999}};
 
 /*double Frequencies[16] = {1, 2, 3, 4,
 						  5, 6, 7, 8,
@@ -259,7 +259,7 @@ void switchPressCallback(enum SWITCHS key)
 }
 
 // double ticksArray[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-int test = 0;
+long test = 0;
 int digit = 0;
 /**
  * @brief  The application entry point.
@@ -303,13 +303,14 @@ int run(void)
 	int startTime = (int)date();
 	// SetFrequency(1, 3);
 	int index1 = 0;
-	AddFrequency(1000, 1000+lastTime);
+	AddFrequency(1000, 1000 + lastTime);
 	while (1)
 	{
 		CheckFrequency();
 		check();
 		checkLCDWrites();
 		playRecording();
+		checkDate();
 		// double current = date();
 		// double tickTime = date() - lastTickDate;
 
@@ -328,7 +329,7 @@ int run(void)
 		if (date() - lastTime > 1000)
 		{
 
-			test = HAL_GetTick(); //(int)date();
+			test = date(); //(int)date();
 			int logOf = (int)log10(test);
 			Set_CursorPosition(0, 15 - logOf);
 

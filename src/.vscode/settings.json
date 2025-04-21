@@ -16,5 +16,9 @@
 				}
 			]
 		}
-	]
+	],
+	"files.associations": {
+		"stm32l4xx_hal.h": "c",
+		"stdint.h": "c"
+	}
 }
