@@ -291,6 +291,7 @@ int run(void)
 
 	EnableClock();
 	enable_tim_clocks();
+	initOCT();
 	// Init_LED(1);
 	// Init_LED(0);
 	LCD_Init();
@@ -300,7 +301,6 @@ int run(void)
 	Init_buzzerEXT(2);
 	Init_buzzerEXT(3);
 	// HAL_Delay(1000);
-	// initOCT();
 	//    Init_buzzerEXT(0);
 	//   Init_buzzerEXT(1);
 	//   Init_buzzerEXT(0);
