@@ -36,26 +36,62 @@ void EnableClock()
 // 	str[1] = '\0';
 // 	return str;
 // }
-	struct NoteProperties
+int modeCycle = 0;
+uint8_t presetIndex = 0;
+int Frequencies[3][16] =
 	{
-		uint8_t octaves;
+		{175, 262, 392, 0, 165, 247, 349, 523, 147, 220, 330, 494, 131, 196, 292, 440},
+		{44, 65, 98, 0, 41, 62, 87, 131, 37, 55, 82, 123, 33, 49, 73, 110},
+		{698, 1047, 1568, 0, 659, 988, 1397, 2093, 587, 880, 1319, 1975, 523, 784, 1175, 1760}};
+struct NoteProperties
+ 	{
 		uint16_t frequencies;
-		char note;
-		
+ 		char octaves;
+ 		char note;
+
+ 	};
+ struct NoteProperties newFrequencies[3][16] =
+ 	{
+		{ {175,'3','F',},{262,'4','C'},{392,'4','G'},{165,'3','E'},{247,'3','B'},{349,'4','F'},{523,'5','C'},{147,'3','D'},{220,'3','A'},{330,'4','E'},{494,'4','B'},{131,'3','C'},{196,'3','G'},{292,'4','D'},{440,'4','A'} },
+		{ {44,'1','F'},{65,'2','C'},{98,'2','G'},{41,'1','E'},{62,'1','B'},{87,'2','F'},{131,'3','C'},{37,'1','D'},{55,'1','A'},{82,'2','E'},{123,'2','B'},{33,'1','C'},{49,'1','G'},{73,'2','D'},{110,'2','A'} },
+		{ {698,'5','F'},{1047,'6','C'},{1568,'6','G'},{659,'5','E'},{988,'5','B'},{1397,'6','F'},{2093,'7','C'},{587,'5','D'},{880,'5','A'},{1319,'6','E'},{1975,'6','B'},{523,'5','C'},{784,'5','G'},{1175,'6','D'},{1760,'6','A'} },
 	};
-struct NoteProperties newFrequencies[3][16] = 
-	{
-		{131, 147, 165, 175, 196, 220, 247, 262, 294, 330, 349, 392, 440, 494, 523},
-		{33, 37, 41, 44, 49, 55, 62, 65, 73, 82, 87, 98, 110, 123, 131},
-		{523, 587, 659, 698, 784, 880, 988, 1047, 1175, 1319, 1397, 1568, 1760, 1975, 2093}};
-	
-		
-	void displayFrequency()
-	{
-		
-		
-		
-	}
+
+
+	 void DisplayNumber(long num, int8_t line, int8_t position, uint8_t from)
+	 {
+
+			int logOf = (int)log10(num);
+			if((line != -1) && (position != -1))
+			Set_CursorPosition(line, from ? position - logOf - ((num < 0) ? 1 : 0) : position);
+			if(num < 0)
+				Write_Char_LCD('-');
+
+			for (int i = logOf; i >= 0; i--)
+			{
+				uint8_t place = (int)num / (int)pow(10, i);
+				uint8_t digit = place % 10;
+				Write_Char_LCD(digit + '0');
+			}
+ 		}
+ 	void displayFrequency(enum KEYPAD key)
+ 	{
+ 	  struct NoteProperties noteProperties = newFrequencies[presetIndex][key];
+
+		Set_CursorPosition(0,0);
+		Write_Char_LCD(noteProperties.note);
+		Write_Char_LCD(noteProperties.octaves);
+		Write_Char_LCD(' ');
+		DisplayNumber(noteProperties.frequencies,-1, -1, 0);
+		Write_String_LCD("Hz");
+ 	}
+
+
+
+
+
+
+
 
 char *intToString(int number)
 {
@@ -93,8 +129,7 @@ char *intToString(int number)
 	str[numDigits - 1] = '\0'; // Null-terminate the string
 	return str;
 }
-int modeCycle = 0;
-uint8_t presetIndex = 0;
+
 
 char switch_Menu[4][4];
 uint8_t compareStrings(char *string1, char *string2)
@@ -188,11 +223,7 @@ void update_SW_Menu()
 	}
 }
 
-int Frequencies[3][16] =
-	{
-		{131, 147, 165, 175, 196, 220, 247, 262, 294, 330, 349, 392, 440, 494, 523, 999},
-		{33, 37, 41, 44, 49, 55, 62, 65, 73, 82, 87, 98, 110, 123, 13, 9991},
-		{523, 587, 659, 698, 784, 880, 988, 1047, 1175, 1319, 1397, 1568, 1760, 1975, 2093, 999}};
+
 
 /*double Frequencies[16] = {1, 2, 3, 4,
 						  5, 6, 7, 8,
@@ -219,6 +250,7 @@ void keyPressCallback(enum KEYPAD key)
 		return;
 	AddFrequency(Frequencies[presetIndex][key], 0);
 	recordMusicPress(key);
+	displayFrequency(key);
 }
 
 void keyReleaseCallback(enum KEYPAD key)
@@ -301,7 +333,7 @@ int run(void)
 	Init_buzzerEXT(2);
 	Init_buzzerEXT(3);
 	// HAL_Delay(1000);
-	
+
 	//    Init_buzzerEXT(0);
 	//   Init_buzzerEXT(1);
 	//   Init_buzzerEXT(0);
@@ -326,7 +358,7 @@ int run(void)
 	// SetFrequency(1, 3);
 	int index1 = 0;
 	//AddFrequency(1000, 1000 + lastTime);
-	
+
 	while (1)
 	{
 		CheckFrequency();

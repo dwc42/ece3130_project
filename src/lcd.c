@@ -134,9 +134,9 @@ double lastDateLCD = 0;
 void checkLCDWrites()
 {
 	double currentDate = date();
-	if (currentDate - lastDateLCD < 1) // 1ms delay between writes to LCD
-		return;						   // not enough time has passed since last write to LCD, return and wait for next check
-	lastDateLCD = currentDate;		   // update the last date LCD was written to
+	if (currentDate - lastDateLCD < 2) // 1ms delay between writes to LCD
+		return;							// not enough time has passed since last write to LCD, return and wait for next check
+	lastDateLCD = currentDate;			// update the last date LCD was written to
 	if (writingInstruction == 0)
 	{
 		currentWrite = popWrites();
