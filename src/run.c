@@ -35,6 +35,8 @@ void EnableClock()
 // 	str[1] = '\0';
 // 	return str;
 // }
+int modeCycle = 0;
+uint8_t presetIndex = 0;
 int Frequencies[3][16] =
 	{
 		{175, 262, 392, 0, 165, 247, 349, 523, 147, 220, 330, 494, 131, 196, 292, 440},
@@ -50,16 +52,37 @@ struct NoteProperties
  struct NoteProperties newFrequencies[3][16] = 
  	{
 		{ {175,'3','F',},{262,'4','C'},{392,'4','G'},{165,'3','E'},{247,'3','B'},{349,'4','F'},{523,'5','C'},{147,'3','D'},{220,'3','A'},{330,'4','E'},{494,'4','B'},{131,'3','C'},{196,'3','G'},{292,'4','D'},{440,'4','A'} }, 
-		{ {},{},{},{},{},{},{},{},{},{},{},{},{},{},{} },
+		{ {44,'1','F'},{65,'2','C'},{98,'2','G'},{41,'1','E'},{62,'1','B'},{87,'2','F'},{131,'3','C'},{37,'1','D'},{55,'1','A'},{82,'2','E'},{123,'2','B'},{33,'1','C'},{49,'1','G'},{73,'2','D'},{110,'2','A'} },
 		{ {698,'5','F'},{1047,'6','C'},{1568,'6','G'},{659,'5','E'},{988,'5','B'},{1397,'6','F'},{2093,'7','C'},{587,'5','D'},{880,'5','A'},{1319,'6','E'},{1975,'6','B'},{523,'5','C'},{784,'5','G'},{1175,'6','D'},{1760,'6','A'} },
 	};
  	
- 		
- 	void displayFrequency()
+	
+	 void DisplayNumber(long num, int8_t line, int8_t position, uint8_t from)
+	 {
+		 
+			int logOf = (int)log10(num);
+			if((line != -1) && (position != -1))
+			Set_CursorPosition(line, from ? position - logOf - ((num < 0) ? 1 : 0) : position);
+			if(num < 0)
+				Write_Char_LCD('-');
+			
+			for (int i = logOf; i >= 0; i--)
+			{
+				uint8_t place = (int)num / (int)pow(10, i);
+				uint8_t digit = place % 10;
+				Write_Char_LCD(digit + '0');
+			}
+ 		}
+ 	void displayFrequency(enum KEYPAD key)
  	{
- 		
- 		
- 		
+ 	  struct NoteProperties noteProperties = newFrequencies[presetIndex][key];
+		
+		Set_CursorPosition(0,0);
+		Write_Char_LCD(noteProperties.note);
+		Write_Char_LCD(noteProperties.octaves);
+		Write_Char_LCD(' ');
+		DisplayNumber(noteProperties.frequencies,-1, -1, 0);
+		Write_String_LCD("Hz");
  	}
 
 
@@ -105,8 +128,7 @@ char *intToString(int number)
 	str[numDigits - 1] = '\0'; // Null-terminate the string
 	return str;
 }
-int modeCycle = 0;
-uint8_t presetIndex = 0;
+
 
 char switch_Menu[4][4];
 uint8_t compareStrings(char *string1, char *string2)
@@ -215,6 +237,7 @@ void keyPressCallback(enum KEYPAD key)
 {
 	if (modeCycle)
 		return;
+	displayFrequency(key);
 	AddFrequency(Frequencies[presetIndex][key]);
 }
 
