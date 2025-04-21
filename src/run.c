@@ -36,6 +36,27 @@ void EnableClock()
 // 	str[1] = '\0';
 // 	return str;
 // }
+	struct NoteProperties
+	{
+		uint8_t octaves;
+		uint16_t frequencies;
+		char note;
+		
+	};
+struct NoteProperties newFrequencies[3][16] = 
+	{
+		{131, 147, 165, 175, 196, 220, 247, 262, 294, 330, 349, 392, 440, 494, 523},
+		{33, 37, 41, 44, 49, 55, 62, 65, 73, 82, 87, 98, 110, 123, 131},
+		{523, 587, 659, 698, 784, 880, 988, 1047, 1175, 1319, 1397, 1568, 1760, 1975, 2093}};
+	
+		
+	void displayFrequency()
+	{
+		
+		
+		
+	}
+
 char *intToString(int number)
 {
 	// Handle special case for 0
