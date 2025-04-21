@@ -295,12 +295,13 @@ int run(void)
 	// Init_LED(0);
 	LCD_Init();
 	InitEvents();
+	initOCT();
 	Init_buzzerEXT(0);
 	Init_buzzerEXT(1);
 	Init_buzzerEXT(2);
 	Init_buzzerEXT(3);
 	// HAL_Delay(1000);
-	// initOCT();
+	
 	//    Init_buzzerEXT(0);
 	//   Init_buzzerEXT(1);
 	//   Init_buzzerEXT(0);
