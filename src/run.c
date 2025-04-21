@@ -324,7 +324,8 @@ int run(void)
 	int startTime = (int)date();
 	// SetFrequency(1, 3);
 	int index1 = 0;
-	AddFrequency(1000, 1000 + lastTime);
+	//AddFrequency(1000, 1000 + lastTime);
+	
 	while (1)
 	{
 		CheckFrequency();

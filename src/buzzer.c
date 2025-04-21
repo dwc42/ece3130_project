@@ -221,23 +221,23 @@ void CheckFrequency()
         // Update the last date frequency to now, to avoid spamming the buzzer
         volatile int i = 0;
 
-        for (int frequencyIndex = 0; frequency_list[i].frequency; frequencyIndex++)
+        for (int frequencyIndex = 0; frequencyIndex < 4; frequencyIndex++)
         {
-            if (frequency_list[i].endDate && currentDate > frequency_list[i].endDate)
+            if (i < 4 && !frequency_list[i].frequency)
+            {
+                SetFrequency(0, frequencyIndex);
+            }
+						else if (frequency_list[i].endDate && currentDate > frequency_list[i].endDate)
             {
                 RemoveFrequency(frequency_list[i].frequency, frequency_list[i].endDate);
                 if (i < 4)
                     SetFrequency(0, frequencyIndex);
                 if (i > 0)
-                    i--;
-                continue;
-            }
-            if (i <= 3 && frequency_list[i].frequency == PlayVoid.frequency)
-            {
-                SetFrequency(0, frequencyIndex);
+                    frequencyIndex--;
             }
             else
             {
+							
                 i++;
                 SetFrequency(frequency_list[frequencyIndex].frequency, frequencyIndex);
                 checkOct(frequency_list[frequencyIndex].frequency);

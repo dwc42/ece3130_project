@@ -42,9 +42,9 @@ long getCurrentMicros(void)
 		m = HAL_GetTick();
 		u = tms - SysTick->VAL;
 	}
-	volatile long test = pow(2, 32);
- volatile long val = (ticks) ? ticks *  test : 0;
-	volatile long end = val + m * 1000 + (u * 1000) / tms;
+	//volatile long test = pow(2, 32);
+	//volatile long val = (ticks) ? ticks *  test : 0;
+	volatile long end = /*val +*/ m * 1000 + (u * 1000) / tms;
 	return end;
 }
 /**int lastValue = 0;
