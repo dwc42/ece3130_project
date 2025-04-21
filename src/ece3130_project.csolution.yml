@@ -1,0 +1,10 @@
+solution:
+  created-by: uv2csolution@1.6.0
+  created-for: CMSIS-Toolbox@2.7.0
+  compiler: AC6
+  target-types:
+    - type: Target_1
+      device: STM32L476RGTx
+      optimize: debug
+  projects:
+    - project: ece3130_project.cproject.yml

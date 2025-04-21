@@ -4,6 +4,7 @@
 #include "events.h"
 #include "main.h"
 #include "stm32l4xx_hal.h"
+#include "recording.h"
 #include "lcd.h"
 #include "buzzer.h"
 #include "date.h"
@@ -110,9 +111,19 @@ void update_SW_Menu()
 		{
 			strcpy(sector4New, "5&6");
 		}
-		strcpy(sector7New, "M#0");
-		strcpy(sector5New, "TRC");
-		//strcpy(sector6New, "TPB");
+		if (recording)
+			strcpy(sector5New, "REC");
+		else
+		{
+			strcpy(sector5New, "SRC");
+		}
+		if (playBack)
+			strcpy(sector6New, "PBE");
+		else
+		{
+			strcpy(sector6New, "PBD");
+		}
+		// strcpy(sector6New, "TPB");
 		break;
 	}
 	case 1:
@@ -120,7 +131,7 @@ void update_SW_Menu()
 		strcpy(sector4New, "PDD");
 		strcpy(sector5New, "TRP");
 		strcpy(sector7New, "M#1");
-		//strcpy(sector6New, "   ");
+		// strcpy(sector6New, "   ");
 		break;
 	}
 	case 2:
@@ -128,7 +139,7 @@ void update_SW_Menu()
 		strcpy(sector4New, "   ");
 		strcpy(sector5New, "TRP");
 		strcpy(sector7New, "M#2");
-		//strcpy(sector6New, "   ");
+		// strcpy(sector6New, "   ");
 		break;
 	}
 	}
@@ -158,9 +169,9 @@ void update_SW_Menu()
 
 int Frequencies[3][16] =
 	{
-		{131, 147, 165, 175, 196, 220, 247, 262, 294, 330, 349, 392, 440, 494, 523},
-		{33, 37, 41, 44, 49, 55, 62, 65, 73, 82, 87, 98, 110, 123, 131},
-		{523, 587, 659, 698, 784, 880, 988, 1047, 1175, 1319, 1397, 1568, 1760, 1975, 2093}};
+		{131, 147, 165, 175, 196, 220, 247, 262, 294, 330, 349, 392, 440, 494, 523, 999},
+		{33, 37, 41, 44, 49, 55, 62, 65, 73, 82, 87, 98, 110, 123, 13,9991},
+		{523, 587, 659, 698, 784, 880, 988, 1047, 1175, 1319, 1397, 1568, 1760, 1975, 2093,999}};
 
 /*double Frequencies[16] = {1, 2, 3, 4,
 						  5, 6, 7, 8,
@@ -185,14 +196,16 @@ void keyPressCallback(enum KEYPAD key)
 {
 	if (modeCycle)
 		return;
-	AddFrequency(Frequencies[presetIndex][key]);
+	AddFrequency(Frequencies[presetIndex][key], 0);
+	recordMusicPress(key);
 }
 
 void keyReleaseCallback(enum KEYPAD key)
 {
 	if (modeCycle)
 		return;
-	RemoveFrequency(Frequencies[presetIndex][key]);
+	RemoveFrequency(Frequencies[presetIndex][key], 0);
+	recordMusicRelease(key);
 }
 
 void switchPressCallback(enum SWITCHS key)
@@ -210,11 +223,12 @@ void switchPressCallback(enum SWITCHS key)
 
 	case BUTTON_SWITCH3:
 	{
-
+		toggleRecording();
 		break;
 	}
 	case BUTTON_SWITCH4:
 	{
+		togglePlayBack();
 		break;
 	}
 	case BUTTON_SWITCH5: // this will be our Mode Cycle
@@ -245,7 +259,8 @@ void switchPressCallback(enum SWITCHS key)
 }
 
 // double ticksArray[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-
+int test = 0;
+int digit = 0;
 /**
  * @brief  The application entry point.
  * @retval int
@@ -263,10 +278,12 @@ int run(void)
 	Init_buzzerEXT(1);
 	Init_buzzerEXT(2);
 	Init_buzzerEXT(3);
+	// HAL_Delay(1000);
+	// initOCT();
+	//    Init_buzzerEXT(0);
+	//   Init_buzzerEXT(1);
 	//   Init_buzzerEXT(0);
-	//  Init_buzzerEXT(1);
-	//  Init_buzzerEXT(0);
-	//  Test_LED_With_Timer();
+	//   Test_LED_With_Timer();
 	/*DWT_Init();*/
 	/*Write_Char_LCD('o');*/
 	Write_String_LCD("Sounds");
@@ -283,12 +300,16 @@ int run(void)
 	int index = 0;
 	HAL_Delay(1000);
 	int lastTime = (int)date();
+	int startTime = (int)date();
 	// SetFrequency(1, 3);
+	int index1 = 0;
+	AddFrequency(1000, 1000+lastTime);
 	while (1)
 	{
 		CheckFrequency();
 		check();
 		checkLCDWrites();
+		playRecording();
 		// double current = date();
 		// double tickTime = date() - lastTickDate;
 
@@ -302,33 +323,22 @@ int run(void)
 		// }
 		// ticksArray[0] = tickTime;
 		// average = total / 10;
-
-		/*if (date() - lastTime > 1000)
+		if ((int)date() - startTime < 3000)
+			continue;
+		if (date() - lastTime > 1000)
 		{
-			int test = (int)date();
 
-			for (int i = 15; i >= 0; i--) {
-				Set_CursorPosition(0, i);
-				Write_Char_LCD((test % 10) + '0');
-				test/= 10;
-			}
+			test = HAL_GetTick(); //(int)date();
+			int logOf = (int)log10(test);
+			Set_CursorPosition(0, 15 - logOf);
 
-			if (index == 0)
-				SetFrequency(330, 3);
-			else if (index == 1)
+			for (int i = logOf; i >= 0; i--)
 			{
-				SetFrequency(0, 3);
+				int place = (int)test / (int)pow(10, i);
+				digit = place % 10;
+				Write_Char_LCD(digit + '0');
 			}
-			else if (index == 4)
-			{
-				SetFrequency(250, 3);
-			}
-			else if (index == 5)
-			{
-				SetFrequency(0, 3);
-			}
-			index = (index + 1) % 8;
 			lastTime = date();
-		}*/
+		}
 	}
 }

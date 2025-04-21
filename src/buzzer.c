@@ -12,7 +12,7 @@
 #include "stm32l4xx_hal_rcc.h"
 #include "stm32l4xx_hal_tim.h"
 #include <stdint.h>
-int *frequency_list; // List of frequencies, initialized to NULL
+struct Play *frequency_list; // List of frequencies, initialized to NULL
 
 // TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htimEXT[4] = {{0}, {0}, {0}, {0}};
@@ -80,8 +80,8 @@ struct timer timers[4] = {
 void Init_buzzerEXT(uint8_t timer)
 {
     // Initialize the frequency list if it hasn't been done yet
-    frequency_list = malloc(sizeof(INT32_MAX)); // allocate space for one integer and INT32_MAX terminator
-    frequency_list[0] = INT32_MAX;              // set the terminator
+    frequency_list = malloc(sizeof(PlayVoid)); // allocate space for one integer and INT32_MAX terminator
+    frequency_list[0] = PlayVoid;              // set the terminator
 
     GPIO_InitTypeDef GPIO_InitStruct = {0};
 
@@ -108,13 +108,94 @@ void Init_buzzerEXT(uint8_t timer)
     sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
     sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
 }
-void AddFrequency(double freq)
+void AddFrequency(double freq, uint32_t endDate)
 {
-    pushInteger(&frequency_list, (int)freq);
+    int intFreq = (int)freq;
+    struct Play *play = malloc(sizeof(struct Play));
+    play->frequency = freq;
+    play->endDate = endDate;
+    int *lenindex = indexOfLengthPlay(frequency_list, *play);
+    int index = lenindex[0];
+    free(lenindex);
+    if (index != -1)
+    {
+        free(play);
+        return;
+    }
+
+    pushPlay(&frequency_list, *play);
+    free(play);
 }
-void RemoveFrequency(double freq)
+void RemoveFrequency(double freq, uint32_t endDate)
 {
-    removeFromIntegers(&frequency_list, (int)freq, 2);
+    int intFreq = (int)freq;
+    struct Play *play = malloc(sizeof(struct Play));
+    play->frequency = freq;
+    play->endDate = endDate;
+    int *lenindex = indexOfLengthPlay(frequency_list, *play);
+    int index = lenindex[0];
+    free(lenindex);
+    if (index == -1)
+    {
+        free(play);
+        return;
+    }
+    removeFromPlays(&frequency_list, *play);
+    free(play);
+}
+void clearOCT()
+{
+    GPIOC->ODR &= ~(1 << 3);
+    GPIOC->ODR &= ~(1 << 2);
+    GPIOC->ODR &= ~(1 << 15);
+    GPIOC->ODR &= ~(1 << 14);
+    GPIOA->ODR &= ~(1 << 14);
+    GPIOC->ODR &= ~(1 << 0);
+}
+void outputinit(GPIO_TypeDef *GPIO, uint16_t pin)
+{
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitStruct.Pin = pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(GPIO, &GPIO_InitStruct);
+}
+void initOCT()
+{
+    outputinit(GPIOC, GPIO_PIN_3);
+    outputinit(GPIOC, GPIO_PIN_2);
+    outputinit(GPIOC, GPIO_PIN_15);
+    outputinit(GPIOC, GPIO_PIN_14);
+    outputinit(GPIOA, GPIO_PIN_14);
+    outputinit(GPIOC, GPIO_PIN_0);
+}
+void checkOct(int freq)
+{
+    if ((freq > 32) && (freq < 65))
+    {
+        GPIOC->ODR |= (1 << 3);
+    }
+    if ((freq > 64) && (freq < 132))
+    {
+        GPIOC->ODR |= (1 << 2);
+    }
+    if ((freq > 130) && (freq < 263))
+    {
+        GPIOC->ODR |= (1 << 15);
+    }
+    if ((freq > 262) && (freq < 524))
+    {
+        GPIOC->ODR |= (1 << 14);
+    }
+    if ((freq > 522) && (freq < 1048))
+    {
+        GPIOA->ODR |= (1 << 14);
+    }
+    if ((freq > 1046) && (freq < 2094))
+    {
+        GPIOC->ODR |= (1 << 0);
+    }
 }
 double lastDateFrequency = 0.0;
 int frequencyIndex = 0;
@@ -122,30 +203,45 @@ int currentFrequency[4] = {0, 0, 0, 0};
 int lastSwitchTime = 1;
 void CheckFrequency()
 {
-
-    if (date() - lastDateFrequency <= lastSwitchTime)
+    uint32_t currentDate = date();
+    if (currentDate - lastDateFrequency <= lastSwitchTime)
         return;
-    int smallest = 0;
-   /* for (; frequency_list[i] != INT32_MAX; i++)
-        if (frequency_list[i] < smallest)
-            smallest = frequency_list[i];
-    lastSwitchTime = 20 - smallest / 100;*/
+    /* for (; frequency_list[i] != INT32_MAX; i++)
+         if (frequency_list[i] < smallest)
+             smallest = frequency_list[i];
+     lastSwitchTime = 20 - smallest / 100;*/
     lastDateFrequency = date();
-    if (frequency_list[0] == INT32_MAX)
+    clearOCT();
+    if (!frequency_list[0].frequency)
     {
         SetFrequency(0, 0);
-        return;
     }
-    // Update the last date frequency to now, to avoid spamming the buzzer
-    int i = 0;
-    for (int frequencyIndex=0; frequencyIndex <= 3; frequencyIndex++)
+    else
     {
-        if(frequency_list[i] == INT32_MAX){
-            SetFrequency(0, frequencyIndex);
-        }
-        else{
-            i++;
-            SetFrequency(frequency_list[frequencyIndex], frequencyIndex);
+        // Update the last date frequency to now, to avoid spamming the buzzer
+        volatile int i = 0;
+
+        for (int frequencyIndex = 0; frequency_list[i].frequency; frequencyIndex++)
+        {
+            if (frequency_list[i].endDate && currentDate > frequency_list[i].endDate)
+            {
+                RemoveFrequency(frequency_list[i].frequency, frequency_list[i].endDate);
+                if (i < 4)
+                    SetFrequency(0, frequencyIndex);
+                if (i > 0)
+                    i--;
+                continue;
+            }
+            if (i <= 3 && frequency_list[i].frequency == PlayVoid.frequency)
+            {
+                SetFrequency(0, frequencyIndex);
+            }
+            else
+            {
+                i++;
+                SetFrequency(frequency_list[frequencyIndex].frequency, frequencyIndex);
+                checkOct(frequency_list[frequencyIndex].frequency);
+            }
         }
     }
 }

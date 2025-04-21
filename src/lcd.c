@@ -134,9 +134,9 @@ double lastDateLCD = 0;
 void checkLCDWrites()
 {
 	double currentDate = date();
-	if (currentDate - lastDateLCD < 10) // 1ms delay between writes to LCD
-		return;							// not enough time has passed since last write to LCD, return and wait for next check
-	lastDateLCD = currentDate;			// update the last date LCD was written to
+	if (currentDate - lastDateLCD < 1) // 1ms delay between writes to LCD
+		return;						   // not enough time has passed since last write to LCD, return and wait for next check
+	lastDateLCD = currentDate;		   // update the last date LCD was written to
 	if (writingInstruction == 0)
 	{
 		currentWrite = popWrites();
@@ -302,7 +302,7 @@ void Set_CursorPosition(uint8_t line, uint8_t position)
 void LCD_Init()
 {
 	for (int i = 0; i < 32; i++)
-		cacheLCD.string[i] = 0;
+		cacheLCD.string[i] = ' ';
 	cacheLCD.string[32] = '\0'; // ensure null termination for safety, though it should not be used in the string directly
 	cacheLCD.line = 0;			// default line 0
 	cacheLCD.position = 0;		// default position 0
@@ -335,11 +335,11 @@ void LCD_Init()
 	/* move cursor to right (entry mode set instruction)*/
 }
 
-void Write_String_Sector_LCD(uint8_t sector, char* string)
+void Write_String_Sector_LCD(uint8_t sector, char *string)
 {
 	uint8_t lastPosition = cacheLCD.position;
 	uint8_t lastLine = cacheLCD.line;
-	Set_CursorPosition(sector/4, (sector%4)*4);
+	Set_CursorPosition(sector / 4, (sector % 4) * 4);
 	Write_String_LCD(string);
 	Set_CursorPosition(lastLine, lastPosition);
 }

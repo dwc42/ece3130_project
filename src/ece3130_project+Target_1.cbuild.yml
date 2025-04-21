@@ -1,0 +1,221 @@
+build:
+  generated-by: csolution version 2.8.0
+  solution: ece3130_project.csolution.yml
+  project: ece3130_project.cproject.yml
+  context: ece3130_project+Target_1
+  compiler: AC6
+  device: STMicroelectronics::STM32L476RGTx
+  device-pack: Keil::STM32L4xx_DFP@3.0.0
+  device-books:
+    - name: https://www.st.com/resource/en/reference_manual/rm0351-stm32l47xxx-stm32l48xxx-stm32l49xxx-and-stm32l4axxx-advanced-armbased-32bit-mcus-stmicroelectronics.pdf
+      title: STM32L47xxx, STM32L48xxx, STM32L49xxx and STM32L4Axxx Reference Manual
+    - name: https://www.st.com/resource/en/datasheet/stm32l476je.pdf
+      title: STM32L476xx Data Sheet
+    - name: https://developer.arm.com/documentation/dui0553/latest/
+      title: Cortex-M4 Generic User Guide
+  dbgconf:
+    - file: RTE/Device/STM32L476RGTx/STM32L4x5_4x6.dbgconf
+      version: 0.0.0
+      status: missing file
+  processor:
+    dsp: on
+    endian: little
+    fpu: sp
+    core: Cortex-M4
+  packs:
+    - pack: ARM::CMSIS@6.1.0
+      path: ${CMSIS_PACK_ROOT}/ARM/CMSIS/6.1.0
+    - pack: Keil::STM32L4xx_DFP@3.0.0
+      path: ${CMSIS_PACK_ROOT}/Keil/STM32L4xx_DFP/3.0.0
+  optimize: debug
+  debug: on
+  misc:
+    ASM:
+      - -masm=auto
+    C:
+      - -std=c99
+      - -fno-rtti
+      - -funsigned-char
+      - -fshort-enums
+      - -fshort-wchar
+      - -ffunction-sections
+      - -Wall
+      - -Wextra
+      - -Wno-packed
+      - -Wno-reserved-id-macro
+      - -Wno-unused-macros
+      - -Wno-documentation-unknown-command
+      - -Wno-documentation
+      - -Wno-license-management
+      - -Wno-parentheses-equality
+    CPP:
+      - -xc++
+      - -std=c++11
+      - -fno-exceptions
+      - -fno-rtti
+      - -funsigned-char
+      - -fshort-enums
+      - -fshort-wchar
+      - -ffunction-sections
+      - -Wall
+      - -Wextra
+      - -Wno-packed
+      - -Wno-reserved-id-macro
+      - -Wno-unused-macros
+      - -Wno-documentation-unknown-command
+      - -Wno-documentation
+      - -Wno-license-management
+      - -Wno-parentheses-equality
+    Link:
+      - --map
+      - --load_addr_map_info
+      - --xref
+      - --callgraph
+      - --symbols
+      - --info sizes
+      - --info totals
+      - --info unused
+      - --info veneers
+      - --strict
+      - --summary_stderr
+      - --info summarysizes
+  define:
+    - USE_HAL_DRIVER
+    - STM32L476xx
+    - STM32L476xx
+    - _RTE_
+  define-asm:
+    - STM32L476xx
+    - _RTE_
+  add-path:
+    - .
+    - STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Inc
+    - STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Inc/Legacy
+    - STM32CubeMX/Target_1/STM32CubeMX/Drivers/CMSIS/Device/ST/STM32L4xx/Include
+    - STM32CubeMX/Target_1/STM32CubeMX/Inc
+    - STM32CubeMX/Target_1/MX_Device
+    - RTE/_Target_1
+    - ${CMSIS_PACK_ROOT}/ARM/CMSIS/6.1.0/CMSIS/Core/Include
+  add-path-asm:
+    - RTE/_Target_1
+    - ${CMSIS_PACK_ROOT}/ARM/CMSIS/6.1.0/CMSIS/Core/Include
+  output-dirs:
+    intdir: tmp
+    outdir: out/ece3130_project/Target_1
+    rtedir: RTE
+  output:
+    - type: elf
+      file: ece3130_project.axf
+  components:
+    - component: ARM::CMSIS:CORE@6.1.0
+      condition: ARMv6_7_8-M Device
+      from-pack: ARM::CMSIS@6.1.0
+      selected-by: ARM::CMSIS:CORE
+      files:
+        - file: ${CMSIS_PACK_ROOT}/ARM/CMSIS/6.1.0/CMSIS/Core/Include
+          category: include
+          version: 6.1.0
+        - file: ${CMSIS_PACK_ROOT}/ARM/CMSIS/6.1.0/CMSIS/Core/Include/tz_context.h
+          category: header
+          version: 6.1.0
+        - file: ${CMSIS_PACK_ROOT}/ARM/CMSIS/6.1.0/CMSIS/Core/Template/ARMv8-M/main_s.c
+          category: sourceC
+          attr: template
+          version: 1.1.1
+          select: Secure mode 'main' module for ARMv8-M
+        - file: ${CMSIS_PACK_ROOT}/ARM/CMSIS/6.1.0/CMSIS/Core/Template/ARMv8-M/tz_context.c
+          category: sourceC
+          attr: template
+          version: 1.1.1
+          select: RTOS Context Management (TrustZone for ARMv8-M)
+        - file: ${CMSIS_PACK_ROOT}/ARM/CMSIS/6.1.0/CMSIS/Documentation/html/Core/index.html
+          category: doc
+          version: 6.1.0
+    - component: Keil::Device:CubeMX@1.0.0
+      condition: STM32L4 CMSIS
+      from-pack: Keil::STM32L4xx_DFP@3.0.0
+      selected-by: Keil::Device:CubeMX
+      files:
+        - file: https://github.com/Open-CMSIS-Pack/cmsis-toolbox/blob/main/docs/CubeMX.md
+          category: doc
+          version: 1.0.0
+      generator:
+        id: CubeMX
+        path: STM32CubeMX/Target_1/ece3130_project.cgen.yml
+  linker:
+    script: RTE/Device/STM32L476RGTx/ac6_linker_script.sct.src
+    regions: RTE/Device/STM32L476RGTx/regions_STM32L476RGTx.h
+  groups:
+    - group: Source Group 1
+      files:
+        - file: buzzer.c
+          category: sourceC
+        - file: date.c
+          category: sourceC
+        - file: events.c
+          category: sourceC
+        - file: lcd.c
+          category: sourceC
+        - file: list.c
+          category: sourceC
+        - file: run.c
+          category: sourceC
+    - group: CubeMX
+      files:
+        - file: STM32CubeMX/Target_1/STM32CubeMX/Src/main.c
+          category: sourceC
+        - file: STM32CubeMX/Target_1/STM32CubeMX/Src/stm32l4xx_it.c
+          category: sourceC
+        - file: STM32CubeMX/Target_1/STM32CubeMX/Src/stm32l4xx_hal_msp.c
+          category: sourceC
+        - file: STM32CubeMX/Target_1/STM32CubeMX/MDK-ARM/startup_stm32l476xx.s
+          category: sourceAsm
+        - file: STM32CubeMX/Target_1/STM32CubeMX/Src/system_stm32l4xx.c
+          category: sourceC
+    - group: STM32 HAL Driver
+      files:
+        - file: STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim.c
+          category: sourceC
+        - file: STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim_ex.c
+          category: sourceC
+        - file: STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c
+          category: sourceC
+        - file: STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc.c
+          category: sourceC
+        - file: STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc_ex.c
+          category: sourceC
+        - file: STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash.c
+          category: sourceC
+        - file: STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ex.c
+          category: sourceC
+        - file: STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c
+          category: sourceC
+        - file: STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_gpio.c
+          category: sourceC
+        - file: STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_i2c.c
+          category: sourceC
+        - file: STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_i2c_ex.c
+          category: sourceC
+        - file: STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma.c
+          category: sourceC
+        - file: STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma_ex.c
+          category: sourceC
+        - file: STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr.c
+          category: sourceC
+        - file: STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr_ex.c
+          category: sourceC
+        - file: STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.c
+          category: sourceC
+        - file: STM32CubeMX/Target_1/STM32CubeMX/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_exti.c
+          category: sourceC
+  constructed-files:
+    - file: RTE/_Target_1/RTE_Components.h
+      category: header
+  licenses:
+    - license: Apache-2.0
+      packs:
+        - pack: ARM::CMSIS@6.1.0
+        - pack: Keil::STM32L4xx_DFP@3.0.0
+      components:
+        - component: ARM::CMSIS:CORE@6.1.0
+        - component: Keil::Device:CubeMX@1.0.0
