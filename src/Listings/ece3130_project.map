@@ -2968,7 +2968,7 @@ Memory Map of the image
 
   Image Entry point : 0x08000285
 
-  Load Region LR_1 (Base: 0x08000000, Size: 0x00004980, Max: 0xffffffff, ABSOLUTE, COMPRESSED[0x000048d8])
+  Load Region LR_1 (Base: 0x08000000, Size: 0x00004980, Max: 0xffffffff, ABSOLUTE, COMPRESSED[0x000048d4])
 
     Execution Region ER_RO (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x0000480c, Max: 0xffffffff, ABSOLUTE)
 
@@ -3190,7 +3190,7 @@ Memory Map of the image
     0x080047ec   0x080047ec   0x00000020   Data   RO         1561    Region$$Table       anon$$obj.o
 
 
-    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x08004810, Size: 0x00000170, Max: 0xffffffff, ABSOLUTE, COMPRESSED[0x000000c8])
+    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x08004810, Size: 0x00000170, Max: 0xffffffff, ABSOLUTE, COMPRESSED[0x000000c4])
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -3209,18 +3209,18 @@ Memory Map of the image
     0x2000016c   COMPRESSED   0x00000004   Data   RW          669    .data.uwTickPrio    stm32l4xx_hal.o
 
 
-    Execution Region ER_ZI (Exec base: 0x20000170, Load base: 0x080048d8, Size: 0x000008a8, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_ZI (Exec base: 0x20000170, Load base: 0x080048d4, Size: 0x000008a8, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x20000170        -       0x00000060   Zero   RW         1371    .bss                c_w.l(libspace.o)
     0x200001d0        -       0x00000058   Zero   RW           74    .bss.Events         events.o
     0x20000228        -       0x00000023   Zero   RW          115    .bss.cacheLCD       lcd.o
-    0x2000024b   0x080048d8   0x00000001   PAD
+    0x2000024b   0x080048d4   0x00000001   PAD
     0x2000024c        -       0x00000010   Zero   RW           19    .bss.currentFrequency  buzzer.o
     0x2000025c        -       0x00000001   Zero   RW          118    .bss.currentWrite   lcd.o
     0x2000025d        -       0x00000001   Zero   RW          114    .bss.delayLCD       lcd.o
-    0x2000025e   0x080048d8   0x00000002   PAD
+    0x2000025e   0x080048d4   0x00000002   PAD
     0x20000260        -       0x00000004   Zero   RW           16    .bss.frequency_list  buzzer.o
     0x20000264        -       0x0000004c   Zero   RW          198    .bss.htim2          main.o
     0x200002b0        -       0x00000130   Zero   RW           14    .bss.htimEXT        buzzer.o
@@ -3228,13 +3228,13 @@ Memory Map of the image
     0x200003e8        -       0x00000008   Zero   RW          120    .bss.lastDateLCD    lcd.o
     0x200003f0        -       0x00000004   Zero   RW          177    .bss.modeCycle      run.o
     0x200003f4        -       0x00000001   Zero   RW          178    .bss.presetIndex    run.o
-    0x200003f5   0x080048d8   0x00000003   PAD
+    0x200003f5   0x080048d4   0x00000003   PAD
     0x200003f8        -       0x00000004   Zero   RW          116    .bss.sr_writes      lcd.o
     0x200003fc        -       0x00000004   Zero   RW          117    .bss.sr_writeslength  lcd.o
     0x20000400        -       0x00000010   Zero   RW          179    .bss.switch_Menu    run.o
     0x20000410        -       0x00000004   Zero   RW          671    .bss.uwTick         stm32l4xx_hal.o
     0x20000414        -       0x00000001   Zero   RW          119    .bss.writingInstruction  lcd.o
-    0x20000415   0x080048d8   0x00000003   PAD
+    0x20000415   0x080048d4   0x00000003   PAD
     0x20000418        -       0x00000200   Zero   RW          249    HEAP                startup_stm32l476xx.o
     0x20000618        -       0x00000400   Zero   RW          248    STACK               startup_stm32l476xx.o
 
@@ -3246,28 +3246,28 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       966         32          0        132        332       9516   buzzer.o
-        96          8          0          0          0       1540   date.o
-      2494          8          0         20         88      15912   events.o
-      1592          8          0          1         54      10683   lcd.o
-       634          0          0          0          0       8222   list.o
-       358          0          0          0         76       8130   main.o
-       870          8          0        196         21       6310   run.o
-        64         26        392          0       1536        948   startup_stm32l476xx.o
-       198          0          0          5          4       9021   stm32l4xx_hal.o
-       162          0          0          0          0      10889   stm32l4xx_hal_cortex.o
-       476          0          0          0          0       5428   stm32l4xx_hal_gpio.o
-       174          0          0          0          0       5782   stm32l4xx_hal_msp.o
-       156          0          0          0          0       9766   stm32l4xx_hal_pwr_ex.o
-      2430          0          0          0          0      11927   stm32l4xx_hal_rcc.o
-        18          0          0          0          0      13820   stm32l4xx_hal_rcc_ex.o
-      2432         22          0          0          0      60879   stm32l4xx_hal_tim.o
-       356          0          0          0          0      23370   stm32l4xx_hal_tim_ex.o
-        20          0          0          0          0       1243   stm32l4xx_it.o
-        18          0         64          4          0       3170   system_stm32l4xx.o
+       966         32          0        132        332       9528   buzzer.o
+        96          8          0          0          0       1547   date.o
+      2494          8          0         20         88      15913   events.o
+      1592          8          0          1         54      10695   lcd.o
+       634          0          0          0          0       8237   list.o
+       358          0          0          0         76       8137   main.o
+       870          8          0        196         21       6322   run.o
+        64         26        392          0       1536        964   startup_stm32l476xx.o
+       198          0          0          5          4       9028   stm32l4xx_hal.o
+       162          0          0          0          0      10896   stm32l4xx_hal_cortex.o
+       476          0          0          0          0       5440   stm32l4xx_hal_gpio.o
+       174          0          0          0          0       5794   stm32l4xx_hal_msp.o
+       156          0          0          0          0       9773   stm32l4xx_hal_pwr_ex.o
+      2430          0          0          0          0      11939   stm32l4xx_hal_rcc.o
+        18          0          0          0          0      13832   stm32l4xx_hal_rcc_ex.o
+      2432         22          0          0          0      60891   stm32l4xx_hal_tim.o
+       356          0          0          0          0      23382   stm32l4xx_hal_tim_ex.o
+        20          0          0          0          0       1258   stm32l4xx_it.o
+        18          0         64          4          0       3177   system_stm32l4xx.o
 
     ----------------------------------------------------------------------
-     13596        112        490        368       2120     216556   Object Totals
+     13596        112        490        368       2120     216753   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         82          0          2         10          9          0   (incl. Padding)
 
@@ -3354,15 +3354,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     17954        398        490        368       2216     218240   Grand Totals
-     17954        398        490        200       2216     218240   ELF Image Totals (compressed)
-     17954        398        490        200          0          0   ROM Totals
+     17954        398        490        368       2216     218437   Grand Totals
+     17954        398        490        196       2216     218437   ELF Image Totals (compressed)
+     17954        398        490        196          0          0   ROM Totals
 
 ==============================================================================
 
     Total RO  Size (Code + RO Data)                18444 (  18.01kB)
     Total RW  Size (RW Data + ZI Data)              2584 (   2.52kB)
-    Total ROM Size (Code + RO Data + RW Data)      18644 (  18.21kB)
+    Total ROM Size (Code + RO Data + RW Data)      18640 (  18.20kB)
 
 ==============================================================================
 
