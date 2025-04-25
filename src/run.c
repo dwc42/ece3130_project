@@ -149,31 +149,31 @@ void update_SW_Menu()
 	char sector6New[4] = {0, 0, 0, 0};
 	char sector7New[4] = {0, 0, 0, 0};
 	;
-	switch (modeCycle)
+	switch (modeCycle)          // switch case for each mode we have
+	{ 
+	case 0:        
 	{
-	case 0:
-	{
-		if (presetIndex == 0)
+		if (presetIndex == 0)          
 		{
-			strcpy(sector4New, "3&4");
+			strcpy(sector4New, "3&4");    // prints octaves 3 and 4 to LCD
 		}
-		else if (presetIndex == 1)
+		else if (presetIndex == 1)         
 		{
 
-			strcpy(sector4New, "1&2");
+			strcpy(sector4New, "1&2");       // shows octaves 1 and 2
 		}
-		else if (presetIndex == 2)
+		else if (presetIndex == 2)     // mode 2
 		{
-			strcpy(sector4New, "5&6");
+			strcpy(sector4New, "5&6");     // prints octaves 5 and 6 to LCD
 		}
-		strcpy(sector7New, "M#0");
+		strcpy(sector7New, "M#0");     //    prints info to the sectors on mode 0
 		strcpy(sector5New, "TRC");
 		//strcpy(sector6New, "TPB");
 		break;
 	}
-	case 1:
+	case 1:                             
 	{
-		strcpy(sector4New, "PDD");
+		strcpy(sector4New, "PDD");    // these following lines update LCD in affected sectors with new chars
 		strcpy(sector5New, "TRP");
 		strcpy(sector7New, "M#1");
 		//strcpy(sector6New, "   ");
@@ -189,9 +189,9 @@ void update_SW_Menu()
 	}
 	}
 
-	if (sector4New[0] && !compareStrings(sector4New, switch_Menu[0]))
-	{
-		strcpy(switch_Menu[0], sector4New);
+	if (sector4New[0] && !compareStrings(sector4New, switch_Menu[0]))      // these following lines are what allow us to to change the
+	{                                                                      // LCD based on inputs in switch statement above
+		strcpy(switch_Menu[0], sector4New);   
 		Write_String_Sector_LCD(4, sector4New);
 	}
 
