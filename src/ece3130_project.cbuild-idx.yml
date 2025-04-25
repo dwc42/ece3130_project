@@ -1,0 +1,23 @@
+build-idx:
+  generated-by: csolution version 2.8.0
+  csolution: ece3130_project.csolution.yml
+  tmpdir: tmp
+  cprojects:
+    - cproject: ece3130_project.cproject.yml
+  cbuilds:
+    - cbuild: ece3130_project+Target_1.cbuild.yml
+      project: ece3130_project
+      configuration: +Target_1
+      clayers:
+        - clayer: STM32CubeMX/Target_1/ece3130_project.cgen.yml
+      errors: true
+      messages:
+        errors:
+          - file 'C:/Users/mrpat/OneDrive/Documents/ECE3130/Hardware/ece3130_project/src/RTE/Device/STM32L476RGTx/STM32L4x5_4x6.dbgconf' not found; use --update-rte
+        info:
+          - ece3130_project.cbuild-pack.yml - file is already up-to-date
+          - ece3130_project+Target_1.cbuild-run.yml - file generated successfully
+          - ece3130_project+Target_1.cbuild.yml - file is already up-to-date
+      packs-unused:
+        - pack: ARM::CMSIS-DSP@1.16.2
+        - pack: ARM::CMSIS-NN@4.1.0

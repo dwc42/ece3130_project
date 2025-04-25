@@ -1,5 +1,7 @@
 #ifndef __LIST_H
 #define __LIST_H
+#include <stdint.h>
+#include "config.h"
 /**
  * @brief Gets the length of a list of integers, the list must be terminated with a INT_MAX
  * @note The list must be terminated with a INT_MAX, this function will not check for this
@@ -46,13 +48,22 @@ struct Sample
 	int timeSinceFirstPressEnd;
 	int frequency;
 };
+struct Play
+{
+	uint32_t endDate;
+	int frequency;
+};
 extern struct Press PressVoid;
 extern struct Sample SampleVoid;
+extern struct Play PlayVoid;
 // int lengthPress(struct Press *list);
-int lengthSample(struct Sample *list);
+uint32_t lengthPlays(struct Play list[MAX_PLAYS]);
+uint32_t lengthSample(struct Sample *list);
 // int pushPress(struct Press **list, struct Press item);
-int pushSample(struct Sample **list, struct Sample item);
+int pushSample(struct Sample list[MAX_SAMPLES], struct Sample item);
 // int *indexOfLengthPress(struct Press *list, struct Press item);
 // void removeFromPresses(struct Press **list, struct Press value);
-
+int pushPlay(struct Play list[MAX_PLAYS], struct Play item);
+int *indexOfLengthPlay(struct Play list[MAX_PLAYS], struct Play item);
+void removeFromPlays(struct Play list[MAX_PLAYS], struct Play value);
 #endif /*__LIST_H*/

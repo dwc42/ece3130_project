@@ -1,0 +1,24 @@
+{
+	"cmsis-csolution.actions": [
+		{
+			"path": "ece3130_project.csolution.yml",
+			"target": "Target_1",
+			"config": {
+				"run": "Flash Device",
+				"debug": "Arm Debugger"
+			},
+			"projects": [
+				{
+					"path": "ece3130_project.cproject.yml",
+					"config": {
+						"run": "Flash Device"
+					}
+				}
+			]
+		}
+	],
+	"files.associations": {
+		"stm32l4xx_hal.h": "c",
+		"stdint.h": "c"
+	}
+}

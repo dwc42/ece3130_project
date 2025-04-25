@@ -72,37 +72,16 @@ uint8_t Write_SR_LCD_Direct_GEN(uint8_t temp)
 	maskLCD = maskLCD >> 1;
 	return 0;
 }
-uint8_t *sr_writes = NULL;
+uint8_t sr_writes[200];
 int sr_writeslength = 0;
 void Write_SR_LCD(uint8_t temp)
 {
-	if (sr_writes == NULL)
-	{
-		sr_writes = malloc(sizeof(uint8_t));
-		sr_writes[0] = temp;
-		sr_writeslength = 1;
-		return;
-	}
-	uint8_t *new_list = malloc(sizeof(uint8_t) * (sr_writeslength + 1));
-	new_list[0] = temp;
-	for (int i = 0; i < sr_writeslength; i++)
-	{
-		new_list[i + 1] = sr_writes[i];
-	}
-
-	free(sr_writes);
-	sr_writes = new_list;
-	sr_writeslength++;
+	sr_writes[++sr_writeslength] = temp;
 }
 uint8_t currentWrite = 0;
 uint8_t writingInstruction = 0;
 uint8_t popWrites()
 {
-	if (sr_writes == NULL)
-	{
-		writingInstruction = 0;
-		return 0;
-	}
 	if (sr_writeslength == 0)
 	{
 		writingInstruction = 0;
@@ -110,33 +89,30 @@ uint8_t popWrites()
 	}
 	if (sr_writeslength == 1)
 	{
-		uint8_t last = sr_writes[0]; // if there is only one element, return it and set the list to NULL
-		free(sr_writes);
-		sr_writes = NULL;
+		uint8_t first = sr_writes[0]; // if there is only one element, return it and set the list to NULL
 		writingInstruction = 1;
 		sr_writeslength = 0;
-		return last;
+		sr_writes[0] = 0; // Set the first element to UINT8_MAX to indicate that the list is empty
+		return first;
 	}
-	uint8_t last = sr_writes[sr_writeslength - 1];
-	uint8_t *new_list = malloc(sizeof(uint8_t) * (sr_writeslength - 1));
-	for (int i = 0; i < sr_writeslength - 1; i++)
+	uint8_t first = sr_writes[0];
+	for (int i = 0; i < sr_writeslength; i++)
 	{
-		new_list[i] = sr_writes[i];
+		sr_writes[i] = sr_writes[i + 1];
 	}
-	free(sr_writes);
-	sr_writes = new_list;
-	sr_writeslength--;
+	sr_writes[sr_writeslength--] = 0;
 	writingInstruction = 1;
-	return last;
+	return first;
 }
 double lastDateLCD = 0;
 
 void checkLCDWrites()
 {
 	double currentDate = date();
-	if (currentDate - lastDateLCD < 2) // 1ms delay between writes to LCD
-		return;							// not enough time has passed since last write to LCD, return and wait for next check
-	lastDateLCD = currentDate;			// update the last date LCD was written to
+	/*if (currentDate - lastDateLCD < 2) // 1ms delay between writes to LCD
+		return;*/
+	// not enough time has passed since last write to LCD, return and wait for next check
+	lastDateLCD = currentDate; // update the last date LCD was written to
 	if (writingInstruction == 0)
 	{
 		currentWrite = popWrites();
@@ -301,8 +277,10 @@ void Set_CursorPosition(uint8_t line, uint8_t position)
 
 void LCD_Init()
 {
+	for (int i = 0; i < 200; i++)
+		sr_writes[i] = 0; // initialize the sr_writes array to 0
 	for (int i = 0; i < 32; i++)
-		cacheLCD.string[i] = 0;
+		cacheLCD.string[i] = ' ';
 	cacheLCD.string[32] = '\0'; // ensure null termination for safety, though it should not be used in the string directly
 	cacheLCD.line = 0;			// default line 0
 	cacheLCD.position = 0;		// default position 0
@@ -335,11 +313,11 @@ void LCD_Init()
 	/* move cursor to right (entry mode set instruction)*/
 }
 
-void Write_String_Sector_LCD(uint8_t sector, char* string)
+void Write_String_Sector_LCD(uint8_t sector, char *string)
 {
 	uint8_t lastPosition = cacheLCD.position;
 	uint8_t lastLine = cacheLCD.line;
-	Set_CursorPosition(sector/4, (sector%4)*4);
+	Set_CursorPosition(sector / 4, (sector % 4) * 4);
 	Write_String_LCD(string);
 	Set_CursorPosition(lastLine, lastPosition);
 }

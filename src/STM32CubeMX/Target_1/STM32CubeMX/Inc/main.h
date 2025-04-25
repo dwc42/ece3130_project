@@ -55,6 +55,7 @@ extern "C"
   /* Exported functions prototypes ---------------------------------------------*/
   void Error_Handler(void);
   extern TIM_HandleTypeDef htim2;
+  extern uint32_t startSTackPointer;
   /* USER CODE BEGIN EFP */
 
   /* USER CODE END EFP */

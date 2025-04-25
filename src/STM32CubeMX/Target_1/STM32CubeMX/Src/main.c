@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "run.h"
+#include "stdint.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -41,7 +42,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 TIM_HandleTypeDef htim2;
-
+uint32_t startSTackPointer;
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -58,14 +59,20 @@ static void MX_TIM2_Init(void);
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
-
+void initStackPointer(void)
+{
+  startSTackPointer = checkMemoryUsage(); // Get the current value of the Main Stack Pointer (MSP)
+  // This can be used for debugging or monitoring stack usage
+  // It is not directly related to the functionality of the application
+  // but can be useful for performance analysis or debugging purposes
+}
 /**
  * @brief  The application entry point.
  * @retval int
  */
 int main(void)
 {
-
+  initStackPointer(); // Initialize the stack pointer at the start of the program
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
