@@ -48,7 +48,7 @@ void recordMusicPress(enum KEYPAD key)
 {
     if (!recording)
         return;
-    uint32_t frequency = Frequencies[presetIndex][key];
+    uint32_t frequency = newFrequencies[presetIndex][key].frequency;
     if (!frequency)
         return;
     struct Sample *sample = malloc(sizeof(struct Sample));
@@ -70,7 +70,7 @@ void recordMusicRelease(enum KEYPAD key)
 {
     if (!recording)
         return;
-    uint32_t frequency = Frequencies[presetIndex][key];
+    uint32_t frequency = newFrequencies[presetIndex][key].frequency;
     if (!frequency)
         return;
     uint32_t ReleaseDate = (uint32_t)date();
@@ -147,7 +147,7 @@ void playRecording()
         {
             continue;
         }
-        uint32_t endDateSample = currentDate + (sample.timeSinceFirstPressEnd - sample.timeSinceFirstPressStart);
+        uint32_t endDateSample = ChannelStartDates[i] + sample.timeSinceFirstPressEnd;
 
         AddFrequency(sample.frequency, endDateSample);
         ChannelIndexes[i]++;
