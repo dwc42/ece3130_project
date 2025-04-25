@@ -166,7 +166,7 @@ void togglePlayBack()
 {
     if (playBack)
     {
-        return;
+        
         ChannelStartDates[0] = 0;
         ChannelStartDates[1] = 0;
         ChannelStartDates[2] = 0;
@@ -175,10 +175,12 @@ void togglePlayBack()
         {
             if (frequency_list->endDate == 0)
                 continue;
-            removeFromPlays(&frequency_list, frequency_list[i]);
+            removeFromPlays(frequency_list, frequency_list[i]);
             if (i > 0)
                 i--;
         }
+				playBack =0;
+				return;
     }
     playBack = 1;
 }
