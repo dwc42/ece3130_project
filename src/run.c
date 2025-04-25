@@ -36,9 +36,7 @@ void EnableClock()
 // 	str[1] = '\0';
 // 	return str;
 // }
-int modeCycle = 0;
-uint8_t presetIndex = 0;
-int Frequencies[3][16] =
+	struct NoteProperties
 	{
 		{175, 262, 392, 0, 165, 247, 349, 523, 147, 220, 330, 494, 131, 196, 292, 440},
 		{44, 65, 98, 0, 41, 62, 87, 131, 37, 55, 82, 123, 33, 49, 73, 110},
@@ -138,6 +136,8 @@ char *intToString(int number)
 	str[numDigits - 1] = '\0'; // Null-terminate the string
 	return str;
 }
+int modeCycle = 0;
+uint8_t presetIndex = 0;
 
 char switch_Menu[4][4];
 uint8_t compareStrings(char *string1, char *string2)
@@ -231,6 +231,12 @@ void update_SW_Menu()
 	}
 }
 
+int Frequencies[3][16] =
+	{
+		{131, 147, 165, 175, 196, 220, 247, 262, 294, 330, 349, 392, 440, 494, 523, 999},
+		{33, 37, 41, 44, 49, 55, 62, 65, 73, 82, 87, 98, 110, 123, 13, 9991},
+		{523, 587, 659, 698, 784, 880, 988, 1047, 1175, 1319, 1397, 1568, 1760, 1975, 2093, 999}};
+
 /*double Frequencies[16] = {1, 2, 3, 4,
 						  5, 6, 7, 8,
 						  9, 10, 11,
@@ -256,7 +262,6 @@ void keyPressCallback(enum KEYPAD key)
 		return;
 	AddFrequency(Frequencies[presetIndex][key], 0);
 	recordMusicPress(key);
-	displayFrequency(key);
 }
 
 void keyReleaseCallback(enum KEYPAD key)
@@ -339,17 +344,16 @@ int run(void)
 
 	EnableClock();
 	enable_tim_clocks();
+	initOCT();
 	// Init_LED(1);
 	// Init_LED(0);
 	LCD_Init();
 	InitEvents();
-	// initOCT();
 	Init_buzzerEXT(0);
 	Init_buzzerEXT(1);
 	Init_buzzerEXT(2);
 	Init_buzzerEXT(3);
-	 //HAL_Delay(1000);
-
+	// HAL_Delay(1000);
 	//    Init_buzzerEXT(0);
 	//   Init_buzzerEXT(1);
 	//   Init_buzzerEXT(0);
@@ -373,8 +377,8 @@ int run(void)
 	int startTime = (int)date();
 	// SetFrequency(1, 3);
 	int index1 = 0;
-	// AddFrequency(1000, 1000 + lastTime);
-	// DisplayNumber(1000, 0,0,0);
+	//AddFrequency(1000, 1000 + lastTime);
+
 	while (1)
 	{
 		CheckFrequency();

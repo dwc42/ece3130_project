@@ -149,8 +149,8 @@ void clearOCT()
 {
     GPIOC->ODR &= ~(1 << 3);
     GPIOC->ODR &= ~(1 << 2);
-    GPIOC->ODR &= ~(1 << 15);
-    GPIOC->ODR &= ~(1 << 14);
+    GPIOC->ODR &= ~(1 << 11);
+    GPIOC->ODR &= ~(1 << 10);
     GPIOA->ODR &= ~(1 << 14);
     GPIOC->ODR &= ~(1 << 0);
 }
@@ -167,8 +167,8 @@ void initOCT()
 {
     outputinit(GPIOC, GPIO_PIN_3);
     outputinit(GPIOC, GPIO_PIN_2);
-    outputinit(GPIOC, GPIO_PIN_15);
-    outputinit(GPIOC, GPIO_PIN_14);
+    outputinit(GPIOC, GPIO_PIN_11);
+    outputinit(GPIOC, GPIO_PIN_10);
     outputinit(GPIOA, GPIO_PIN_14);
     outputinit(GPIOC, GPIO_PIN_0);
 }
@@ -184,11 +184,11 @@ void checkOct(int freq)
     }
     if ((freq > 130) && (freq < 263))
     {
-        GPIOC->ODR |= (1 << 15);
+        GPIOC->ODR |= (1 << 11);
     }
     if ((freq > 262) && (freq < 524))
     {
-        GPIOC->ODR |= (1 << 14);
+        GPIOC->ODR |= (1 << 10);
     }
     if ((freq > 522) && (freq < 1048))
     {
