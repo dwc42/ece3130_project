@@ -114,8 +114,6 @@ void removeChannel(uint8_t channelIndex)
 {
     for (uint8_t i = channelIndex; ListChannel[i].defined && i < 4; i++)
     {
-        
-        
     }
 }
 uint32_t ChannelIndexes[4] = {0, 0, 0, 0}; // Array to keep track of the current index of each channel
@@ -138,6 +136,14 @@ void playRecording()
         /*struct Sample*/ sample = ListChannel[i].ListSample[channelIndex];
         if (sample.frequency == SampleVoid.frequency)
         {
+            if (channelIndex > 0)
+            {
+                uint32_t endDateSample = ChannelStartDates[i] + ListChannel[i].ListSample[channelIndex-1].timeSinceFirstPressEnd;
+                if (currentDate < endDateSample)
+                {
+                    continue; // If the current date is before the end date of the previous sample, skip to the next channel
+                }
+            }
             ChannelIndexes[i] = 0;
             ChannelStartDates[i] = (uint32_t)date();
             continue;
@@ -166,7 +172,7 @@ void togglePlayBack()
 {
     if (playBack)
     {
-        
+
         ChannelStartDates[0] = 0;
         ChannelStartDates[1] = 0;
         ChannelStartDates[2] = 0;
@@ -179,8 +185,8 @@ void togglePlayBack()
             if (i > 0)
                 i--;
         }
-				playBack =0;
-				return;
+        playBack = 0;
+        return;
     }
     playBack = 1;
 }
