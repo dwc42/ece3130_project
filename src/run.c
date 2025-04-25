@@ -230,6 +230,8 @@ void keyPressCallback(enum KEYPAD key)
 		return;
 	AddFrequency(newFrequencies[presetIndex][key].frequency, 0);
 	recordMusicPress(key);
+	displayFrequency(key);
+	
 }
 
 void keyReleaseCallback(enum KEYPAD key)
