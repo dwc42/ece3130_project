@@ -4,6 +4,7 @@
 #include <float.h>
 #include <stdint.h>
 #include "list.h"
+#include "config.h"
 int lengthIntegers(int *list)
 {
 	int len = 0;
@@ -83,17 +84,8 @@ void removeFromIntegers(int **list, int value, int precision)
 
 struct Press PressVoid = {0, 0};
 struct Sample SampleVoid = {0, 0, 0};
-uint32_t lengthPress(struct Press *list)
-{
-	uint32_t len = 0;
-	if (list == NULL)
-		return 0; // handle null pouint32_ter case
-	for (; list[len].pressDate != PressVoid.pressDate; len++)
-	{
-	}
-	return len;
-}
-uint32_t lengthSample(struct Sample *list)
+
+uint32_t lengthSample(struct Sample list[MAX_SAMPLES])
 {
 	uint32_t len = 0;
 	if (list == NULL)
@@ -103,101 +95,22 @@ uint32_t lengthSample(struct Sample *list)
 	}
 	return len;
 }
-uint32_t pushPress(struct Press **list, struct Press item)
+uint32_t len;
+int pushSample(struct Sample list[MAX_SAMPLES], struct Sample item)
 {
-	if (*list == NULL)
-	{
-		*list = malloc(sizeof(struct Press) * 2); // allocate space for one uint32_teger and uint32_t32_MAX terminator
-		(*list)[0] = item;
-		(*list)[1] = PressVoid; // set the terminator
-		return 0;
-	}
-	uint32_t len = lengthPress(*list);
-	struct Press *new_list = malloc((sizeof(struct Press) * (len + 2)));
-	for (uint32_t i = 0; i < len; i++)
-	{
-		new_list[i] = (*list)[i];
-	}
-	new_list[len] = item;
-	new_list[len + 1] = PressVoid; // set the terminator
-	free(*list);
-	*list = new_list;
+	len = lengthSample(list);
+	list[len] = item;
+	list[len + 1] = SampleVoid; // Set the terminator
 	return len;
 }
-int pushSample(struct Sample **list, struct Sample item)
-{
-	if (*list == NULL)
-	{
-		*list = malloc(sizeof(struct Sample) * 2); // allocate space for one uint32_teger and uint32_t32_MAX terminator
-		(*list)[0] = item;
-		(*list)[1] = SampleVoid; // set the terminator
-		return 0;
-	}
-	uint32_t len = lengthSample(*list);
-	struct Sample *new_list = malloc((sizeof(struct Sample) * (len + 2)));
-	for (uint32_t i = 0; i < len; i++)
-	{
-		new_list[i] = (*list)[i];
-	}
-	new_list[len] = item;
-	new_list[len + 1] = SampleVoid; // set the terminator
-	free(*list);
-	*list = new_list;
-	return len;
-}
-int *indexOfLengthPress(struct Press *list, struct Press item)
-{
-	uint32_t i = 0;
-	uint32_t index = -1;
-	for (; list[i].pressDate != PressVoid.pressDate; i++)
-	{
-		if (index <= -1 && list[i].pressDate == item.pressDate && list[i].RecordingIndex == item.RecordingIndex) // check for equality or within precision range
-		{
-			index = i; // found the first occurrence of the value
-		}
-	}
-	uint32_t *out = malloc(sizeof(uint32_t) * 2);
-	out[0] = index; // index of the value or -1 if not found
-	out[1] = i;		// length of the list
-	return out;
-}
-void removeFromPresses(struct Press **list, struct Press value)
-{
-	if (*list == NULL)
-		return; // handle null pouint32_ter case
 
-	uint32_t *dat = indexOfLengthPress(*list, value);
-	uint32_t indexFound = dat[0];
-	if (indexFound <= -1)
-	{
-		free(dat);
-		return; // value not found, nothing to remove
-	}
-	uint32_t len = dat[1];
-	free(dat);
-
-	// Create a new list without the found value
-	struct Press *new_list = malloc(sizeof(struct Press) * (len)); // +1 for uint32_t32_MAX terminator
-	uint32_t j = 0;
-	for (uint32_t i = 0; i < len; i++)
-	{
-		if (i != indexFound)
-		{
-			new_list[j++] = (*list)[i];
-		}
-	}
-	new_list[j] = PressVoid; // set the terminator
-
-	free(*list);
-	*list = new_list;
-}
 //
 //
 
 //
 //
 struct Play PlayVoid = {0, 0};
-uint32_t lengthPlay(struct Play *list)
+uint32_t lengthPlay(struct Play list[MAX_PLAYS])
 {
 	uint32_t len = 0;
 	if (list == NULL)
@@ -207,28 +120,17 @@ uint32_t lengthPlay(struct Play *list)
 	}
 	return len;
 }
-int pushPlay(struct Play **list, struct Play item)
+
+int pushPlay(struct Play list[MAX_PLAYS], struct Play item)
 {
-	if (*list == NULL)
-	{
-		*list = malloc(sizeof(struct Play) * 2); // allocate space for one uint32_teger and uint32_t32_MAX terminator
-		(*list)[0] = item;
-		(*list)[1] = PlayVoid; // set the terminator
-		return 0;
-	}
-	uint32_t len = lengthPlay(*list);
-	struct Play *new_list = malloc((sizeof(struct Play) * (len + 2)));
-	for (uint32_t i = 0; i < len; i++)
-	{
-		new_list[i] = (*list)[i];
-	}
-	new_list[len] = item;
-	new_list[len + 1] = PlayVoid; // set the terminator
-	free(*list);
-	*list = new_list;
-	return len;
+	uint32_t len = lengthPlay(list);
+	if (len >= MAX_PLAYS - 1)
+		return -1;
+	list[len] = item;
+	list[len + 1] = PlayVoid; // set the terminator
+	return len + 1;
 }
-int *indexOfLengthPlay(struct Play *list, struct Play item)
+int *indexOfLengthPlay(struct Play list[MAX_PLAYS], struct Play item)
 {
 	uint32_t i = 0;
 	int index = -1;
@@ -244,12 +146,9 @@ int *indexOfLengthPlay(struct Play *list, struct Play item)
 	out[1] = i;		// length of the list
 	return out;
 }
-void removeFromPlays(struct Play **list, struct Play value)
+void removeFromPlays(struct Play list[MAX_PLAYS], struct Play value)
 {
-	if (*list == NULL)
-		return; // handle null pouint32_ter case
-
-	int *dat = indexOfLengthPlay(*list, value);
+	int *dat = indexOfLengthPlay(list, value);
 	int indexFound = dat[0];
 	if (indexFound <= -1)
 	{
@@ -260,17 +159,13 @@ void removeFromPlays(struct Play **list, struct Play value)
 	free(dat);
 
 	// Create a new list without the found value
-	struct Play *new_list = malloc(sizeof(struct Play) * (len)); // +1 for uint32_t32_MAX terminator
 	int j = 0;
 	for (int i = 0; i < len; i++)
 	{
 		if (i != indexFound)
 		{
-			new_list[j++] = (*list)[i];
+			list[j++] = (list)[i];
 		}
 	}
-	new_list[j] = PlayVoid; // set the terminator
-
-	free(*list);
-	*list = new_list;
+	list[j] = PlayVoid; // set the terminator
 }

@@ -12,7 +12,7 @@
 #include "stm32l4xx_hal_rcc.h"
 #include "stm32l4xx_hal_tim.h"
 #include <stdint.h>
-struct Play *frequency_list; // List of frequencies, initialized to NULL
+struct Play frequency_list[20]; // List of frequencies, initialized to NULL
 
 // TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htimEXT[4] = {{0}, {0}, {0}, {0}};
@@ -56,6 +56,7 @@ TIM_HandleTypeDef htimEXT[4] = {{0}, {0}, {0}, {0}};
 //     sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
 //     sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
 // }
+
 void enable_tim_clocks()
 {
     __HAL_RCC_TIM2_CLK_ENABLE();
@@ -80,8 +81,10 @@ struct timer timers[4] = {
 void Init_buzzerEXT(uint8_t timer)
 {
     // Initialize the frequency list if it hasn't been done yet
-    frequency_list = malloc(sizeof(PlayVoid)); // allocate space for one integer and INT32_MAX terminator
-    frequency_list[0] = PlayVoid;              // set the terminator
+    for (int i = 0; i < 20; i++)
+    {
+        frequency_list[i] = PlayVoid;
+    }
 
     GPIO_InitTypeDef GPIO_InitStruct = {0};
 
@@ -122,7 +125,6 @@ void AddFrequency(double freq, uint32_t endDate)
         free(play);
         return;
     }
-
     pushPlay(&frequency_list, *play);
     free(play);
 }
@@ -227,7 +229,7 @@ void CheckFrequency()
             {
                 SetFrequency(0, frequencyIndex);
             }
-						else if (frequency_list[i].endDate && currentDate > frequency_list[i].endDate)
+            else if (frequency_list[i].endDate && currentDate > frequency_list[i].endDate)
             {
                 RemoveFrequency(frequency_list[i].frequency, frequency_list[i].endDate);
                 if (i < 4)
@@ -237,7 +239,7 @@ void CheckFrequency()
             }
             else
             {
-							
+
                 i++;
                 SetFrequency(frequency_list[frequencyIndex].frequency, frequencyIndex);
                 checkOct(frequency_list[frequencyIndex].frequency);

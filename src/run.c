@@ -44,54 +44,63 @@ int Frequencies[3][16] =
 		{44, 65, 98, 0, 41, 62, 87, 131, 37, 55, 82, 123, 33, 49, 73, 110},
 		{698, 1047, 1568, 0, 659, 988, 1397, 2093, 587, 880, 1319, 1975, 523, 784, 1175, 1760}};
 struct NoteProperties
- 	{
-		uint16_t frequencies;
- 		char octaves;
- 		char note;
+{
+	uint16_t frequencies;
+	char octaves;
+	char note;
+};
+struct NoteProperties newFrequencies[3][16] =
+	{
+		{{
+			 175,
+			 '3',
+			 'F',
+		 },
+		 {262, '4', 'C'},
+		 {392, '4', 'G'},
+		 {165, '3', 'E'},
+		 {247, '3', 'B'},
+		 {349, '4', 'F'},
+		 {523, '5', 'C'},
+		 {147, '3', 'D'},
+		 {220, '3', 'A'},
+		 {330, '4', 'E'},
+		 {494, '4', 'B'},
+		 {131, '3', 'C'},
+		 {196, '3', 'G'},
+		 {292, '4', 'D'},
+		 {440, '4', 'A'}},
+		{{44, '1', 'F'}, {65, '2', 'C'}, {98, '2', 'G'}, {41, '1', 'E'}, {62, '1', 'B'}, {87, '2', 'F'}, {131, '3', 'C'}, {37, '1', 'D'}, {55, '1', 'A'}, {82, '2', 'E'}, {123, '2', 'B'}, {33, '1', 'C'}, {49, '1', 'G'}, {73, '2', 'D'}, {110, '2', 'A'}},
+		{{698, '5', 'F'}, {1047, '6', 'C'}, {1568, '6', 'G'}, {659, '5', 'E'}, {988, '5', 'B'}, {1397, '6', 'F'}, {2093, '7', 'C'}, {587, '5', 'D'}, {880, '5', 'A'}, {1319, '6', 'E'}, {1975, '6', 'B'}, {523, '5', 'C'}, {784, '5', 'G'}, {1175, '6', 'D'}, {1760, '6', 'A'}},
+};
 
- 	};
- struct NoteProperties newFrequencies[3][16] =
- 	{
-		{ {175,'3','F',},{262,'4','C'},{392,'4','G'},{165,'3','E'},{247,'3','B'},{349,'4','F'},{523,'5','C'},{147,'3','D'},{220,'3','A'},{330,'4','E'},{494,'4','B'},{131,'3','C'},{196,'3','G'},{292,'4','D'},{440,'4','A'} },
-		{ {44,'1','F'},{65,'2','C'},{98,'2','G'},{41,'1','E'},{62,'1','B'},{87,'2','F'},{131,'3','C'},{37,'1','D'},{55,'1','A'},{82,'2','E'},{123,'2','B'},{33,'1','C'},{49,'1','G'},{73,'2','D'},{110,'2','A'} },
-		{ {698,'5','F'},{1047,'6','C'},{1568,'6','G'},{659,'5','E'},{988,'5','B'},{1397,'6','F'},{2093,'7','C'},{587,'5','D'},{880,'5','A'},{1319,'6','E'},{1975,'6','B'},{523,'5','C'},{784,'5','G'},{1175,'6','D'},{1760,'6','A'} },
-	};
+void DisplayNumber(long num, int8_t line, int8_t position, uint8_t from)
+{
 
+	int logOf = (int)log10(num);
+	if ((line != -1) && (position != -1))
+		Set_CursorPosition(line, from ? position - logOf - ((num < 0) ? 1 : 0) : position);
+	if (num < 0)
+		Write_Char_LCD('-');
 
-	 void DisplayNumber(long num, int8_t line, int8_t position, uint8_t from)
-	 {
+	for (int i = logOf; i >= 0; i--)
+	{
+		uint8_t place = (int)num / (int)pow(10, i);
+		uint8_t digit = place % 10;
+		Write_Char_LCD(digit + '0');
+	}
+}
+void displayFrequency(enum KEYPAD key)
+{
+	struct NoteProperties noteProperties = newFrequencies[presetIndex][key];
 
-			int logOf = (int)log10(num);
-			if((line != -1) && (position != -1))
-			Set_CursorPosition(line, from ? position - logOf - ((num < 0) ? 1 : 0) : position);
-			if(num < 0)
-				Write_Char_LCD('-');
-
-			for (int i = logOf; i >= 0; i--)
-			{
-				uint8_t place = (int)num / (int)pow(10, i);
-				uint8_t digit = place % 10;
-				Write_Char_LCD(digit + '0');
-			}
- 		}
- 	void displayFrequency(enum KEYPAD key)
- 	{
- 	  struct NoteProperties noteProperties = newFrequencies[presetIndex][key];
-
-		Set_CursorPosition(0,0);
-		Write_Char_LCD(noteProperties.note);
-		Write_Char_LCD(noteProperties.octaves);
-		Write_Char_LCD(' ');
-		DisplayNumber(noteProperties.frequencies,-1, -1, 0);
-		Write_String_LCD("Hz");
- 	}
-
-
-
-
-
-
-
+	Set_CursorPosition(0, 0);
+	Write_Char_LCD(noteProperties.note);
+	Write_Char_LCD(noteProperties.octaves);
+	Write_Char_LCD(' ');
+	DisplayNumber(noteProperties.frequencies, -1, -1, 0);
+	Write_String_LCD("Hz");
+}
 
 char *intToString(int number)
 {
@@ -129,7 +138,6 @@ char *intToString(int number)
 	str[numDigits - 1] = '\0'; // Null-terminate the string
 	return str;
 }
-
 
 char switch_Menu[4][4];
 uint8_t compareStrings(char *string1, char *string2)
@@ -223,8 +231,6 @@ void update_SW_Menu()
 	}
 }
 
-
-
 /*double Frequencies[16] = {1, 2, 3, 4,
 						  5, 6, 7, 8,
 						  9, 10, 11,
@@ -311,9 +317,19 @@ void switchPressCallback(enum SWITCHS key)
 	update_SW_Menu();
 }
 
+#define HEAP_START 0x20000000 // Adjust based on your MCU's memory layout
+
+uint32_t checkMemoryUsage()
+{
+	uint32_t msp;							   // Main Stack Pointer
+	__asm volatile("MRS %0, msp" : "=r"(msp)); // Get the current value of MSP
+
+	return msp;
+}
 // double ticksArray[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 long test = 0;
 int digit = 0;
+uint32_t freeMemory = 0;
 /**
  * @brief  The application entry point.
  * @retval int
@@ -327,12 +343,12 @@ int run(void)
 	// Init_LED(0);
 	LCD_Init();
 	InitEvents();
-	initOCT();
+	// initOCT();
 	Init_buzzerEXT(0);
 	Init_buzzerEXT(1);
 	Init_buzzerEXT(2);
 	Init_buzzerEXT(3);
-	// HAL_Delay(1000);
+	 //HAL_Delay(1000);
 
 	//    Init_buzzerEXT(0);
 	//   Init_buzzerEXT(1);
@@ -357,17 +373,17 @@ int run(void)
 	int startTime = (int)date();
 	// SetFrequency(1, 3);
 	int index1 = 0;
-	//AddFrequency(1000, 1000 + lastTime);
-
+	// AddFrequency(1000, 1000 + lastTime);
+	// DisplayNumber(1000, 0,0,0);
 	while (1)
 	{
 		CheckFrequency();
 		check();
 		checkLCDWrites();
 		playRecording();
-		checkDate();
-		// double current = date();
-		// double tickTime = date() - lastTickDate;
+		// checkDate();
+		//  double current = date();
+		//  double tickTime = date() - lastTickDate;
 
 		// double total = 0;
 		// for (int i = 0; i < 10; i++)
@@ -384,8 +400,8 @@ int run(void)
 		if (date() - lastTime > 1000)
 		{
 
-			test = date(); //(int)date();
-			int logOf = (int)log10(test);
+			test = checkMemoryUsage() - startSTackPointer; //(int)date();
+			int logOf = (test >= 0 && test <= 1) ? 1 : (int)log10(test);
 			Set_CursorPosition(0, 15 - logOf);
 
 			for (int i = logOf; i >= 0; i--)

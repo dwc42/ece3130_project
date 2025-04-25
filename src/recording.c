@@ -7,37 +7,53 @@
 #include "math.h"
 #include "buzzer.h"
 #include "run.h"
-
-struct Sample *ListSample;
+#include "config.h"
+struct Sample ListSample[500];
 struct Press ListPress[16];
 
 struct Channel
 {
-    struct Sample *ListSample; // Pouint32_ter to the list of samples
-    uint32_t peroid;           // The period of the channel in milliseconds
+    struct Sample ListSample[500]; // Pouint32_ter to the list of samples
+    uint32_t peroid;               // The period of the channel in milliseconds
+    uint8_t defined;
 };
-struct Channel ChannelVoid = {NULL, 0}; // Void channel to be used as a terminator or default value
+struct Channel ChannelVoid = {NULL, 0, 0}; // Void channel to be used as a terminator or default value
 
 struct Channel ListChannel[4]; // Array of 4 channels, each channel has its own list of samples and period
 uint8_t recording = 0;
 uint8_t playBack = 0;
 void init()
 {
-    ListSample = malloc(sizeof(struct Sample));
-    ListSample[0] = SampleVoid;
+    for (uint16_t i = 0; i < 500; i++)
+    {
+        ListSample[i] = SampleVoid; // Initialize the ListSample array with SampleVoid
+        ListChannel[0].ListSample[i] = SampleVoid;
+        ListChannel[1].ListSample[i] = SampleVoid;
+        ListChannel[2].ListSample[i] = SampleVoid;
+        ListChannel[3].ListSample[i] = SampleVoid;
+    }
     for (uint8_t i = 0; i < 16; i++)
     {
         ListPress[i] = PressVoid;
     }
+
+    ListChannel[0] = ChannelVoid;
+    ListChannel[1] = ChannelVoid;
+    ListChannel[2] = ChannelVoid;
+    ListChannel[3] = ChannelVoid;
 }
+
 uint32_t firstPress = 0;
 void recordMusicPress(enum KEYPAD key)
 {
     if (!recording)
         return;
+    uint32_t frequency = Frequencies[presetIndex][key];
+    if (!frequency)
+        return;
     struct Sample *sample = malloc(sizeof(struct Sample));
     struct Press *press = malloc(sizeof(struct Press));
-    uint32_t frequency = Frequencies[presetIndex][key];
+
     sample->frequency = frequency;
     uint32_t pressDate = (uint32_t)date(); // Get the current date in milliseconds
     sample->timeSinceFirstPressStart = pressDate - firstPress;
@@ -46,18 +62,23 @@ void recordMusicPress(enum KEYPAD key)
     press->RecordingIndex = sampleIndex;
     press->pressDate = pressDate;
     ListPress[key] = *press; // Store the press in the ListPress array
+    free(sample);
+    free(press);
 };
 
 void recordMusicRelease(enum KEYPAD key)
 {
     if (!recording)
         return;
+    uint32_t frequency = Frequencies[presetIndex][key];
+    if (!frequency)
+        return;
     uint32_t ReleaseDate = (uint32_t)date();
     struct Press press = ListPress[key]; // Get the press from the ListPress array
     if (press.pressDate == PressVoid.pressDate)
         return;
     ListSample[press.RecordingIndex].timeSinceFirstPressEnd = ReleaseDate - firstPress; // Update the time since first press end
-		ListPress[key] = PressVoid;
+    ListPress[key] = PressVoid;
 };
 void recordMusicStart()
 {
@@ -70,46 +91,36 @@ void recordMusicEnd()
     recording = 0;
     for (uint8_t i = 0; i < 4; i++)
     {
-        if (ListChannel[i].ListSample == NULL)
-        {
+        if (ListChannel[i].defined)
+            continue;
 
-            uint32_t len = length(ListSample);
-            if (len <= 0)
-            {
-                ListChannel[i] = ChannelVoid; // If there are no samples, set the channel to void
-                continue;
-            }
-            struct Sample *tempListSample = malloc(sizeof(struct Sample) * (len + 1));
-            ListChannel[i].ListSample = tempListSample; // Allocate memory for the channel's sample list
-            for (uint32_t j = 0; j < len; j++)
-            {
-                ListChannel[i].ListSample[j] = ListSample[j]; // Copy the samples from the main list to the channel's list
-            }
-            ListChannel[i].ListSample[len] = SampleVoid; // Add a terminator to the channel's sample list
-            ListChannel[i].peroid = ListSample[len - 1].timeSinceFirstPressEnd;
-            free(ListSample);                           // Free the main sample list
-            ListSample = malloc(sizeof(struct Sample)); // Reallocate memory for the main sample list
-            ListSample[0] = SampleVoid;                 // Initialize the main sample list with a void sample
+        uint32_t len = lengthSample(ListSample);
+        if (len <= 0)
+        {
+            ListChannel[i].ListSample[0] = SampleVoid; // If there are no samples, set the channel to void
+            continue;
         }
+        for (uint32_t j = 0; j < len; j++)
+        {
+            ListChannel[i].ListSample[j] = ListSample[j]; // Copy the samples from the main list to the channel's list
+            ListSample[j] = SampleVoid;                   // Fill the rest of the channel's list with SampleVoid
+        }
+        ListChannel[i].ListSample[len] = SampleVoid; // Set the last element to SampleVoid to indicate the end of the list
+        ListChannel[i].defined = 1;                  // Mark the channel as defined
+        ListChannel[i].peroid = ListChannel[i].ListSample[len - 1].timeSinceFirstPressEnd;
     }
 }
 void removeChannel(uint8_t channelIndex)
 {
-    uint8_t j = 0;
-    for (uint8_t i = channelIndex; ListChannel[i].ListSample != NULL && i < 4; i++)
+    for (uint8_t i = channelIndex; ListChannel[i].defined && i < 4; i++)
     {
-        if (i == channelIndex)
-        {
-            ListChannel[j++] = ListChannel[i]; // Copy the channel to the temporary list
-        }
-        else
-        {
-            ListChannel[j++] = ChannelVoid; // If the channel is void, add a void channel to the temporary list
-        }
+        
+        
     }
 }
 uint32_t ChannelIndexes[4] = {0, 0, 0, 0}; // Array to keep track of the current index of each channel
 uint32_t ChannelStartDates[4] = {0, 0, 0, 0};
+struct Sample sample;
 void playRecording()
 {
     if (!playBack)
@@ -117,27 +128,28 @@ void playRecording()
         return;
     }
     uint32_t currentDate = date();
-    for (uint8_t i = 0; ListChannel[i].ListSample != NULL && i < 4; i++)
+    for (uint8_t i = 0; ListChannel[i].defined && i < 4; i++)
     {
         if (!ChannelStartDates[i])
             ChannelStartDates[i] = (uint32_t)date();
         uint32_t startDate = ChannelStartDates[i];
         uint32_t channelIndex = ChannelIndexes[i];
 
-        struct Sample *sample = ListChannel[i].ListSample;
-        if (sample->frequency == SampleVoid.frequency)
+        /*struct Sample*/ sample = ListChannel[i].ListSample[channelIndex];
+        if (sample.frequency == SampleVoid.frequency)
         {
             ChannelIndexes[i] = 0;
             ChannelStartDates[i] = (uint32_t)date();
+            continue;
         }
-        uint32_t startDateSample = sample->timeSinceFirstPressStart + startDate;
+        uint32_t startDateSample = sample.timeSinceFirstPressStart + startDate;
         if (currentDate < startDateSample)
         {
             continue;
         }
-        uint32_t endDateSample = sample->timeSinceFirstPressEnd + startDate;
+        uint32_t endDateSample = currentDate + (sample.timeSinceFirstPressEnd - sample.timeSinceFirstPressStart);
 
-        AddFrequency(sample->frequency, endDateSample);
+        AddFrequency(sample.frequency, endDateSample);
         ChannelIndexes[i]++;
     }
 }
@@ -155,7 +167,10 @@ void togglePlayBack()
     if (playBack)
     {
         return;
-
+        ChannelStartDates[0] = 0;
+        ChannelStartDates[1] = 0;
+        ChannelStartDates[2] = 0;
+        ChannelStartDates[3] = 0;
         for (int i = 0; frequency_list[i].frequency != PlayVoid.frequency; i++)
         {
             if (frequency_list->endDate == 0)

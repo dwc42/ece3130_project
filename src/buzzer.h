@@ -1,6 +1,9 @@
 #ifndef __BUZZER_H
 #define __BUZZER_H
 #include <stdint.h>
+#include "config.h"
+#include "list.h"
+#define MAX_PLAYS 20 // Maximum number of plays allowed
 /**
  * @brief Initializes the buzzer
  */
@@ -29,5 +32,6 @@ void RemoveFrequency(double freq, uint32_t endDate);
 void CheckFrequency();
 void enable_tim_clocks();
 void initOCT();
-extern struct Play *frequency_list;
+extern struct Play frequency_list[MAX_PLAYS];
+
 #endif
