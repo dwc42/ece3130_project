@@ -224,7 +224,7 @@ void numberBoxCallback(struct BeforeCharWriteEventType *event)
 	event->cancel = 1;
 };
 
-void keyPressCallback(enum KEYPAD key)
+void keyPressCallback(enum KEYPAD key)      
 {
 	if (modeCycle)
 		return;
