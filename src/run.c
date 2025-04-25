@@ -45,10 +45,11 @@ struct NoteProperties newFrequencies[3][16] =
 		{{698, '5', 'F'}, {1047, '6', 'C'}, {1568, '6', 'G'}, {0, 0, 0}, {659, '5', 'E'}, {988, '5', 'B'}, {1397, '6', 'F'}, {2093, '7', 'C'}, {587, '5', 'D'}, {880, '5', 'A'}, {1319, '6', 'E'}, {1975, '6', 'B'}, {523, '5', 'C'}, {784, '5', 'G'}, {1175, '6', 'D'}, {1760, '6', 'A'}},
 };
 
-void DisplayNumber(long num, int8_t line, int8_t position, uint8_t from)
+void DisplayNumber(long num, int8_t line, int8_t position, uint8_t from, uint8_t minDigits)
 {
 
-	int logOf = (int)log10(num);
+	int logOf = (!num) ? 1 : (int)log10(num);
+	if (logOf < minDigits) logOf = minDigits -1;
 	if ((line != -1) && (position != -1))
 		Set_CursorPosition(line, from ? position - logOf - ((num < 0) ? 1 : 0) : position);
 	if (num < 0)
@@ -69,7 +70,7 @@ void displayFrequency(enum KEYPAD key)
 	Write_Char_LCD(noteProperties.note);
 	Write_Char_LCD(noteProperties.octaves);
 	Write_Char_LCD(' ');
-	DisplayNumber(noteProperties.frequency, -1, -1, 0);
+	DisplayNumber(noteProperties.frequency, -1, -1, 0, 4);
 	Write_String_LCD("Hz");
 }
 
@@ -231,7 +232,7 @@ void keyPressCallback(enum KEYPAD key)
 	AddFrequency(newFrequencies[presetIndex][key].frequency, 0);
 	recordMusicPress(key);
 	displayFrequency(key);
-	
+	DisplayNumber(key,0, 15, 1, 2);
 }
 
 void keyReleaseCallback(enum KEYPAD key)
@@ -369,7 +370,7 @@ int run(void)
 		// }
 		// ticksArray[0] = tickTime;
 		// average = total / 10;
-		if ((int)date() - startTime < 3000)
+		/*if ((int)date() - startTime < 3000)
 			continue;
 		if (date() - lastTime > 1000)
 		{
@@ -385,6 +386,6 @@ int run(void)
 				Write_Char_LCD(digit + '0');
 			}
 			lastTime = date();
-		}
+		}*/
 	}
 }
