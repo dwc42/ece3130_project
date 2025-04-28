@@ -16,16 +16,13 @@ void SystemClock_Config(void);
 uint8_t syncPlayback = 0;
 uint8_t repeatedPlayback = 1;
 
-
-
-
 void EnableClock()
 {
 	RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
 	RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN;
 	RCC->AHB2ENR |= RCC_AHB2ENR_GPIOCEN;
 }
-                                                          // matrix of frequencies and the corresponding note and octave
+// matrix of frequencies and the corresponding note and octave
 
 struct NoteProperties newFrequencies[3][16] =
 	{
@@ -38,7 +35,8 @@ void DisplayNumber(long num, int8_t line, int8_t position, uint8_t from, uint8_t
 {
 
 	int logOf = (!num) ? 1 : (int)log10(num);
-	if (logOf < minDigits) logOf = minDigits -1;
+	if (logOf < minDigits)
+		logOf = minDigits - 1;
 	if ((line != -1) && (position != -1))
 		Set_CursorPosition(line, from ? position - logOf - ((num < 0) ? 1 : 0) : position);
 	if (num < 0)
@@ -51,7 +49,7 @@ void DisplayNumber(long num, int8_t line, int8_t position, uint8_t from, uint8_t
 		Write_Char_LCD(digit + '0');
 	}
 }
-void displayFrequency(enum KEYPAD key)                             // displays frequency and octave and note
+void displayFrequency(enum KEYPAD key) // displays frequency and octave and note
 {
 	struct NoteProperties noteProperties = newFrequencies[presetIndex][key];
 
@@ -78,8 +76,6 @@ char *intToString(int number)
 		str[1] = '\0';
 		return str;
 	}
-	
-	
 
 	// Calculate the number of digits using log10
 	int numDigits = (int)log10(abs(number)) + 1; // Number of digits in the number
@@ -116,32 +112,32 @@ uint8_t compareStrings(char *string1, char *string2)
 	}
 	return 1;
 }
-void update_SW_Menu()                          // initializes each sector
+void update_SW_Menu() // initializes each sector
 {
 	char sector4New[4] = {0, 0, 0, 0};
 	char sector5New[4] = {0, 0, 0, 0};
 	char sector6New[4] = {0, 0, 0, 0};
 	char sector7New[4] = {0, 0, 0, 0};
 	;
-         // switch case for each mode we have
+	// switch case for each mode we have
 
-	switch (modeCycle)                     // based on mode selection, the LCD sectors will update 
+	switch (modeCycle) // based on mode selection, the LCD sectors will update
 
 	{
 	case 0:
-	{                                                          // each strcpy line below prints 3 char limit to each sector
+	{ // each strcpy line below prints 3 char limit to each sector
 		if (presetIndex == 0)
 		{
-			strcpy(sector4New, "3&4");    // prints octaves 3 and 4 to LCD
+			strcpy(sector4New, "3&4"); // prints octaves 3 and 4 to LCD
 		}
 		else if (presetIndex == 1)
 		{
 
-			strcpy(sector4New, "1&2");       // shows octaves 1 and 2
+			strcpy(sector4New, "1&2"); // shows octaves 1 and 2
 		}
-		else if (presetIndex == 2)     // mode 2
+		else if (presetIndex == 2) // mode 2
 		{
-			strcpy(sector4New, "5&6");     // prints octaves 5 and 6 to LCD
+			strcpy(sector4New, "5&6"); // prints octaves 5 and 6 to LCD
 		}
 		if (recording)
 			strcpy(sector5New, "REC");
@@ -155,204 +151,186 @@ void update_SW_Menu()                          // initializes each sector
 		{
 			strcpy(sector6New, "PBD");
 		}
-		
+
 		strcpy(sector7New, "M#0");
 		break;
 	}
 	case 1:
 	{
-		                            // these following lines update LCD in affected sectors with new chars
+		// these following lines update LCD in affected sectors with new chars
 		strcpy(sector5New, "TRP");
 		strcpy(sector7New, "M#1");
-		
-		if(syncPlayback)
+
+		if (syncPlayback)
 		{
-			strcpy(sector5New, "PFE");
-			
+			strcpy(sector4New, "PFL");
 		}
-		else if(syncPlayback != 1)
+		else if (!syncPlayback)
 		{
-			strcpy(sector5New, "PFL");
-			
+			strcpy(sector4New, "PFE");
 		}
-		
-		strcpy(sector4New, "DEL");
-		if(repeatedPlayback)
+		strcpy(sector5New, "NUL");
+		strcpy(sector6New, "NUL");
+		break;
+	}
+
+		if (sector4New[0] && !compareStrings(sector4New, switch_Menu[0])) // these following lines are what allow us to to change the
+		{																  // LCD based on inputs in switch statement above
+
+			if (sector4New[0] && !compareStrings(sector4New, switch_Menu[0]))
+			{
+
+				strcpy(switch_Menu[0], sector4New);
+				Write_String_Sector_LCD(4, sector4New);
+			}
+
+			if (sector7New[0] && !compareStrings(sector7New, switch_Menu[3]))
+			{
+				strcpy(switch_Menu[3], sector7New);
+				Write_String_Sector_LCD(7, sector7New);
+			}
+			if (sector5New[0] && !compareStrings(sector5New, switch_Menu[1]))
+			{
+				strcpy(switch_Menu[1], sector5New);
+				Write_String_Sector_LCD(5, sector5New);
+			}
+			if (sector6New[0] && !compareStrings(sector6New, switch_Menu[2]))
+			{
+				strcpy(switch_Menu[2], sector6New);
+				Write_String_Sector_LCD(6, sector6New);
+			}
+		}
+	}
+
+	double peroid = 0.0;
+	int setFreq = -2;
+	void numberBoxCallback(struct BeforeCharWriteEventType * event)
+	{
+		if (setFreq < 0)
+			return;
+		if (!event->line && event->position <= 13) // only allow 5 characters in the first line for frequency display
+			return;
+		else
+			Set_CursorPosition(0, 9);
+		if (event->c >= '0' || event->c <= '9')
+			return; // only allow numbers in the frequency display box
+		event->cancel = 1;
+	};
+
+	// void keyPressCallback(enum KEYPAD key);
+
+	void keyPressCallback(enum KEYPAD key)
+
+	{
+		if (modeCycle)
+			return;
+		AddFrequency(newFrequencies[presetIndex][key].frequency, 0);
+		recordMusicPress(key);
+		displayFrequency(key);
+		DisplayNumber(key, 0, 15, 1, 2);
+	}
+
+	void keyReleaseCallback(enum KEYPAD key)
+	{
+		if (modeCycle)
+			return;
+		RemoveFrequency(newFrequencies[presetIndex][key].frequency, 0);
+		recordMusicRelease(key);
+	}
+
+	void switchPressCallback(enum SWITCHS key)
+	{
+
+		switch (key)
 		{
-			strcpy(sector6New, "RPE");
-		}
-		else if(repeatedPlayback != 0)
+
+		case BUTTON_SWITCH2: // preset index for SW2 is used to switch octaves
 		{
-			strcpy(sector6New, "RPD");
+
+			if (!modeCycle)
+				presetIndex = (presetIndex + 1) % 3;
+			else
+			{
+				syncPlayback ^= 1; // toggle sync playback mode
+			}
 		}
-		
 		break;
+
+		case BUTTON_SWITCH3:
+		{
+
+			if (!modeCycle)
+				toggleRecording(); // if SW3 is pressed, calls toggle recording mode
+			break;
+		}
+		case BUTTON_SWITCH4:
+		{
+			if (!modeCycle)
+				togglePlayBack(); // if SW4 is pressed, calls toggle playback mode
+			break;
+		}
+		case BUTTON_SWITCH5: // this will be our Mode Cycle
+		{
+			modeCycle = (modeCycle + 1) % 3;
+
+			break;
+		}
+		}
+		update_SW_Menu();
 	}
-	case 2:
-	{
-		strcpy(sector5New, "TRP");
-		strcpy(sector7New, "M#2");
-		
-		break;
-	}
-	}
-
-
-	if (sector4New[0] && !compareStrings(sector4New, switch_Menu[0]))      // these following lines are what allow us to to change the
-	{                                                                      // LCD based on inputs in switch statement above
-
-	if (sector4New[0] && !compareStrings(sector4New, switch_Menu[0]))    
-	{
-
-		strcpy(switch_Menu[0], sector4New);
-		Write_String_Sector_LCD(4, sector4New);
-	}
-
-	if (sector7New[0] && !compareStrings(sector7New, switch_Menu[3]))
-	{
-		strcpy(switch_Menu[3], sector7New);
-		Write_String_Sector_LCD(7, sector7New);
-	}
-	if (sector5New[0] && !compareStrings(sector5New, switch_Menu[1]))
-	{
-		strcpy(switch_Menu[1], sector5New);
-		Write_String_Sector_LCD(5, sector5New);
-	}
-	if (sector6New[0] && !compareStrings(sector6New, switch_Menu[2]))
-	{
-		strcpy(switch_Menu[2], sector6New);
-		Write_String_Sector_LCD(6, sector6New);
-	}
-	
-}
-}
-
-double peroid = 0.0;
-int setFreq = -2;
-void numberBoxCallback(struct BeforeCharWriteEventType *event)
-{
-	if (setFreq < 0)
-		return;
-	if (!event->line && event->position <= 13) // only allow 5 characters in the first line for frequency display
-		return;
-	else
-		Set_CursorPosition(0, 9);
-	if (event->c >= '0' || event->c <= '9')
-		return; // only allow numbers in the frequency display box
-	event->cancel = 1;
-};
-
-
-//void keyPressCallback(enum KEYPAD key);
-
-void keyPressCallback(enum KEYPAD key)  
-
-{
-	if (modeCycle)
-		return;
-	AddFrequency(newFrequencies[presetIndex][key].frequency, 0);
-	recordMusicPress(key);
-	displayFrequency(key);
-	DisplayNumber(key,0, 15, 1, 2);
-}
-
-void keyReleaseCallback(enum KEYPAD key)
-{
-	if (modeCycle)
-		return;
-	RemoveFrequency(newFrequencies[presetIndex][key].frequency, 0);
-	recordMusicRelease(key);
-}
-
-void switchPressCallback(enum SWITCHS key)
-{
-
-	switch (key)
-	{
-
-	case BUTTON_SWITCH2:                             // preset index for SW2 is used to switch octaves
-	{
-		
-		presetIndex = (presetIndex + 1) % 3;
-	}
-	break;
-
-	case BUTTON_SWITCH3:
-	{
-		
-		toggleRecording();                    // if SW3 is pressed, calls toggle recording mode
-		break;
-	}
-	case BUTTON_SWITCH4:    
-	{
-		togglePlayBack();               // if SW4 is pressed, calls toggle playback mode 
-		break;
-	}
-	case BUTTON_SWITCH5: // this will be our Mode Cycle
-	{
-		modeCycle = (modeCycle + 1) % 3;
-
-		
-		break;
-	}
-	}
-	update_SW_Menu();   
-}
 
 #define HEAP_START 0x20000000 // Adjust based on your MCU's memory layout
 
-uint32_t checkMemoryUsage()
-{
-	uint32_t msp;							   // Main Stack Pointer
-	__asm volatile("MRS %0, msp" : "=r"(msp)); // Get the current value of MSP
-
-	return msp;
-}
-// double ticksArray[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-long test = 0;
-int digit = 0;
-uint32_t freeMemory = 0;
-/**
- * @brief  The application entry point.
- * @retval int
- */
-int run(void)
-{
-
-	EnableClock();
-	enable_tim_clocks();
-	initOCT();
-	// Init_LED(1);
-	// Init_LED(0);
-	LCD_Init();
-	InitEvents();
-	Init_buzzerEXT(0);
-	Init_buzzerEXT(1);
-	Init_buzzerEXT(2);
-	Init_buzzerEXT(3);
-	
-	/*DWT_Init();*/
-	/*Write_Char_LCD('o');*/
-	Write_String_LCD("Sounds");
-	// Write_String_LCD(line2);
-	Events.onKeyPadPress(keyPressCallback);
-	Events.onKeyPadRelease(keyReleaseCallback);
-	Events.onSwitchPress(switchPressCallback);
-	Events.beforeCharWrite(numberBoxCallback);
-	// Write_String_LCD("0123456789ABCDEF");
-	// Write_String_LCD("0123456789ABCDEFG");
-	// Clear_Display();
-	update_SW_Menu();
-
-	HAL_Delay(1000);
-
-	while (1)
+	uint32_t checkMemoryUsage()
 	{
-		CheckFrequency();
-		check();
-		checkLCDWrites();
-		playRecording();
-		
-		
+		uint32_t msp;							   // Main Stack Pointer
+		__asm volatile("MRS %0, msp" : "=r"(msp)); // Get the current value of MSP
+
+		return msp;
 	}
-}
+	// double ticksArray[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+	long test = 0;
+	int digit = 0;
+	uint32_t freeMemory = 0;
+	/**
+	 * @brief  The application entry point.
+	 * @retval int
+	 */
+	int run(void)
+	{
+
+		EnableClock();
+		enable_tim_clocks();
+		initOCT();
+		// Init_LED(1);
+		// Init_LED(0);
+		LCD_Init();
+		InitEvents();
+		Init_buzzerEXT(0);
+		Init_buzzerEXT(1);
+		Init_buzzerEXT(2);
+		Init_buzzerEXT(3);
+
+		/*DWT_Init();*/
+		/*Write_Char_LCD('o');*/
+		Write_String_LCD("Sounds");
+		// Write_String_LCD(line2);
+		Events.onKeyPadPress(keyPressCallback);
+		Events.onKeyPadRelease(keyReleaseCallback);
+		Events.onSwitchPress(switchPressCallback);
+		Events.beforeCharWrite(numberBoxCallback);
+		// Write_String_LCD("0123456789ABCDEF");
+		// Write_String_LCD("0123456789ABCDEFG");
+		// Clear_Display();
+		update_SW_Menu();
+
+		HAL_Delay(1000);
+
+		while (1)
+		{
+			CheckFrequency();
+			check();
+			checkLCDWrites();
+			playRecording();
+		}
+	}
