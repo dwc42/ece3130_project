@@ -13,7 +13,7 @@
 #include <math.h>
 void SystemClock_Config(void);
 
-uint8_t syncPlayback = 0;
+uint8_t syncPlayback = 1;
 uint8_t repeatedPlayback = 1;
 
 void EnableClock()
@@ -165,7 +165,7 @@ void update_SW_Menu() // initializes each sector
 		{
 			strcpy(sector4New, "PFL");
 		}
-		else if (!syncPlayback)
+		else
 		{
 			strcpy(sector4New, "PFE");
 		}
@@ -173,29 +173,28 @@ void update_SW_Menu() // initializes each sector
 		strcpy(sector6New, "NUL");
 		break;
 	}
+	}
+	if (sector4New[0] && !compareStrings(sector4New, switch_Menu[0]))
+	{
 
-		if (sector4New[0] && !compareStrings(sector4New, switch_Menu[0]))
-		{
+		strcpy(switch_Menu[0], sector4New);
+		Write_String_Sector_LCD(4, sector4New);
+	}
 
-			strcpy(switch_Menu[0], sector4New);
-			Write_String_Sector_LCD(4, sector4New);
-		}
-
-		if (sector7New[0] && !compareStrings(sector7New, switch_Menu[3]))
-		{
-			strcpy(switch_Menu[3], sector7New);
-			Write_String_Sector_LCD(7, sector7New);
-		}
-		if (sector5New[0] && !compareStrings(sector5New, switch_Menu[1]))
-		{
-			strcpy(switch_Menu[1], sector5New);
-			Write_String_Sector_LCD(5, sector5New);
-		}
-		if (sector6New[0] && !compareStrings(sector6New, switch_Menu[2]))
-		{
-			strcpy(switch_Menu[2], sector6New);
-			Write_String_Sector_LCD(6, sector6New);
-		}
+	if (sector7New[0] && !compareStrings(sector7New, switch_Menu[3]))
+	{
+		strcpy(switch_Menu[3], sector7New);
+		Write_String_Sector_LCD(7, sector7New);
+	}
+	if (sector5New[0] && !compareStrings(sector5New, switch_Menu[1]))
+	{
+		strcpy(switch_Menu[1], sector5New);
+		Write_String_Sector_LCD(5, sector5New);
+	}
+	if (sector6New[0] && !compareStrings(sector6New, switch_Menu[2]))
+	{
+		strcpy(switch_Menu[2], sector6New);
+		Write_String_Sector_LCD(6, sector6New);
 	}
 }
 
