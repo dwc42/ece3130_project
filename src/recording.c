@@ -8,9 +8,10 @@
 #include "buzzer.h"
 #include "run.h"
 #include "config.h"
+#include <stdint.h>
 struct Sample ListSample[500];
 struct Press ListPress[16];
-
+uint32_t startPlayBackDate = 0;
 struct Channel
 {
     struct Sample ListSample[500]; // Pouint32_ter to the list of samples
@@ -42,8 +43,12 @@ void init()
     ListChannel[2] = ChannelVoid;
     ListChannel[3] = ChannelVoid;
 }
+uint32_t ChannelIndexes[4] = {0, 0, 0, 0}; // Array to keep track of the current index of each channel
+uint32_t ChannelStartDates[4] = {0, 0, 0, 0};
 
 uint32_t firstPress = 0;
+uint32_t timeSincePlayBackStart = 0;
+uint32_t timeSinceLoop0Start = 0;
 void recordMusicPress(enum KEYPAD key)
 {
     if (!recording)
@@ -85,6 +90,10 @@ void recordMusicStart()
 
     firstPress = (uint32_t)date();
     recording = 1;
+    if (!ChannelStartDates[0])
+        return;
+    timeSinceLoop0Start = firstPress - ChannelStartDates[0]; // Initialize the start date of the first channel
+    timeSincePlayBackStart = firstPress - startPlayBackDate; // Initialize the start date of playback
 }
 void recordMusicEnd()
 {
@@ -112,7 +121,7 @@ void recordMusicEnd()
 }
 void removeChannel(uint8_t channelIndex)
 {
-    for (uint8_t i = channelIndex; ListChannel[i].defined && i < 4; i++)
+    for (uint8_t i = channelIndex; i < 4; i++)
     {
         int lenCurrentChannel = lengthSample(ListChannel[i].ListSample);
         if (lenCurrentChannel > 0)
@@ -123,10 +132,31 @@ void removeChannel(uint8_t channelIndex)
             }
             continue;
         }
+        ListChannel[i].defined = 0; // If the channel is empty, mark it as undefined
+        ListChannel[i].peroid = 0;  // Reset the period of the channel
+        struct Channel nextChannel = ListChannel[i + 1];
+        int lenNextChannel = lengthSample(nextChannel.ListSample);
+        if (lenNextChannel > 0)
+        {
+            for (int j = 0; j < lenNextChannel; j++)
+            {
+                ListChannel[i].ListSample[j] = nextChannel.ListSample[j]; // Copy the samples from the next channel to the current channel
+            }
+            ListChannel[i].ListSample[lenNextChannel] = SampleVoid; // Set the last element to SampleVoid to indicate the end of the list
+            ListChannel[i].defined = true;
+            // Set the defined status of the current channel to that of the next channel
+            ListChannel[i].peroid = nextChannel.peroid; // Set the period of the current channel to that of the next channel
+        }
     }
 }
-uint32_t ChannelIndexes[4] = {0, 0, 0, 0}; // Array to keep track of the current index of each channel
-uint32_t ChannelStartDates[4] = {0, 0, 0, 0};
+void disableChannel(uint8_t channelIndex)
+{
+    if (channelIndex >= 4)
+    {
+        return; // If the channel index is out of bounds, do nothing
+    }
+}
+
 struct Sample sample;
 void playRecording()
 {
@@ -134,6 +164,7 @@ void playRecording()
     {
         return;
     }
+
     uint32_t currentDate = date();
     for (uint8_t i = 0; ListChannel[i].defined && i < 4; i++)
     {
@@ -197,5 +228,6 @@ void togglePlayBack()
         playBack = 0;
         return;
     }
+    startPlayBackDate = (uint32_t)date(); // Get the current date in milliseconds
     playBack = 1;
 }
