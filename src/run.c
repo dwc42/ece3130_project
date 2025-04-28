@@ -13,8 +13,7 @@
 #include <math.h>
 void SystemClock_Config(void);
 
-uint8_t syncPlayback = 0;
-uint8_t repeatedPlayback = 1;
+uint8_t syncPlayback = 1;
 
 void EnableClock()
 {
@@ -155,28 +154,18 @@ void update_SW_Menu() // initializes each sector
 	case 1:
 	{
 		// these following lines update LCD in affected sectors with new chars
-		strcpy(sector5New, "TRP");
 		strcpy(sector7New, "M#1");
 
 		if (syncPlayback)
 		{
-			strcpy(sector5New, "PFE");
+			strcpy(sector4New, "PFL");
 		}
-		else if (syncPlayback != 1)
+		else if (!syncPlayback)
 		{
-			strcpy(sector5New, "PFL");
+			strcpy(sector4New, "PFE");
 		}
-
-		strcpy(sector4New, "DEL");
-		if (repeatedPlayback)
-		{
-			strcpy(sector6New, "RPE");
-		}
-		else if (repeatedPlayback != 0)
-		{
-			strcpy(sector6New, "RPD");
-		}
-
+		strcpy(sector5New, "NUL");
+		strcpy(sector6New, "NUL");
 		break;
 	}
 	}
@@ -203,9 +192,6 @@ void update_SW_Menu() // initializes each sector
 		Write_String_Sector_LCD(6, sector6New);
 	}
 }
-
-double peroid = 0.0;
-int setFreq = -2;
 
 double peroid = 0.0;
 int setFreq = -2;
@@ -240,36 +226,31 @@ void switchPressCallback(enum SWITCHS key)
 	case BUTTON_SWITCH2: // preset index for SW2 is used to switch octaves
 	{
 
-		presetIndex = (presetIndex + 1) % 3;
+		if (!modeCycle) presetIndex = (presetIndex + 1) % 3;
+		else syncPlayback ^=1;
 	}
 	break;
 
 	case BUTTON_SWITCH3:
 	{
-		toggleRecording(); // if SW3 is pressed, calls toggle recording mode
+		if (!modeCycle) toggleRecording(); // if SW3 is pressed, calls toggle recording mode
 		break;
 	}
 	case BUTTON_SWITCH4:
 	{
-		togglePlayBack(); // if SW4 is pressed, calls toggle playback mode
+		if (!modeCycle) togglePlayBack(); // if SW4 is pressed, calls toggle playback mode
 		break;
 	}
 	case BUTTON_SWITCH5: // this will be our Mode Cycle
 	{
-		modeCycle = (modeCycle + 1) % 3;
+		modeCycle = (modeCycle + 1) % 2;
 
 		break;
 	}
 	}
 	update_SW_Menu();
 }
-void keyReleaseCallback(enum KEYPAD key)
-{
-	if (modeCycle)
-		return;
-	RemoveFrequency(newFrequencies[presetIndex][key].frequency, 0);
-	recordMusicRelease(key);
-}
+
 
 #define HEAP_START 0x20000000 // Adjust based on your MCU's memory layout
 
@@ -310,14 +291,11 @@ int run(void)
 	Events.onKeyPadPress(keyPressCallback);
 	Events.onKeyPadRelease(keyReleaseCallback);
 	Events.onSwitchPress(switchPressCallback);
-	Events.beforeCharWrite(numberBoxCallback);
 	// Write_String_LCD("0123456789ABCDEF");
 	// Write_String_LCD("0123456789ABCDEFG");
 	// Clear_Display();
 	update_SW_Menu();
-
 	HAL_Delay(1000);
-
 	while (1)
 	{
 		CheckFrequency();
