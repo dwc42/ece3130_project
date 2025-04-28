@@ -19,24 +19,7 @@ void EnableClock()
 	RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN;
 	RCC->AHB2ENR |= RCC_AHB2ENR_GPIOCEN;
 }
-// void Init_LED(int i)
-// {
-// 	/* enable
-//    GPIOB clock */
-// 	GPIOA->MODER &= ~(0x03 << (2 * i));
-// 	GPIOA->MODER |= (0x01 << (2 * i));
-// 	GPIOA->OTYPER &= ~(0x01 << i);
-// 	GPIOA->PUPDR &= ~(0x03 << (2 * i));
-// }
-// char *charToString(char c)
-// {
-// 	if (c == '\0')
-// 		return "";
-// 	char *str = (char *)malloc(2);
-// 	str[0] = c;
-// 	str[1] = '\0';
-// 	return str;
-// }
+                                                          // matrix of frequencies and the corresponding note and octave
 
 struct NoteProperties newFrequencies[3][16] =
 	{
@@ -62,7 +45,7 @@ void DisplayNumber(long num, int8_t line, int8_t position, uint8_t from, uint8_t
 		Write_Char_LCD(digit + '0');
 	}
 }
-void displayFrequency(enum KEYPAD key)
+void displayFrequency(enum KEYPAD key)                             // displays frequency and octave and note
 {
 	struct NoteProperties noteProperties = newFrequencies[presetIndex][key];
 
@@ -125,17 +108,21 @@ uint8_t compareStrings(char *string1, char *string2)
 	}
 	return 1;
 }
-void update_SW_Menu()
+void update_SW_Menu()                          // initializes each sector
 {
 	char sector4New[4] = {0, 0, 0, 0};
 	char sector5New[4] = {0, 0, 0, 0};
 	char sector6New[4] = {0, 0, 0, 0};
 	char sector7New[4] = {0, 0, 0, 0};
 	;
+<<<<<<< Updated upstream
 	switch (modeCycle)          // switch case for each mode we have
+=======
+	switch (modeCycle)                     // based on mode selection, the LCD sectors will update 
+>>>>>>> Stashed changes
 	{
 	case 0:
-	{
+	{                                                          // each strcpy line below prints 3 char limit to each sector
 		if (presetIndex == 0)
 		{
 			strcpy(sector4New, "3&4");    // prints octaves 3 and 4 to LCD
@@ -161,7 +148,7 @@ void update_SW_Menu()
 		{
 			strcpy(sector6New, "PBD");
 		}
-		// strcpy(sector6New, "TPB");
+		
 		strcpy(sector7New, "M#0");
 		break;
 	}
@@ -170,7 +157,7 @@ void update_SW_Menu()
 		strcpy(sector4New, "PDD");    // these following lines update LCD in affected sectors with new chars
 		strcpy(sector5New, "TRP");
 		strcpy(sector7New, "M#1");
-		// strcpy(sector6New, "   ");
+		
 		break;
 	}
 	case 2:
@@ -178,13 +165,18 @@ void update_SW_Menu()
 		strcpy(sector4New, "   ");
 		strcpy(sector5New, "TRP");
 		strcpy(sector7New, "M#2");
-		// strcpy(sector6New, "   ");
+		
 		break;
 	}
 	}
 
+<<<<<<< Updated upstream
 	if (sector4New[0] && !compareStrings(sector4New, switch_Menu[0]))      // these following lines are what allow us to to change the
 	{                                                                      // LCD based on inputs in switch statement above
+=======
+	if (sector4New[0] && !compareStrings(sector4New, switch_Menu[0]))    
+	{
+>>>>>>> Stashed changes
 		strcpy(switch_Menu[0], sector4New);
 		Write_String_Sector_LCD(4, sector4New);
 	}
@@ -206,10 +198,7 @@ void update_SW_Menu()
 	}
 }
 
-/*double Frequencies[16] = {1, 2, 3, 4,
-						  5, 6, 7, 8,
-						  9, 10, 11,
-						  12, 13, 14, 15};*/
+
 double peroid = 0.0;
 int setFreq = -2;
 void numberBoxCallback(struct BeforeCharWriteEventType *event)
@@ -225,7 +214,11 @@ void numberBoxCallback(struct BeforeCharWriteEventType *event)
 	event->cancel = 1;
 };
 
+<<<<<<< Updated upstream
 void keyPressCallback(enum KEYPAD key)
+=======
+void keyPressCallback(enum KEYPAD key)  
+>>>>>>> Stashed changes
 {
 	if (modeCycle)
 		return;
@@ -249,7 +242,7 @@ void switchPressCallback(enum SWITCHS key)
 	switch (key)
 	{
 
-	case BUTTON_SWITCH2:
+	case BUTTON_SWITCH2:                             // preset index for SW2 is used to switch octaves
 	{
 
 		presetIndex = (presetIndex + 1) % 3;
@@ -258,39 +251,23 @@ void switchPressCallback(enum SWITCHS key)
 
 	case BUTTON_SWITCH3:
 	{
-		toggleRecording();
+		toggleRecording();                    // if SW3 is pressed, calls toggle recording mode
 		break;
 	}
-	case BUTTON_SWITCH4:
+	case BUTTON_SWITCH4:    
 	{
-		togglePlayBack();
+		togglePlayBack();               // if SW4 is pressed, calls toggle playback mode 
 		break;
 	}
 	case BUTTON_SWITCH5: // this will be our Mode Cycle
 	{
 		modeCycle = (modeCycle + 1) % 3;
 
-		// if(modeCycle == 0)
-		// {
-		// 	Set_LCD( "mode 0");
-		// 	presetIndex = (++presetIndex)%3;
-		// }
-
-		// else if(modeCycle == 1)
-		// {
-		// 	Set_LCD("mode 1");
-		// }
-
-		// else if(modeCycle ==2)
-		// {
-		// 		Set_LCD( "mode2");
-		// 		presetIndex = presetIndex+2;
-		// }
 
 		break;
 	}
 	}
-	update_SW_Menu();
+	update_SW_Menu();   
 }
 
 #define HEAP_START 0x20000000 // Adjust based on your MCU's memory layout
@@ -324,11 +301,7 @@ int run(void)
 	Init_buzzerEXT(1);
 	Init_buzzerEXT(2);
 	Init_buzzerEXT(3);
-	// HAL_Delay(1000);
-	//    Init_buzzerEXT(0);
-	//   Init_buzzerEXT(1);
-	//   Init_buzzerEXT(0);
-	//   Test_LED_With_Timer();
+	
 	/*DWT_Init();*/
 	/*Write_Char_LCD('o');*/
 	Write_String_LCD("Sounds");
@@ -342,13 +315,7 @@ int run(void)
 	// Clear_Display();
 	update_SW_Menu();
 
-	int index = 0;
 	HAL_Delay(1000);
-	int lastTime = (int)date();
-	int startTime = (int)date();
-	// SetFrequency(1, 3);
-	int index1 = 0;
-	// AddFrequency(1000, 1000 + lastTime);
 
 	while (1)
 	{
@@ -356,36 +323,7 @@ int run(void)
 		check();
 		checkLCDWrites();
 		playRecording();
-		// checkDate();
-		//  double current = date();
-		//  double tickTime = date() - lastTickDate;
-
-		// double total = 0;
-		// for (int i = 0; i < 10; i++)
-		// {
-		// 	total += ticksArray[i];
-		// 	if (i >= 9)
-		// 		continue;
-		// 	ticksArray[i + 1] = ticksArray[i];
-		// }
-		// ticksArray[0] = tickTime;
-		// average = total / 10;
-		/*if ((int)date() - startTime < 3000)
-			continue;
-		if (date() - lastTime > 1000)
-		{
-
-			test = checkMemoryUsage() - startSTackPointer; //(int)date();
-			int logOf = (test >= 0 && test <= 1) ? 1 : (int)log10(test);
-			Set_CursorPosition(0, 15 - logOf);
-
-			for (int i = logOf; i >= 0; i--)
-			{
-				int place = (int)test / (int)pow(10, i);
-				digit = place % 10;
-				Write_Char_LCD(digit + '0');
-			}
-			lastTime = date();
-		}*/
+		
+		
 	}
 }

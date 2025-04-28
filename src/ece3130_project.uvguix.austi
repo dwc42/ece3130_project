@@ -1865,9 +1865,15 @@
       <ActiveTab>0</ActiveTab>
       <Doc>
         <Name>.\run.c</Name>
+<<<<<<< Updated upstream
         <ColumnNumber>0</ColumnNumber>
         <TopLine>61</TopLine>
         <CurrentLine>235</CurrentLine>
+=======
+        <ColumnNumber>39</ColumnNumber>
+        <TopLine>198</TopLine>
+        <CurrentLine>208</CurrentLine>
+>>>>>>> Stashed changes
         <Folding>1</Folding>
         <ContractedFolders></ContractedFolders>
         <PaneID>0</PaneID>
@@ -1883,16 +1889,26 @@
       </Doc>
       <Doc>
         <Name>.\lcd.c</Name>
+<<<<<<< Updated upstream
         <ColumnNumber>12</ColumnNumber>
         <TopLine>121</TopLine>
         <CurrentLine>139</CurrentLine>
+=======
+        <ColumnNumber>4</ColumnNumber>
+        <TopLine>1</TopLine>
+        <CurrentLine>30</CurrentLine>
+>>>>>>> Stashed changes
         <Folding>1</Folding>
         <ContractedFolders></ContractedFolders>
         <PaneID>0</PaneID>
       </Doc>
       <Doc>
         <Name>.\events.c</Name>
+<<<<<<< Updated upstream
         <ColumnNumber>35</ColumnNumber>
+=======
+        <ColumnNumber>39</ColumnNumber>
+>>>>>>> Stashed changes
         <TopLine>61</TopLine>
         <CurrentLine>62</CurrentLine>
         <Folding>1</Folding>
@@ -1901,9 +1917,9 @@
       </Doc>
       <Doc>
         <Name>.\buzzer.c</Name>
-        <ColumnNumber>5</ColumnNumber>
-        <TopLine>66</TopLine>
-        <CurrentLine>79</CurrentLine>
+        <ColumnNumber>4</ColumnNumber>
+        <TopLine>146</TopLine>
+        <CurrentLine>177</CurrentLine>
         <Folding>1</Folding>
         <ContractedFolders></ContractedFolders>
         <PaneID>0</PaneID>
