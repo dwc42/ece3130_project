@@ -114,6 +114,15 @@ void removeChannel(uint8_t channelIndex)
 {
     for (uint8_t i = channelIndex; ListChannel[i].defined && i < 4; i++)
     {
+        int lenCurrentChannel = lengthSample(ListChannel[i].ListSample);
+        if (lenCurrentChannel > 0)
+        {
+            for (int j = 0; j < lenCurrentChannel; j++)
+            {
+                ListChannel[i].ListSample[j] = SampleVoid; // Fill the channel's list with SampleVoid
+            }
+            continue;
+        }
     }
 }
 uint32_t ChannelIndexes[4] = {0, 0, 0, 0}; // Array to keep track of the current index of each channel
@@ -138,7 +147,7 @@ void playRecording()
         {
             if (channelIndex > 0)
             {
-                uint32_t endDateSample = ChannelStartDates[i] + ListChannel[i].ListSample[channelIndex-1].timeSinceFirstPressEnd;
+                uint32_t endDateSample = ChannelStartDates[i] + ListChannel[i].ListSample[channelIndex - 1].timeSinceFirstPressEnd;
                 if (currentDate < endDateSample)
                 {
                     continue; // If the current date is before the end date of the previous sample, skip to the next channel
