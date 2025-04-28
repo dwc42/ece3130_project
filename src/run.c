@@ -174,163 +174,160 @@ void update_SW_Menu() // initializes each sector
 		break;
 	}
 
-		if (sector4New[0] && !compareStrings(sector4New, switch_Menu[0])) // these following lines are what allow us to to change the
-		{																  // LCD based on inputs in switch statement above
+		if (sector4New[0] && !compareStrings(sector4New, switch_Menu[0]))
+		{
 
-			if (sector4New[0] && !compareStrings(sector4New, switch_Menu[0]))
-			{
+			strcpy(switch_Menu[0], sector4New);
+			Write_String_Sector_LCD(4, sector4New);
+		}
 
-				strcpy(switch_Menu[0], sector4New);
-				Write_String_Sector_LCD(4, sector4New);
-			}
-
-			if (sector7New[0] && !compareStrings(sector7New, switch_Menu[3]))
-			{
-				strcpy(switch_Menu[3], sector7New);
-				Write_String_Sector_LCD(7, sector7New);
-			}
-			if (sector5New[0] && !compareStrings(sector5New, switch_Menu[1]))
-			{
-				strcpy(switch_Menu[1], sector5New);
-				Write_String_Sector_LCD(5, sector5New);
-			}
-			if (sector6New[0] && !compareStrings(sector6New, switch_Menu[2]))
-			{
-				strcpy(switch_Menu[2], sector6New);
-				Write_String_Sector_LCD(6, sector6New);
-			}
+		if (sector7New[0] && !compareStrings(sector7New, switch_Menu[3]))
+		{
+			strcpy(switch_Menu[3], sector7New);
+			Write_String_Sector_LCD(7, sector7New);
+		}
+		if (sector5New[0] && !compareStrings(sector5New, switch_Menu[1]))
+		{
+			strcpy(switch_Menu[1], sector5New);
+			Write_String_Sector_LCD(5, sector5New);
+		}
+		if (sector6New[0] && !compareStrings(sector6New, switch_Menu[2]))
+		{
+			strcpy(switch_Menu[2], sector6New);
+			Write_String_Sector_LCD(6, sector6New);
 		}
 	}
+}
 
-	double peroid = 0.0;
-	int setFreq = -2;
-	void numberBoxCallback(struct BeforeCharWriteEventType * event)
+double peroid = 0.0;
+int setFreq = -2;
+void numberBoxCallback(struct BeforeCharWriteEventType *event)
+{
+	if (setFreq < 0)
+		return;
+	if (!event->line && event->position <= 13) // only allow 5 characters in the first line for frequency display
+		return;
+	else
+		Set_CursorPosition(0, 9);
+	if (event->c >= '0' || event->c <= '9')
+		return; // only allow numbers in the frequency display box
+	event->cancel = 1;
+};
+
+// void keyPressCallback(enum KEYPAD key);
+
+void keyPressCallback(enum KEYPAD key)
+
+{
+	if (modeCycle)
+		return;
+	AddFrequency(newFrequencies[presetIndex][key].frequency, 0);
+	recordMusicPress(key);
+	displayFrequency(key);
+	DisplayNumber(key, 0, 15, 1, 2);
+}
+
+void keyReleaseCallback(enum KEYPAD key)
+{
+	if (modeCycle)
+		return;
+	RemoveFrequency(newFrequencies[presetIndex][key].frequency, 0);
+	recordMusicRelease(key);
+}
+
+void switchPressCallback(enum SWITCHS key)
+{
+
+	switch (key)
 	{
-		if (setFreq < 0)
-			return;
-		if (!event->line && event->position <= 13) // only allow 5 characters in the first line for frequency display
-			return;
+
+	case BUTTON_SWITCH2: // preset index for SW2 is used to switch octaves
+	{
+
+		if (!modeCycle)
+			presetIndex = (presetIndex + 1) % 3;
 		else
-			Set_CursorPosition(0, 9);
-		if (event->c >= '0' || event->c <= '9')
-			return; // only allow numbers in the frequency display box
-		event->cancel = 1;
-	};
-
-	// void keyPressCallback(enum KEYPAD key);
-
-	void keyPressCallback(enum KEYPAD key)
-
-	{
-		if (modeCycle)
-			return;
-		AddFrequency(newFrequencies[presetIndex][key].frequency, 0);
-		recordMusicPress(key);
-		displayFrequency(key);
-		DisplayNumber(key, 0, 15, 1, 2);
-	}
-
-	void keyReleaseCallback(enum KEYPAD key)
-	{
-		if (modeCycle)
-			return;
-		RemoveFrequency(newFrequencies[presetIndex][key].frequency, 0);
-		recordMusicRelease(key);
-	}
-
-	void switchPressCallback(enum SWITCHS key)
-	{
-
-		switch (key)
 		{
-
-		case BUTTON_SWITCH2: // preset index for SW2 is used to switch octaves
-		{
-
-			if (!modeCycle)
-				presetIndex = (presetIndex + 1) % 3;
-			else
-			{
-				syncPlayback ^= 1; // toggle sync playback mode
-			}
+			syncPlayback ^= 1; // toggle sync playback mode
 		}
+	}
+	break;
+
+	case BUTTON_SWITCH3:
+	{
+
+		if (!modeCycle)
+			toggleRecording(); // if SW3 is pressed, calls toggle recording mode
 		break;
-
-		case BUTTON_SWITCH3:
-		{
-
-			if (!modeCycle)
-				toggleRecording(); // if SW3 is pressed, calls toggle recording mode
-			break;
-		}
-		case BUTTON_SWITCH4:
-		{
-			if (!modeCycle)
-				togglePlayBack(); // if SW4 is pressed, calls toggle playback mode
-			break;
-		}
-		case BUTTON_SWITCH5: // this will be our Mode Cycle
-		{
-			modeCycle = (modeCycle + 1) % 3;
-
-			break;
-		}
-		}
-		update_SW_Menu();
 	}
+	case BUTTON_SWITCH4:
+	{
+		if (!modeCycle)
+			togglePlayBack(); // if SW4 is pressed, calls toggle playback mode
+		break;
+	}
+	case BUTTON_SWITCH5: // this will be our Mode Cycle
+	{
+		modeCycle = (modeCycle + 1) % 3;
+
+		break;
+	}
+	}
+	update_SW_Menu();
+}
 
 #define HEAP_START 0x20000000 // Adjust based on your MCU's memory layout
 
-	uint32_t checkMemoryUsage()
+uint32_t checkMemoryUsage()
+{
+	uint32_t msp;							   // Main Stack Pointer
+	__asm volatile("MRS %0, msp" : "=r"(msp)); // Get the current value of MSP
+
+	return msp;
+}
+// double ticksArray[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+long test = 0;
+int digit = 0;
+uint32_t freeMemory = 0;
+/**
+ * @brief  The application entry point.
+ * @retval int
+ */
+int run(void)
+{
+
+	EnableClock();
+	enable_tim_clocks();
+	initOCT();
+	// Init_LED(1);
+	// Init_LED(0);
+	LCD_Init();
+	InitEvents();
+	Init_buzzerEXT(0);
+	Init_buzzerEXT(1);
+	Init_buzzerEXT(2);
+	Init_buzzerEXT(3);
+
+	/*DWT_Init();*/
+	/*Write_Char_LCD('o');*/
+	Write_String_LCD("Sounds");
+	// Write_String_LCD(line2);
+	Events.onKeyPadPress(keyPressCallback);
+	Events.onKeyPadRelease(keyReleaseCallback);
+	Events.onSwitchPress(switchPressCallback);
+	Events.beforeCharWrite(numberBoxCallback);
+	// Write_String_LCD("0123456789ABCDEF");
+	// Write_String_LCD("0123456789ABCDEFG");
+	// Clear_Display();
+	update_SW_Menu();
+
+	HAL_Delay(1000);
+
+	while (1)
 	{
-		uint32_t msp;							   // Main Stack Pointer
-		__asm volatile("MRS %0, msp" : "=r"(msp)); // Get the current value of MSP
-
-		return msp;
+		CheckFrequency();
+		check();
+		checkLCDWrites();
+		playRecording();
 	}
-	// double ticksArray[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-	long test = 0;
-	int digit = 0;
-	uint32_t freeMemory = 0;
-	/**
-	 * @brief  The application entry point.
-	 * @retval int
-	 */
-	int run(void)
-	{
-
-		EnableClock();
-		enable_tim_clocks();
-		initOCT();
-		// Init_LED(1);
-		// Init_LED(0);
-		LCD_Init();
-		InitEvents();
-		Init_buzzerEXT(0);
-		Init_buzzerEXT(1);
-		Init_buzzerEXT(2);
-		Init_buzzerEXT(3);
-
-		/*DWT_Init();*/
-		/*Write_Char_LCD('o');*/
-		Write_String_LCD("Sounds");
-		// Write_String_LCD(line2);
-		Events.onKeyPadPress(keyPressCallback);
-		Events.onKeyPadRelease(keyReleaseCallback);
-		Events.onSwitchPress(switchPressCallback);
-		Events.beforeCharWrite(numberBoxCallback);
-		// Write_String_LCD("0123456789ABCDEF");
-		// Write_String_LCD("0123456789ABCDEFG");
-		// Clear_Display();
-		update_SW_Menu();
-
-		HAL_Delay(1000);
-
-		while (1)
-		{
-			CheckFrequency();
-			check();
-			checkLCDWrites();
-			playRecording();
-		}
-	}
+}
