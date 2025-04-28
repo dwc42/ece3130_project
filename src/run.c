@@ -13,6 +13,12 @@
 #include <math.h>
 void SystemClock_Config(void);
 
+uint8_t syncPlayback = 0;
+uint8_t repeatedPlayback = 1;
+
+
+
+
 void EnableClock()
 {
 	RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
@@ -72,6 +78,8 @@ char *intToString(int number)
 		str[1] = '\0';
 		return str;
 	}
+	
+	
 
 	// Calculate the number of digits using log10
 	int numDigits = (int)log10(abs(number)) + 1; // Number of digits in the number
@@ -154,15 +162,36 @@ void update_SW_Menu()                          // initializes each sector
 	}
 	case 1:
 	{
-		strcpy(sector4New, "PDD");    // these following lines update LCD in affected sectors with new chars
+		                            // these following lines update LCD in affected sectors with new chars
 		strcpy(sector5New, "TRP");
 		strcpy(sector7New, "M#1");
+		
+		if(syncPlayback)
+		{
+			strcpy(sector5New, "PFE");
+			
+		}
+		else if(syncPlayback != 1)
+		{
+			strcpy(sector5New, "PFL");
+			
+		}
+		
+		strcpy(sector4New, "DEL");
+		if(repeatedPlayback)
+		{
+			strcpy(sector6New, "RPE");
+		}
+		else if(repeatedPlayback != 0)
+		{
+			strcpy(sector6New, "RPD");
+		}
 		
 		break;
 	}
 	case 2:
 	{
-		strcpy(sector4New, "   ");
+		strcpy(sector4New, "DEL");
 		strcpy(sector5New, "TRP");
 		strcpy(sector7New, "M#2");
 		
@@ -196,6 +225,7 @@ void update_SW_Menu()                          // initializes each sector
 		strcpy(switch_Menu[2], sector6New);
 		Write_String_Sector_LCD(6, sector6New);
 	}
+	
 }
 }
 
@@ -251,6 +281,7 @@ void switchPressCallback(enum SWITCHS key)
 
 	case BUTTON_SWITCH3:
 	{
+		
 		toggleRecording();                    // if SW3 is pressed, calls toggle recording mode
 		break;
 	}
