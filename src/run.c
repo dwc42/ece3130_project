@@ -115,11 +115,11 @@ void update_SW_Menu()                          // initializes each sector
 	char sector6New[4] = {0, 0, 0, 0};
 	char sector7New[4] = {0, 0, 0, 0};
 	;
-<<<<<<< Updated upstream
+
 	switch (modeCycle)          // switch case for each mode we have
-=======
+
 	switch (modeCycle)                     // based on mode selection, the LCD sectors will update 
->>>>>>> Stashed changes
+
 	{
 	case 0:
 	{                                                          // each strcpy line below prints 3 char limit to each sector
@@ -170,13 +170,13 @@ void update_SW_Menu()                          // initializes each sector
 	}
 	}
 
-<<<<<<< Updated upstream
+
 	if (sector4New[0] && !compareStrings(sector4New, switch_Menu[0]))      // these following lines are what allow us to to change the
 	{                                                                      // LCD based on inputs in switch statement above
-=======
+
 	if (sector4New[0] && !compareStrings(sector4New, switch_Menu[0]))    
 	{
->>>>>>> Stashed changes
+
 		strcpy(switch_Menu[0], sector4New);
 		Write_String_Sector_LCD(4, sector4New);
 	}
@@ -197,7 +197,7 @@ void update_SW_Menu()                          // initializes each sector
 		Write_String_Sector_LCD(6, sector6New);
 	}
 }
-
+}
 
 double peroid = 0.0;
 int setFreq = -2;
@@ -214,11 +214,11 @@ void numberBoxCallback(struct BeforeCharWriteEventType *event)
 	event->cancel = 1;
 };
 
-<<<<<<< Updated upstream
-void keyPressCallback(enum KEYPAD key)
-=======
+
+//void keyPressCallback(enum KEYPAD key);
+
 void keyPressCallback(enum KEYPAD key)  
->>>>>>> Stashed changes
+
 {
 	if (modeCycle)
 		return;
