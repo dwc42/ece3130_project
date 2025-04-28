@@ -9,6 +9,15 @@
 #include "math.h"
 #include "buzzer.h"
 #include "run.h"
+#include "stdint.h"
+struct Channel
+{
+	struct Sample ListSample[500]; // Pouint32_ter to the list of samples
+	uint32_t peroid;			   // The period of the channel in milliseconds
+	uint8_t defined;
+	uint32_t timeSinceLoop0Start;
+	uint32_t timeSincePlayBackStart; // Time since the playback started
+};
 
 void init();
 void recordMusicPress(enum KEYPAD key);

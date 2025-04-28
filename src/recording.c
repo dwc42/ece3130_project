@@ -8,16 +8,12 @@
 #include "buzzer.h"
 #include "run.h"
 #include "config.h"
-#include <stdint.h>
+#include "stdint.h"
+#include "recording.h"
 struct Sample ListSample[500];
 struct Press ListPress[16];
 uint32_t startPlayBackDate = 0;
-struct Channel
-{
-    struct Sample ListSample[500]; // Pouint32_ter to the list of samples
-    uint32_t peroid;               // The period of the channel in milliseconds
-    uint8_t defined;
-};
+
 struct Channel ChannelVoid = {NULL, 0, 0}; // Void channel to be used as a terminator or default value
 
 struct Channel ListChannel[4]; // Array of 4 channels, each channel has its own list of samples and period
@@ -158,6 +154,28 @@ void disableChannel(uint8_t channelIndex)
 }
 
 struct Sample sample;
+uint32_t calculateStartDate(uint32_t channelIndex)
+{
+    if (channelIndex >= 4)
+    {
+        return 0; // If the channel index is out of bounds, return 0
+    }
+    uint32_t startDate = date();
+    struct Channel channel = ListChannel[channelIndex];
+    if (channelIndex)
+    {
+        if (!syncPlayback)
+        {
+            startDate += timeSincePlayBackStart; // If sync playback is enabled, add the time since playback started to the start date
+        }
+        else
+        {
+            startDate += timeSinceLoop0Start; // If sync playback is not enabled, add the time since loop 0 started to the start date
+        }
+    }
+
+    return startDate;
+}
 void playRecording()
 {
     if (!playBack)
@@ -169,10 +187,14 @@ void playRecording()
     for (uint8_t i = 0; ListChannel[i].defined && i < 4; i++)
     {
         if (!ChannelStartDates[i])
-            ChannelStartDates[i] = (uint32_t)date();
+        {
+            ChannelStartDates[i] = calculateStartDate(i); // Calculate the start date for the channel if it is not set
+            ChannelIndexes[i] = 0;                        // Reset the channel index to 0
+            continue;                                     // Skip to the next channel if it is not defined
+        }
+
         uint32_t startDate = ChannelStartDates[i];
         uint32_t channelIndex = ChannelIndexes[i];
-
         /*struct Sample*/ sample = ListChannel[i].ListSample[channelIndex];
         if (sample.frequency == SampleVoid.frequency)
         {

@@ -9,5 +9,6 @@ struct NoteProperties
 };
 extern struct NoteProperties newFrequencies[3][16];
 extern uint8_t presetIndex;
+extern uint8_t syncPlayback;
 uint32_t checkMemoryUsage();
 #endif /*__MAIN_h*/
