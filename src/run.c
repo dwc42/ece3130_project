@@ -236,19 +236,6 @@ void switchPressCallback(enum SWITCHS key)
 
 	switch (key)
 	{
-		if (modeCycle)
-			return;
-		AddFrequency(newFrequencies[presetIndex][key].frequency, 0);
-		recordMusicPress(key);
-		displayFrequency(key);
-		DisplayNumber(key, 0, 15, 1, 2);
-	}
-}
-void switchPressCallback(enum SWITCHS key)
-{
-
-	switch (key)
-	{
 
 	case BUTTON_SWITCH2: // preset index for SW2 is used to switch octaves
 	{
