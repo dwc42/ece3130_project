@@ -191,7 +191,6 @@ void update_SW_Menu()                          // initializes each sector
 	}
 	case 2:
 	{
-		strcpy(sector4New, "DEL");
 		strcpy(sector5New, "TRP");
 		strcpy(sector7New, "M#2");
 		
@@ -274,7 +273,7 @@ void switchPressCallback(enum SWITCHS key)
 
 	case BUTTON_SWITCH2:                             // preset index for SW2 is used to switch octaves
 	{
-
+		
 		presetIndex = (presetIndex + 1) % 3;
 	}
 	break;
@@ -294,7 +293,7 @@ void switchPressCallback(enum SWITCHS key)
 	{
 		modeCycle = (modeCycle + 1) % 3;
 
-
+		
 		break;
 	}
 	}
