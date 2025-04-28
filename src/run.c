@@ -123,8 +123,7 @@ void update_SW_Menu()                          // initializes each sector
 	char sector6New[4] = {0, 0, 0, 0};
 	char sector7New[4] = {0, 0, 0, 0};
 	;
-
-	switch (modeCycle)          // switch case for each mode we have
+         // switch case for each mode we have
 
 	switch (modeCycle)                     // based on mode selection, the LCD sectors will update 
 
