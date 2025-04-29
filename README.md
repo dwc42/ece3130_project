@@ -1,19 +1,42 @@
 **ECE 3130 Project**
 
 
-
-Assigned: 3-12-25
-
-Completed: 4-30-25
+Team Name: 
 
 
-Team: Cole Wilson, Dow Cox, Austin DuCrest, Nolan Magee, Bernie Friesel 
+The C-Team
+
+
+Team Members: 
+
+
+Dow Cox, Bernie Friesel, Austin DuCrest, Nolan Magee, Cole Wilson
+
+
+Class Number and Name: 
+
+
+ECE 3130-001 Microcomputer Systems 
+
+
+Assigned Date: 
+
+
+3-12-25
+
+Submission Date: 
+
+
+4-30-2025
+
+
 
 
 
 **src**
 
 src folder contains the project code and should be ready to implement on an STM32L476RG MCU NUCLEO-L476RG microcontroller on top of a Trainer4edu EduBase-V2 board. 
+We utilzed external buzzers and LEDs with detailed pin connections in the report. 
 
 
 
@@ -23,6 +46,6 @@ Report folder contains a more detailed description of the project contained in a
 
 
 
-**Demo**
+**PP presentation**
 
-Maybe add a demo video of board working
+This contains a detailed presentation presenting the project, including demonstration videos of the project. 
