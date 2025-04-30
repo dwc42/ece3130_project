@@ -40,6 +40,6 @@ Report folder contains a more detailed description of the project contained in a
 
 ## PP presentation  
 
-Powerpoint presentation to demonstate the project. Includes multiple pictures of our project's best features along with demonstration videos. 
+Powerpoint presentation to demonstate the project. Includes multiple pictures of our project's best features along with demonstration videos (although the GitHub only features the pdf of the powerpoint). 
 
 This contains a detailed presentation presenting the project. 
