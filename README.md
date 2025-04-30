@@ -42,4 +42,4 @@ Report folder contains a more detailed description of the project contained in a
 
 Powerpoint presentation to demonstate the project. Includes multiple pictures of our project's best features along with demonstration videos. 
 
-This contains a detailed presentation presenting the project, including demonstration videos of the project. 
+This contains a detailed presentation presenting the project. 
